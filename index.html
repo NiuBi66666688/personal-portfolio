@@ -7,70 +7,69 @@
 <meta name="description" content="AI Agent Engineer & Full Stack Developer">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════════════ */
-/* noth.in REPLICA — W7W Edition              */
-/* ═══════════════════════════════════════════ */
-:root{--bg:#f5f3ef;--text:#1a1a1a;--muted:#777;--accent:#1a1a1a;--border:rgba(0,0,0,.08)}
+:root{--bg:#f5f3ef;--text:#1a1a1a;--muted:#777;--border:rgba(0,0,0,.08)}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:auto}
-body{font-family:'Noto Sans SC','Inter','PP Neue Montreal',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
-::selection{background:rgba(0,0,0,.15)}
-#scroll-container{position:relative}
+body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(0,0,0,.12)}
 
 /* ── Fixed Left Sidebar ── */
-.sidebar{position:fixed;left:28px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;align-items:center;gap:20px;writing-mode:vertical-rl;font-size:11px;letter-spacing:2px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
+.sidebar{position:fixed;left:28px;top:50%;transform:translateY(-50%);z-index:90;display:flex;flex-direction:column;align-items:center;gap:20px;writing-mode:vertical-rl;font-size:11px;letter-spacing:2px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
 .sidebar a{color:var(--muted);text-decoration:none;transition:color .3s}
 .sidebar a:hover{color:var(--text)}
-.sidebar .divider{width:1px;height:30px;background:var(--border);margin:4px 0}
-.sidebar .lang-toggle{cursor:pointer;transition:color .3s}
-.sidebar .lang-toggle:hover{color:var(--text)}
+.sidebar .sep{width:1px;height:30px;background:var(--border);margin:4px 0}
+.sidebar .lt{cursor:pointer}
 @media(max-width:900px){.sidebar{display:none}}
 
 /* ── Top Menu ── */
-.top-menu{position:fixed;top:28px;right:32px;z-index:100;display:flex;align-items:center;gap:12px}
-.top-menu .menu-btn{cursor:pointer;font-size:15px;font-weight:500;letter-spacing:1px;color:var(--muted);background:none;border:none;font-family:'Noto Sans SC','Inter',sans-serif;transition:color .3s}
-.top-menu .menu-btn:hover{color:var(--text)}
-.top-menu .menu-lines{display:flex;flex-direction:column;gap:5px;cursor:pointer}
-.top-menu .menu-lines span{display:block;width:22px;height:1.5px;background:var(--text);transition:all .3s}
-@media(max-width:900px){.top-menu{right:16px;top:16px}.top-menu .menu-btn{font-size:14px}}
+.top-menu{position:fixed;top:28px;right:32px;z-index:90;display:flex;align-items:center;gap:12px}
+.top-menu button{font-size:15px;font-weight:500;letter-spacing:1px;color:var(--muted);background:none;border:none;cursor:pointer;font-family:'Noto Sans SC','Inter',sans-serif}
+.top-menu button:hover{color:var(--text)}
+.top-menu .lines{display:flex;flex-direction:column;gap:5px;cursor:pointer}
+.top-menu .lines span{display:block;width:22px;height:1.5px;background:var(--text)}
+@media(max-width:900px){.top-menu{right:16px;top:16px}}
 
-/* ── Menu Overlay ── */
 .menu-overlay{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
 .menu-overlay.open{opacity:1;pointer-events:all}
-.menu-overlay .close-btn{position:absolute;top:28px;right:32px;background:none;border:none;font-size:15px;cursor:pointer;color:var(--muted);font-family:'Noto Sans SC','Inter',sans-serif}
+.menu-overlay .cls{position:absolute;top:28px;right:32px;background:none;border:none;font-size:15px;cursor:pointer;color:var(--muted);font-family:'Noto Sans SC','Inter',sans-serif}
 .menu-overlay nav{display:flex;flex-direction:column;align-items:center;gap:28px}
 .menu-overlay nav a{font-size:clamp(28px,5vw,48px);font-weight:500;color:var(--text);text-decoration:none;letter-spacing:-.02em;transition:opacity .3s}
 .menu-overlay nav a:hover{opacity:.5}
 
-/* ── Hero ── */
-.hero{position:relative;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.hero-video-wrap{position:absolute;inset:0;z-index:0}
-.hero-video-wrap video{width:100%;height:100%;object-fit:cover}
-.hero-video-overlay{position:absolute;inset:0;background:rgba(245,243,239,.35);z-index:1}
-#hero-canvas{position:absolute;inset:0;z-index:2;pointer-events:none}
-.hero-content{position:relative;z-index:3;text-align:center}
-.hero-title{font-family:'Noto Sans SC','Inter',sans-serif;font-size:clamp(28px,5vw,52px);font-weight:500;letter-spacing:-.02em;line-height:1.15;color:var(--text);animation:fadeIn 1s ease-out}
-.hero-title .line{display:block}
-.hero-title .line:last-child{font-weight:300;font-size:.6em;margin-top:10px;letter-spacing:.04em}
+/* ═══════════════════════════════════════════ */
+/* HERO — WebGL Mask Reveal + Countdown       */
+/* ═══════════════════════════════════════════ */
+.hero-wrap{position:relative;height:100vh;overflow:hidden}
+.hero-bg-video{position:absolute;inset:0;z-index:0}
+.hero-bg-video video{width:100%;height:100%;object-fit:cover}
+.hero-bg-overlay{position:absolute;inset:0;background:rgba(245,243,239,.3);z-index:1}
 
-/* ── Countdown ── */
-.countdown{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);z-index:3;font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:3px;color:var(--text);display:flex;align-items:center;gap:4px}
-.countdown-num{display:inline-block;min-width:30px;text-align:center;transition:none}
-.countdown-final{font-family:'Noto Sans SC','Inter',sans-serif;font-size:clamp(120px,20vw,280px);font-weight:700;line-height:.85;position:absolute;bottom:10%;left:50%;transform:translate(-50%,0);z-index:3;opacity:0;transition:opacity .6s cubic-bezier(.16,1,.3,1)}
-.countdown-final.show{opacity:1}
+/* Canvas mask layer — covers everything, reveals on countdown complete */
+#mask-canvas{position:absolute;inset:0;z-index:10;display:block}
+#mask-canvas.hidden{display:none}
 
-@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+/* Hero text — hidden until mask reveals */
+.hero-text{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity .8s cubic-bezier(.16,1,.3,1)}
+.hero-text.show{opacity:1}
+.hero-text h1{font-size:clamp(28px,5vw,52px);font-weight:500;text-align:center;letter-spacing:-.02em;line-height:1.15}
+.hero-text h1 span{display:block}
+.hero-text h1 span:last-child{font-weight:300;font-size:.6em;margin-top:10px;letter-spacing:.04em}
+
+/* Final letter — drops in large after countdown */
+.final-letter{position:absolute;bottom:12%;left:50%;transform:translateX(-50%);z-index:11;font-size:clamp(140px,22vw,300px);font-weight:700;line-height:.85;opacity:0;transition:opacity .5s;font-family:'Noto Sans SC','Inter',sans-serif}
+.final-letter.show{opacity:1}
 
 /* ── Section ── */
-.section{position:relative;padding:140px 60px;max-width:1400px;margin:0 auto}
+.section{padding:140px 60px;max-width:1400px;margin:0 auto;opacity:0;transform:translateY(60px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
+.section.visible{opacity:1;transform:translateY(0)}
 .section-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:24px}
-.section-title{font-size:clamp(28px,5vw,56px);font-weight:500;line-height:1.1;letter-spacing:-.02em;margin-bottom:20px;color:var(--text)}
+.section-title{font-size:clamp(28px,5vw,56px);font-weight:500;line-height:1.1;letter-spacing:-.02em;margin-bottom:20px}
 .section-desc{font-size:16px;color:var(--muted);max-width:500px;line-height:1.7}
 @media(max-width:768px){.section{padding:80px 24px}}
 
 /* ── Blog List ── */
-.blog-list{margin-top:50px;display:flex;flex-direction:column;gap:0}
-.blog-item{display:flex;align-items:center;justify-content:space-between;padding:28px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:padding .4s,padding-left .4s}
+.blog-list{margin-top:50px}
+.blog-item{display:flex;align-items:center;justify-content:space-between;padding:28px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:padding .4s}
 .blog-item:hover{padding-left:16px}
 .blog-item h3{font-size:clamp(18px,3vw,32px);font-weight:500;letter-spacing:-.02em;flex:1}
 .blog-item .desc{font-size:14px;color:var(--muted);max-width:300px;text-align:right;line-height:1.5}
@@ -80,30 +79,33 @@ body{font-family:'Noto Sans SC','Inter','PP Neue Montreal',sans-serif;background
 .view-all:hover{gap:14px}
 
 /* ── Gallery ── */
-.gallery{position:relative;height:100vh;margin:0 -60px;overflow:hidden}
-.gallery-inner{display:flex;height:100%;gap:4px}
-.gallery-item{flex:1;overflow:hidden;position:relative;transition:flex .5s cubic-bezier(.25,.1,.25,1)}
-.gallery-item:hover{flex:1.5}
-.gallery-item img,.gallery-item video{width:100%;height:100%;object-fit:cover}
-@media(max-width:768px){.gallery{margin:0;height:60vh}.gallery-inner{flex-direction:column}}
+.gallery{height:100vh;overflow:hidden;opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.16,1,.3,1) .2s,transform 1s cubic-bezier(.16,1,.3,1) .2s}
+.gallery.visible{opacity:1;transform:translateY(0)}
+.gallery-inner{display:flex;height:100%;width:100%}
+.gallery-item{flex:1;overflow:hidden;position:relative;transition:flex .6s cubic-bezier(.25,.1,.25,1)}
+.gallery-item:hover{flex:1.6}
+.gallery-item img,.gallery-item video{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform .6s}
+.gallery-item:hover img,.gallery-item:hover video{transform:scale(1)}
+@media(max-width:768px){.gallery{height:50vh}.gallery-inner{flex-direction:column}.gallery-item{flex:none;height:33.3%}.gallery-item:hover{flex:none}}
 
 /* ── Image Grid ── */
-.image-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:50px}
+.image-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:50px}
 .image-grid-item{aspect-ratio:1;overflow:hidden;position:relative}
-.image-grid-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.image-grid-item:hover img{transform:scale(1.04)}
+.image-grid-item img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform .6s cubic-bezier(.25,.1,.25,1)}
+.image-grid-item:hover img{transform:scale(1)}
 @media(max-width:900px){.image-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* ── Studio ── */
-.studio-row{display:flex;justify-content:space-between;align-items:flex-start;margin-top:50px}
+.studio-row{display:flex;justify-content:space-between;align-items:flex-start;margin-top:50px;gap:40px}
 .studio-col h4{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:16px}
-.studio-col p{font-size:16px;line-height:1.8;color:var(--text)}
+.studio-col p{font-size:16px;line-height:1.8}
+@media(max-width:600px){.studio-row{flex-direction:column}}
 
 /* ── Marquee ── */
 .marquee-wrap{overflow:hidden;padding:80px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.marquee{display:flex;gap:40px;white-space:nowrap;font-family:'Noto Sans SC','Inter',sans-serif}
+.marquee{display:flex;gap:40px;white-space:nowrap}
 .marquee-row{font-size:clamp(48px,8vw,100px);font-weight:700;line-height:.9;letter-spacing:-.03em;display:flex;gap:60px;animation:marquee 30s linear infinite}
-.marquee-row var{font-style:normal;opacity:.15;transition:opacity .3s}
+.marquee-row var{font-style:normal;opacity:.13;transition:opacity .3s}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ── Footer ── */
@@ -116,292 +118,263 @@ body{font-family:'Noto Sans SC','Inter','PP Neue Montreal',sans-serif;background
 .footer-links a:hover{color:var(--text)}
 .footer-bottom{padding:30px 60px;display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace;letter-spacing:1px;border-top:1px solid var(--border)}
 @media(max-width:768px){.footer,.footer-bottom{padding:60px 24px}}
-
-/* ── Reveal ── */
-.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.25,.1,.25,1),transform .8s cubic-bezier(.25,.1,.25,1)}
-.reveal.in{opacity:1;transform:translateY(0)}
-.r1{transition-delay:.05s}.r2{transition-delay:.15s}.r3{transition-delay:.25s}.r4{transition-delay:.35s}
 </style>
 </head>
 <body>
 
 <!-- Fixed Left Sidebar -->
 <aside class="sidebar">
-  <a href="#" target="_blank">GITHUB</a>
-  <span class="divider"></span>
-  <a href="mailto:227110038@qq.com">EMAIL</a>
-  <span class="divider"></span>
-  <span class="lang-toggle" onclick="toggleLang()" id="lang-btn">EN</span>
+  <a href="#" target="_blank">GITHUB</a><span class="sep"></span>
+  <a href="mailto:227110038@qq.com">EMAIL</a><span class="sep"></span>
+  <span class="lt" onclick="toggleLang()" id="lang-btn">EN</span>
 </aside>
 
 <!-- Top Menu -->
 <div class="top-menu">
-  <button class="menu-btn" onclick="document.querySelector('.menu-overlay').classList.add('open')">MENU</button>
-  <div class="menu-lines" onclick="document.querySelector('.menu-overlay').classList.add('open')">
-    <span></span><span></span>
-  </div>
+  <button onclick="document.querySelector('.menu-overlay').classList.add('open')">MENU</button>
+  <div class="lines" onclick="document.querySelector('.menu-overlay').classList.add('open')"><span></span><span></span></div>
 </div>
-
-<!-- Menu Overlay -->
 <div class="menu-overlay">
-  <button class="close-btn" onclick="document.querySelector('.menu-overlay').classList.remove('open')">CLOSE</button>
+  <button class="cls" onclick="document.querySelector('.menu-overlay').classList.remove('open')">CLOSE</button>
   <nav>
-    <a href="#hero" onclick="closeMenu()">首页 / Home</a>
-    <a href="#blog" onclick="closeMenu()">博客 / Blog</a>
-    <a href="#gallery" onclick="closeMenu()">画廊 / Gallery</a>
-    <a href="#hobbies" onclick="closeMenu()">爱好 / Hobbies</a>
-    <a href="#connect" onclick="closeMenu()">联系 / Contact</a>
+    <a href="#hero-wrap" onclick="document.querySelector('.menu-overlay').classList.remove('open')">首页 / Home</a>
+    <a href="#blog" onclick="document.querySelector('.menu-overlay').classList.remove('open')">博客 / Blog</a>
+    <a href="#gallery" onclick="document.querySelector('.menu-overlay').classList.remove('open')">画廊 / Gallery</a>
+    <a href="#hobbies" onclick="document.querySelector('.menu-overlay').classList.remove('open')">爱好 / Hobbies</a>
+    <a href="#connect" onclick="document.querySelector('.menu-overlay').classList.remove('open')">联系 / Contact</a>
   </nav>
 </div>
 
 <!-- ══════════════ HERO ══════════════ -->
-<section class="hero" id="hero">
-  <div class="hero-video-wrap">
-    <video autoplay muted loop playsinline id="hero-video">
+<div class="hero-wrap" id="hero-wrap">
+  <div class="hero-bg-video">
+    <video autoplay muted loop playsinline>
       <source src="https://assets.mixkit.co/videos/13038/13038-720.mp4" type="video/mp4">
     </video>
-    <div class="hero-video-overlay"></div>
+    <div class="hero-bg-overlay"></div>
   </div>
-  <canvas id="hero-canvas"></canvas>
-  <div class="hero-content">
-    <h1 class="hero-title">
-      <span class="line">我从零构建</span>
-      <span class="line">会思考的 AI 系统</span>
+
+  <!-- WebGL Mask Reveal Canvas -->
+  <canvas id="mask-canvas"></canvas>
+
+  <!-- Final letter -->
+  <div class="final-letter" id="final-letter">W</div>
+
+  <!-- Hero text (revealed after mask dissolves) -->
+  <div class="hero-text" id="hero-text">
+    <h1>
+      <span>我从零构建</span>
+      <span>会思考的 AI 系统</span>
     </h1>
   </div>
-  <div class="countdown" id="countdown">
-    <span class="countdown-num" id="cd-num">100</span>
-  </div>
-  <div class="countdown-final" id="cd-final">W</div>
-</section>
+</div>
 
 <!-- ══════════════ BLOG ══════════════ -->
 <section class="section" id="blog">
-  <div class="section-label reveal">博客</div>
-  <h2 class="section-title reveal r1">好的代码解决问题。<br>好的文章启发思考。</h2>
-  <p class="section-desc reveal r2">技术实战教程、工具深度测评、AI 领域前沿观察 — 写给想真正落地的开发者。</p>
-
-  <div class="blog-list reveal r2">
-    <div class="blog-item" onclick="openBlog('post1')">
-      <h3>2026 最值得关注的 10 个 AI 开源工具</h3>
-      <span class="desc">从小白到进阶 · 12 min</span>
-      <span class="arrow">→</span>
-    </div>
-    <div class="blog-item" onclick="openBlog('post2')">
-      <h3>GitHub 必收藏的 8 个开发者效率工具</h3>
-      <span class="desc">亲测排名 · 10 min</span>
-      <span class="arrow">→</span>
-    </div>
-    <div class="blog-item" onclick="openBlog('post3')">
-      <h3>Python 爬虫从入门到实战</h3>
-      <span class="desc">5 个必学库 · 15 min</span>
-      <span class="arrow">→</span>
-    </div>
+  <div class="section-label">博客</div>
+  <h2 class="section-title">好的代码解决问题。<br>好的文章启发思考。</h2>
+  <p class="section-desc">技术实战教程、工具深度测评、AI 领域前沿观察 — 写给想真正落地的开发者。</p>
+  <div class="blog-list">
+    <div class="blog-item" onclick="openBlog('post1')"><h3>2026 最值得关注的 10 个 AI 开源工具</h3><span class="desc">从小白到进阶 · 12 min</span><span class="arrow">→</span></div>
+    <div class="blog-item" onclick="openBlog('post2')"><h3>GitHub 必收藏的 8 个开发者效率工具</h3><span class="desc">亲测排名 · 10 min</span><span class="arrow">→</span></div>
+    <div class="blog-item" onclick="openBlog('post3')"><h3>Python 爬虫从入门到实战</h3><span class="desc">5 个必学库 · 15 min</span><span class="arrow">→</span></div>
   </div>
-  <a href="#" class="view-all reveal r3">查看全部 →</a>
+  <a href="#" class="view-all">查看全部 →</a>
 </section>
 
 <!-- ══════════════ GALLERY ══════════════ -->
-<div class="gallery reveal" id="gallery">
+<div class="gallery" id="gallery">
   <div class="gallery-inner">
-    <div class="gallery-item">
-      <video autoplay muted loop playsinline><source src="https://assets.mixkit.co/videos/13037/13037-720.mp4" type="video/mp4"></video>
-    </div>
-    <div class="gallery-item">
-      <video autoplay muted loop playsinline><source src="https://assets.mixkit.co/videos/28780/28780-720.mp4" type="video/mp4"></video>
-    </div>
-    <div class="gallery-item">
-      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Crect fill='%23e8e5df' width='600' height='600'/%3E%3Ctext x='300' y='320' text-anchor='middle' fill='%23ccc' font-size='100'%3E🏸%3C/text%3E%3C/svg%3E" alt="Badminton">
-    </div>
+    <div class="gallery-item"><video autoplay muted loop playsinline><source src="https://assets.mixkit.co/videos/13037/13037-720.mp4" type="video/mp4"></video></div>
+    <div class="gallery-item"><video autoplay muted loop playsinline><source src="https://assets.mixkit.co/videos/28780/28780-720.mp4" type="video/mp4"></video></div>
+    <div class="gallery-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Crect fill='%23e8e5df' width='600' height='600'/%3E%3Ctext x='300' y='320' text-anchor='middle' fill='%23ccc' font-size='100'%3E🏸%3C/text%3E%3C/svg%3E" alt=""></div>
   </div>
 </div>
 
 <!-- ══════════════ HOBBIES ══════════════ -->
 <section class="section" id="hobbies">
-  <div class="section-label reveal">个人爱好</div>
-  <h2 class="section-title reveal r1">代码之外，<br>我在运动里找到节奏。</h2>
-  <p class="section-desc reveal r2">🏸 羽毛球 · 🏓 乒乓 · 🏀 篮球 · 🏊 游泳 · 🏎️ F1 · 🍜 美食 · 💐 插花 · 📈 投资</p>
-
-  <div class="image-grid reveal r3">
-    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e8e5df' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23ccc' font-size='80'%3E🏸%3C/text%3E%3C/svg%3E" alt="Badminton"></div>
-    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e0dcd5' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23bbb' font-size='80'%3E🏓%3C/text%3E%3C/svg%3E" alt="Ping Pong"></div>
-    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e5e0d8' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23ccc' font-size='80'%3E🏀%3C/text%3E%3C/svg%3E" alt="Basketball"></div>
-    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23d8d8f0' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23aac' font-size='80'%3E🏊%3C/text%3E%3C/svg%3E" alt="Swimming"></div>
-    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e8e0d5' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23ccb' font-size='80'%3E🏎️%3C/text%3E%3C/svg%3E" alt="F1"></div>
-    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23ebe5db' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23cba' font-size='80'%3E🍜%3C/text%3E%3C/svg%3E" alt="Food"></div>
-    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23f0e8f0' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23cac' font-size='80'%3E💐%3C/text%3E%3C/svg%3E" alt="Flowers"></div>
-    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e0e8d8' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23aca' font-size='80'%3E📈%3C/text%3E%3C/svg%3E" alt="Stocks"></div>
+  <div class="section-label">个人爱好</div>
+  <h2 class="section-title">代码之外，<br>我在运动里找到节奏。</h2>
+  <p class="section-desc">🏸 羽毛球 · 🏓 乒乓 · 🏀 篮球 · 🏊 游泳 · 🏎️ F1 · 🍜 美食 · 💐 插花 · 📈 投资</p>
+  <div class="image-grid">
+    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e8e5df' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23ccc' font-size='80'%3E🏸%3C/text%3E%3C/svg%3E" alt=""></div>
+    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e0dcd5' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23bbb' font-size='80'%3E🏓%3C/text%3E%3C/svg%3E" alt=""></div>
+    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e5e0d8' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23ccc' font-size='80'%3E🏀%3C/text%3E%3C/svg%3E" alt=""></div>
+    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23d8d8f0' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23aac' font-size='80'%3E🏊%3C/text%3E%3C/svg%3E" alt=""></div>
+    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e8e0d5' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23ccb' font-size='80'%3E🏎️%3C/text%3E%3C/svg%3E" alt=""></div>
+    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23ebe5db' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23cba' font-size='80'%3E🍜%3C/text%3E%3C/svg%3E" alt=""></div>
+    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23f0e8f0' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23cac' font-size='80'%3E💐%3C/text%3E%3C/svg%3E" alt=""></div>
+    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e0e8d8' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23aca' font-size='80'%3E📈%3C/text%3E%3C/svg%3E" alt=""></div>
   </div>
 </section>
 
 <!-- ══════════════ STUDIO ══════════════ -->
 <section class="section" id="about">
-  <div class="studio-row reveal">
-    <div class="studio-col">
-      <h4>关于我</h4>
-      <p>AI Agent 工程师 & 全栈开发者<br>专注于 LangGraph · RAG · 多Agent协作</p>
-    </div>
-    <div class="studio-col">
-      <h4>联系</h4>
-      <p>227110038@qq.com<br>GitHub: NiuBi66666688</p>
-    </div>
+  <div class="studio-row">
+    <div class="studio-col"><h4>关于我</h4><p>AI Agent 工程师 & 全栈开发者<br>专注于 LangGraph · RAG · 多Agent协作</p></div>
+    <div class="studio-col"><h4>联系</h4><p>227110038@qq.com<br>GitHub: NiuBi66666688</p></div>
   </div>
 </section>
 
 <!-- ══════════════ MARQUEE ══════════════ -->
-<div class="marquee-wrap reveal">
+<div class="marquee-wrap">
   <div class="marquee">
-    <div class="marquee-row">
-      <span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var>
-    </div>
-    <div class="marquee-row" aria-hidden="true">
-      <span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var>
-    </div>
+    <div class="marquee-row"><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var></div>
+    <div class="marquee-row" aria-hidden="true"><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var></div>
   </div>
 </div>
 
 <!-- ══════════════ FOOTER ══════════════ -->
 <section class="footer" id="connect">
-  <div class="footer-cta reveal">
-    <h2>从零开始<br>一起构建。</h2>
-    <a href="mailto:227110038@qq.com">BOOK A CALL</a>
-  </div>
-  <div class="footer-links reveal r2">
-    <a href="https://github.com/NiuBi66666688">GitHub</a>
-    <a href="mailto:227110038@qq.com">Email</a>
-    <a href="#blog">Blog</a>
-    <a href="#hobbies">Hobbies</a>
-  </div>
+  <div class="footer-cta"><h2>从零开始<br>一起构建。</h2><a href="mailto:227110038@qq.com">BOOK A CALL</a></div>
+  <div class="footer-links"><a href="https://github.com/NiuBi66666688">GitHub</a><a href="mailto:227110038@qq.com">Email</a><a href="#blog">Blog</a><a href="#hobbies">Hobbies</a></div>
 </section>
-<div class="footer-bottom">
-  <span>©2026 W7W</span>
-  <span>Built from scratch · All rights reserved</span>
-</div>
+<div class="footer-bottom"><span>©2026 W7W</span><span>Built from scratch · All rights reserved</span></div>
 
 <!-- Blog Modals -->
-<div id="post1-modal" style="display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto;padding:80px 40px">
-  <button onclick="closeBlog('post1')" style="position:fixed;top:28px;right:32px;z-index:301;background:none;border:none;font-size:15px;cursor:pointer;color:var(--muted);font-family:'Noto Sans SC',sans-serif">CLOSE</button>
-  <div style="max-width:700px;margin:0 auto">
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted)">AI 工具</span>
-    <h2 style="font-size:36px;font-weight:500;margin:16px 0 8px;letter-spacing:-.02em">2026 年最值得关注的 10 个 AI 开源工具</h2>
-    <p style="color:var(--muted);font-size:13px;margin-bottom:32px">2026-07-06 · 12 min read</p>
-    <p style="font-size:15px;line-height:1.8;margin-bottom:24px">从小白到进阶，当前最值得关注的 10 个 AI 开源工具完整排名。</p>
-    <h3 style="font-size:20px;margin:32px 0 12px">🥇 入门必装</h3>
-    <p style="font-size:15px;line-height:1.8"><strong>1. Ollama</strong> — 本地跑大模型 · <strong>2. Open WebUI</strong> — Docker 一键部署</p>
-    <h3 style="font-size:20px;margin:32px 0 12px">🥈 进阶之选</h3>
-    <p style="font-size:15px;line-height:1.8"><strong>3. Dify</strong> · <strong>4. FastGPT</strong> · <strong>5. LangGraph</strong></p>
-    <h3 style="font-size:20px;margin:32px 0 12px">🥉 专业玩家</h3>
-    <p style="font-size:15px;line-height:1.8">6. vLLM · 7. CrewAI · 8. AnythingLLM · 9. n8n+AI · 10. Mem0</p>
-  </div>
-</div>
-<div id="post2-modal" style="display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto;padding:80px 40px">
-  <button onclick="closeBlog('post2')" style="position:fixed;top:28px;right:32px;z-index:301;background:none;border:none;font-size:15px;cursor:pointer;color:var(--muted);font-family:'Noto Sans SC',sans-serif">CLOSE</button>
-  <div style="max-width:700px;margin:0 auto">
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted)">DEV 工具</span>
-    <h2 style="font-size:36px;font-weight:500;margin:16px 0 8px;letter-spacing:-.02em">GitHub 必收藏的 8 个开发者效率工具</h2>
-    <p style="color:var(--muted);font-size:13px;margin-bottom:32px">2026-07-05 · 10 min read</p>
-    <table style="width:100%;border-collapse:collapse;font-size:14px">
-      <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">🥇</td><td style="padding:10px 8px"><strong>Raycast</strong></td><td style="padding:10px 8px">20K+ ⭐</td><td style="padding:10px 8px;color:var(--muted)">macOS 效率启动器</td></tr>
-      <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">🥈</td><td style="padding:10px 8px"><strong>Warp</strong></td><td style="padding:10px 8px">22K+ ⭐</td><td style="padding:10px 8px;color:var(--muted)">AI 原生终端</td></tr>
-      <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">🥉</td><td style="padding:10px 8px"><strong>Nushell</strong></td><td style="padding:10px 8px">32K+ ⭐</td><td style="padding:10px 8px;color:var(--muted)">结构化 Shell</td></tr>
-      <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">4</td><td style="padding:10px 8px"><strong>Lazygit</strong></td><td style="padding:10px 8px">50K+ ⭐</td><td style="padding:10px 8px;color:var(--muted)">Git 终端 UI</td></tr>
-      <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">5</td><td style="padding:10px 8px"><strong>fzf</strong></td><td style="padding:10px 8px">65K+ ⭐</td><td style="padding:10px 8px;color:var(--muted)">模糊搜索</td></tr>
-      <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">6</td><td style="padding:10px 8px"><strong>Bruno</strong></td><td style="padding:10px 8px">25K+ ⭐</td><td style="padding:10px 8px;color:var(--muted)">API 客户端</td></tr>
-      <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">7</td><td style="padding:10px 8px"><strong>devcontainers</strong></td><td style="padding:10px 8px">10K+ ⭐</td><td style="padding:10px 8px;color:var(--muted)">容器化开发</td></tr>
-      <tr><td style="padding:10px 8px">8</td><td style="padding:10px 8px"><strong>Ghostty</strong></td><td style="padding:10px 8px">25K+ ⭐</td><td style="padding:10px 8px;color:var(--muted)">GPU 终端</td></tr>
-    </table>
-  </div>
-</div>
-<div id="post3-modal" style="display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto;padding:80px 40px">
-  <button onclick="closeBlog('post3')" style="position:fixed;top:28px;right:32px;z-index:301;background:none;border:none;font-size:15px;cursor:pointer;color:var(--muted);font-family:'Noto Sans SC',sans-serif">CLOSE</button>
-  <div style="max-width:700px;margin:0 auto">
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted)">爬虫</span>
-    <h2 style="font-size:36px;font-weight:500;margin:16px 0 8px;letter-spacing:-.02em">Python 爬虫从入门到实战</h2>
-    <p style="color:var(--muted);font-size:13px;margin-bottom:32px">2026-07-04 · 15 min read</p>
-    <h3 style="font-size:20px;margin:32px 0 12px">📦 5 个必学库</h3>
-    <p style="font-size:15px;line-height:1.8"><strong>requests</strong> (52K⭐) → <strong>BeautifulSoup</strong> → <strong>Scrapy</strong> (53K⭐) → <strong>Playwright</strong> (68K⭐) → <strong>httpx</strong> (13K⭐)</p>
-    <h3 style="font-size:20px;margin:32px 0 12px">🛡️ 反爬策略</h3>
-    <p style="font-size:15px;line-height:1.8">UA轮换 · 间隔随机化 · IP代理池 · Cookie管理 · 验证码识别</p>
-  </div>
-</div>
+<div id="post1-modal" style="display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto;padding:80px 40px"><button onclick="closeBlog('post1')" style="position:fixed;top:28px;right:32px;z-index:301;background:none;border:none;font-size:15px;cursor:pointer;color:var(--muted);font-family:'Noto Sans SC',sans-serif">CLOSE</button><div style="max-width:700px;margin:0 auto"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted)">AI 工具</span><h2 style="font-size:36px;font-weight:500;margin:16px 0 8px;letter-spacing:-.02em">2026 年最值得关注的 10 个 AI 开源工具</h2><p style="color:var(--muted);font-size:13px;margin-bottom:32px">2026-07-06 · 12 min</p><p style="font-size:15px;line-height:1.8"><strong>1. Ollama</strong> · <strong>2. Open WebUI</strong> · <strong>3. Dify</strong> · <strong>4. FastGPT</strong> · <strong>5. LangGraph</strong> · 6. vLLM · 7. CrewAI · 8. AnythingLLM · 9. n8n+AI · 10. Mem0</p></div></div>
+<div id="post2-modal" style="display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto;padding:80px 40px"><button onclick="closeBlog('post2')" style="position:fixed;top:28px;right:32px;z-index:301;background:none;border:none;font-size:15px;cursor:pointer;color:var(--muted);font-family:'Noto Sans SC',sans-serif">CLOSE</button><div style="max-width:700px;margin:0 auto"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted)">DEV 工具</span><h2 style="font-size:36px;font-weight:500;margin:16px 0 8px">GitHub 必收藏的 8 个开发者效率工具</h2><p style="color:var(--muted);font-size:13px;margin-bottom:32px">2026-07-05 · 10 min</p><table style="width:100%;border-collapse:collapse;font-size:14px"><tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">🥇</td><td style="padding:10px 8px"><strong>Raycast</strong></td><td style="padding:10px 8px">20K+</td></tr><tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">🥈</td><td style="padding:10px 8px"><strong>Warp</strong></td><td style="padding:10px 8px">22K+</td></tr><tr><td style="padding:10px 8px">🥉</td><td style="padding:10px 8px"><strong>Nushell</strong></td><td style="padding:10px 8px">32K+</td></tr></table></div></div>
+<div id="post3-modal" style="display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto;padding:80px 40px"><button onclick="closeBlog('post3')" style="position:fixed;top:28px;right:32px;z-index:301;background:none;border:none;font-size:15px;cursor:pointer;color:var(--muted);font-family:'Noto Sans SC',sans-serif">CLOSE</button><div style="max-width:700px;margin:0 auto"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted)">爬虫</span><h2 style="font-size:36px;font-weight:500;margin:16px 0 8px">Python 爬虫从入门到实战</h2><p style="color:var(--muted);font-size:13px;margin-bottom:32px">2026-07-04 · 15 min</p><p style="font-size:15px;line-height:1.8"><strong>requests</strong>→<strong>BeautifulSoup</strong>→<strong>Scrapy</strong>→<strong>Playwright</strong>→<strong>httpx</strong></p></div></div>
 
 <script>
-// ═══════════════════════════════════════════
-// WEBGL CANVAS PARTICLES
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// WEBGL-STYLE MASK REVEAL CANVAS (Canvas2D)
+// ═══════════════════════════════════════════════
 (function(){
-  const canvas=document.getElementById('hero-canvas');
+  const canvas=document.getElementById('mask-canvas');
   const ctx=canvas.getContext('2d');
-  let W,H,particles=[];
+  const finalLetter=document.getElementById('final-letter');
+  const heroText=document.getElementById('hero-text');
+  let W,H,particles=[],countdownNum=100,phase='countdown',phaseTimer=0;
+  const TOTAL_DURATION=5000; // 5s total
+  const COUNTDOWN_END=3500; // countdown ends at 3.5s
+  const DISSOLVE_END=5000; // dissolve ends at 5s
+
   function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
+  
   class Particle{
     constructor(){this.reset()}
-    reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.3;this.vy=(Math.random()-.5)*.3;this.size=Math.random()*1.5+.3;this.opacity=Math.random()*.3+.05}
-    update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset()}
-    draw(){ctx.fillStyle=`rgba(0,0,0,${this.opacity})`;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill()}
-  }
-  for(let i=0;i<80;i++)particles.push(new Particle());
-  function animate(){ctx.clearRect(0,0,W,H);particles.forEach(p=>{p.update();p.draw()});requestAnimationFrame(animate)}
-  resize();animate();window.addEventListener('resize',resize);
-})();
-
-// ═══════════════════════════════════════════
-// COUNTDOWN 100→W (original NOTHIN effect)
-// ═══════════════════════════════════════════
-(function(){
-  const numEl=document.getElementById('cd-num');
-  const finalEl=document.getElementById('cd-final');
-  const totalDuration=5000; // 5 seconds
-  const startNum=100;
-  const startTime=performance.now();
-  
-  function tick(now){
-    const elapsed=now-startTime;
-    const progress=Math.min(elapsed/totalDuration,1);
-    // Ease out — slow down at the end
-    const eased=1-Math.pow(1-progress,3);
-    const current=Math.floor(startNum*(1-eased));
-    numEl.textContent=current;
-    
-    if(progress<1){
-      requestAnimationFrame(tick);
-    }else{
-      numEl.textContent='';
-      numEl.style.display='none';
-      finalEl.classList.add('show');
+    reset(){
+      this.x=Math.random()*W;
+      this.y=Math.random()*H;
+      this.vx=(Math.random()-.5)*.6;
+      this.vy=(Math.random()-.5)*.6;
+      this.size=Math.random()*2+.4;
+      this.opacity=Math.random()*.5+.2;
+      this.life=Math.random()*200+100;
+    }
+    update(dt){
+      this.x+=this.vx*dt*.06;
+      this.y+=this.vy*dt*.06;
+      this.life-=dt*.06;
+      if(this.life<=0)this.reset();
+      // Drift toward edges during dissolve phase
+      if(phase==='dissolve'){
+        const cx=W/2,cy=H/2;
+        const dx=this.x-cx,dy=this.y-cy;
+        const dist=Math.sqrt(dx*dx+dy*dy)||1;
+        this.vx+=dx/dist*.04*dt*.06;
+        this.vy+=dy/dist*.04*dt*.06;
+      }
+    }
+    draw(){
+      ctx.fillStyle=`rgba(0,0,0,${this.opacity})`;
+      ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill()
     }
   }
-  setTimeout(()=>requestAnimationFrame(tick),500);
+
+  for(let i=0;i<120;i++)particles.push(new Particle());
+
+  function drawCountdown(num){
+    // Dark overlay
+    ctx.fillStyle='rgba(0,0,0,.85)';
+    ctx.fillRect(0,0,W,H);
+    // Countdown number
+    const fontSize=Math.min(W*.25,300);
+    ctx.fillStyle='rgba(255,255,255,.9)';
+    ctx.font=`${fontSize}px "IBM Plex Mono",monospace`;
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText(num,W/2,H/2);
+    // Particles
+    particles.forEach(p=>{p.update(16);p.draw()});
+  }
+
+  function drawDissolve(progress){
+    // Fade out overlay
+    const alpha=Math.max(0,.85*(1-progress));
+    ctx.fillStyle=`rgba(0,0,0,${alpha})`;
+    ctx.fillRect(0,0,W,H);
+    // Drift particles outward
+    particles.forEach(p=>{p.update(16);p.draw()});
+  }
+
+  function animate(timestamp){
+    if(!startTime)startTime=timestamp;
+    const elapsed=timestamp-startTime;
+
+    if(elapsed<COUNTDOWN_END){
+      phase='countdown';
+      const eased=1-Math.pow(1-elapsed/COUNTDOWN_END,3);
+      countdownNum=Math.floor(100*(1-eased));
+      drawCountdown(countdownNum);
+    }else if(elapsed<TOTAL_DURATION){
+      phase='dissolve';
+      if(countdownNum>0){countdownNum=0;drawCountdown(0);setTimeout(()=>finalLetter.classList.add('show'),100)}
+      const dissolveProgress=(elapsed-COUNTDOWN_END)/(TOTAL_DURATION-COUNTDOWN_END);
+      drawDissolve(dissolveProgress);
+    }else{
+      // Done — remove canvas, show text
+      canvas.style.display='none';
+      heroText.classList.add('show');
+      return;
+    }
+    requestAnimationFrame(animate);
+  }
+
+  let startTime=null;
+  resize();window.addEventListener('resize',resize);
+  requestAnimationFrame(animate);
 })();
 
-// ═══════════════════════════════════════════
-// SCROLL REVEAL
-// ═══════════════════════════════════════════
-const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight)el.classList.add('in')}),300);
+// ═══════════════════════════════════════════════
+// SCROLL REVEAL (noth.in style)
+// ═══════════════════════════════════════════════
+const revealObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+    }
+  });
+},{threshold:.08,rootMargin:'0px 0px -60px 0px'});
+document.querySelectorAll('.section,.gallery').forEach(el=>revealObserver.observe(el));
+setTimeout(()=>{
+  document.querySelectorAll('.section,.gallery').forEach(el=>{
+    if(el.getBoundingClientRect().top<innerHeight)el.classList.add('visible');
+  });
+},500);
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // BLOG MODALS
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function openBlog(id){document.getElementById(id+'-modal').style.display='block';document.body.style.overflow='hidden'}
 function closeBlog(id){document.getElementById(id+'-modal').style.display='none';document.body.style.overflow=''}
-function closeMenu(){document.querySelector('.menu-overlay').classList.remove('open')}
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('[id$="-modal"]').forEach(el=>el.style.display='none');document.querySelector('.menu-overlay').classList.remove('open');document.body.style.overflow=''}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('[id$="-modal"]').forEach(el=>el.style.display='none');document.body.style.overflow=''}});
 
-// ═══════════════════════════════════════════
-// LANGUAGE TOGGLE (中/EN)
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// LANGUAGE TOGGLE
+// ═══════════════════════════════════════════════
 let lang='zh';
-const t={zh:{hero1:'我从零构建',hero2:'会思考的 AI 系统',blog:'博客',blogTitle1:'好的代码解决问题。',blogTitle2:'好的文章启发思考。',blogDesc:'技术实战教程、工具深度测评、AI 领域前沿观察 — 写给想真正落地的开发者。',viewAll:'查看全部 →',hobbies:'个人爱好',hobbiesTitle1:'代码之外，',hobbiesTitle2:'我在运动里找到节奏。',hobbiesDesc:'🏸 羽毛球 · 🏓 乒乓 · 🏀 篮球 · 🏊 游泳 · 🏎️ F1 · 🍜 美食 · 💐 插花 · 📈 投资',aboutMe:'关于我',aboutDesc:'AI Agent 工程师 & 全栈开发者<br>专注于 LangGraph · RAG · 多Agent协作',contact:'联系',footerTitle1:'从零开始',footerTitle2:'一起构建。',bookCall:'BOOK A CALL',menuHome:'首页 / Home',menuBlog:'博客 / Blog',menuGallery:'画廊 / Gallery',menuHobbies:'爱好 / Hobbies',menuContact:'联系 / Contact',close:'CLOSE'},
-  en:{hero1:'I build AI systems',hero2:'that think & act',blog:'Blog',blogTitle1:'Good code solves problems.',blogTitle2:'Great articles inspire thinking.',blogDesc:'Practical tutorials, deep tool reviews, and AI frontier insights — for developers who ship.',viewAll:'View all →',hobbies:'Hobbies',hobbiesTitle1:'Beyond the terminal,',hobbiesTitle2:'I find rhythm in motion.',hobbiesDesc:'🏸 Badminton · 🏓 Ping Pong · 🏀 Basketball · 🏊 Swimming · 🏎️ F1 · 🍜 Food · 💐 Flowers · 📈 Stocks',aboutMe:'About',aboutDesc:'AI Agent Engineer & Full Stack Dev<br>Focused on LangGraph · RAG · Multi-Agent',contact:'Contact',footerTitle1:"Let's start",footerTitle2:'from scratch.',bookCall:'BOOK A CALL',menuHome:'首页 / Home',menuBlog:'博客 / Blog',menuGallery:'画廊 / Gallery',menuHobbies:'爱好 / Hobbies',menuContact:'联系 / Contact',close:'CLOSE'}
+const t={
+  zh:{hero1:'我从零构建',hero2:'会思考的 AI 系统',blog:'博客',blogTitle1:'好的代码解决问题。',blogTitle2:'好的文章启发思考。',blogDesc:'技术实战教程、工具深度测评、AI 领域前沿观察 — 写给想真正落地的开发者。',viewAll:'查看全部 →',hobbies:'个人爱好',hobbiesTitle1:'代码之外，',hobbiesTitle2:'我在运动里找到节奏。',hobbiesDesc:'🏸 羽毛球 · 🏓 乒乓 · 🏀 篮球 · 🏊 游泳 · 🏎️ F1 · 🍜 美食 · 💐 插花 · 📈 投资',aboutMe:'关于我',aboutDesc:'AI Agent 工程师 & 全栈开发者<br>专注于 LangGraph · RAG · 多Agent协作',contact:'联系',footerTitle1:'从零开始',footerTitle2:'一起构建。',close:'CLOSE'},
+  en:{hero1:'I build AI systems',hero2:'that think & act',blog:'Blog',blogTitle1:'Good code solves problems.',blogTitle2:'Great articles inspire thinking.',blogDesc:'Tutorials, tool reviews, AI frontier insights — for devs who ship.',viewAll:'View all →',hobbies:'Hobbies',hobbiesTitle1:'Beyond the terminal,',hobbiesTitle2:'I find rhythm in motion.',hobbiesDesc:'🏸 Badminton · 🏓 Ping Pong · 🏀 Basketball · 🏊 Swimming · 🏎️ F1 · 🍜 Food · 💐 Flowers · 📈 Stocks',aboutMe:'About',aboutDesc:'AI Agent Engineer & Full Stack Dev<br>LangGraph · RAG · Multi-Agent',contact:'Contact',footerTitle1:"Let's start",footerTitle2:'from scratch.',close:'CLOSE'}
 };
 function toggleLang(){
   lang=lang==='zh'?'en':'zh';
   const d=t[lang];
   document.getElementById('lang-btn').textContent=lang==='zh'?'EN':'中';
-  document.querySelector('.hero-title .line:first-child').textContent=d.hero1;
-  document.querySelector('.hero-title .line:last-child').textContent=d.hero2;
+  document.querySelector('#hero-text h1 span:first-child').textContent=d.hero1;
+  document.querySelector('#hero-text h1 span:last-child').textContent=d.hero2;
   document.querySelector('#blog .section-label').textContent=d.blog;
   document.querySelector('#blog .section-title').innerHTML=d.blogTitle1+'<br>'+d.blogTitle2;
   document.querySelector('#blog .section-desc').textContent=d.blogDesc;
@@ -413,13 +386,7 @@ function toggleLang(){
   document.querySelector('#about .studio-col:first-child p').innerHTML=d.aboutDesc;
   document.querySelector('#about .studio-col:last-child h4').textContent=d.contact;
   document.querySelector('.footer-cta h2').innerHTML=d.footerTitle1+'<br>'+d.footerTitle2;
-  document.querySelector('.footer-cta a').textContent=d.bookCall;
-  document.querySelectorAll('.menu-overlay nav a')[0].textContent=d.menuHome;
-  document.querySelectorAll('.menu-overlay nav a')[1].textContent=d.menuBlog;
-  document.querySelectorAll('.menu-overlay nav a')[2].textContent=d.menuGallery;
-  document.querySelectorAll('.menu-overlay nav a')[3].textContent=d.menuHobbies;
-  document.querySelectorAll('.menu-overlay nav a')[4].textContent=d.menuContact;
-  document.querySelector('.menu-overlay .close-btn').textContent=d.close;
+  document.querySelector('.menu-overlay .cls').textContent=d.close;
 }
 </script>
 </body>
