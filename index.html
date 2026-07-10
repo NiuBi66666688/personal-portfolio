@@ -20,6 +20,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 40px;display:fl
 .nav-toggle{display:none;background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
 @media(max-width:768px){nav{padding:20px 24px}.nav-links{display:none}.nav-toggle{display:block}}
 
+/* ── Custom Cursor ── */
+.cursor{position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference}
+.cursor-dot{width:5px;height:5px;background:#fff;border-radius:50%;position:fixed;transform:translate(-50%,-50%);pointer-events:none;z-index:9999}
+.cursor-ring{width:26px;height:26px;border:1px solid rgba(255,255,255,.25);border-radius:50%;position:fixed;transform:translate(-50%,-50%);pointer-events:none;z-index:9998;transition:width .35s cubic-bezier(.25,1,.5,1),height .35s cubic-bezier(.25,1,.5,1),border-color .35s}
+.cursor-ring.on-media{width:50px;height:50px;border-color:rgba(255,255,255,.5)}
+@media(max-width:768px){.cursor-dot,.cursor-ring{display:none}}
+
 /* ── Hero Video Section ── */
 .hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
@@ -28,7 +35,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 40px;display:fl
 .hero h1{font-family:'Noto Serif SC','Georgia',serif;font-size:clamp(36px,7vw,80px);font-weight:600;line-height:1.08;letter-spacing:-.01em;margin-bottom:24px;animation:fadeUp 1s ease-out}
 .hero h1 span{display:block;font-weight:300;font-size:.5em;letter-spacing:.08em;margin-bottom:10px;font-family:'Noto Sans SC','Inter',sans-serif}
 .hero-tagline{font-size:16px;color:rgba(255,255,255,.65);line-height:1.7;max-width:480px;margin:0 auto 32px;animation:fadeUp 1s ease-out .2s both}
-.hero-cta{display:inline-block;padding:14px 36px;border:1px solid rgba(255,255,255,.3);color:#fff;text-decoration:none;font-size:13px;letter-spacing:2px;text-transform:uppercase;transition:all .4s;animation:fadeUp 1s ease-out .4s both}
+.hero-cta{display:inline-block;padding:14px 36px;border:1px solid rgba(255,255,255,.3);color:#fff;text-decoration:none;font-size:13px;letter-spacing:2px;text-transform:uppercase;transition:all .4s,transform .12s ease-out;animation:fadeUp 1s ease-out .4s both;will-change:transform}
 .hero-cta:hover{background:#fff;color:#000;border-color:#fff}
 .hero-scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;color:rgba(255,255,255,.4);font-size:11px;letter-spacing:3px;text-transform:uppercase;animation:fadeUp 1s ease-out .8s both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
@@ -42,8 +49,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 40px;display:fl
 
 /* ── Video Grid ── */
 .video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:60px}
-.video-grid-item{position:relative;aspect-ratio:16/10;overflow:hidden;cursor:pointer}
-.video-grid-item video,.video-grid-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.25,.1,.25,1)}
+.video-grid-item{position:relative;aspect-ratio:16/10;overflow:hidden;cursor:pointer;transform-style:preserve-3d;perspective:1000px;transition:transform .15s ease-out}
+.video-grid-item video,.video-grid-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.25,.1,.25,1);transform:scale(1.06)}
 .video-grid-item:hover video,.video-grid-item:hover img{transform:scale(1.04)}
 .video-grid-item .caption{position:absolute;bottom:0;left:0;right:0;padding:40px 24px 20px;background:linear-gradient(transparent,rgba(0,0,0,.7));z-index:2}
 .video-grid-item .caption h3{font-size:14px;font-weight:500;letter-spacing:1px}
@@ -54,15 +61,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 40px;display:fl
 /* ── Full-width Image Strip ── */
 .image-strip{display:flex;gap:4px;margin-top:60px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .image-strip::-webkit-scrollbar{display:none}
-.image-strip-item{flex:0 0 45vw;min-width:300px;aspect-ratio:4/5;overflow:hidden;position:relative}
-.image-strip-item video,.image-strip-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.image-strip-item{flex:0 0 45vw;min-width:300px;aspect-ratio:4/5;overflow:hidden;position:relative;transform-style:preserve-3d;perspective:1000px;transition:transform .15s ease-out}
+.image-strip-item video,.image-strip-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s;transform:scale(1.05)}
 .image-strip-item:hover video,.image-strip-item:hover img{transform:scale(1.03)}
 .image-strip-item .label{position:absolute;bottom:20px;left:20px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#fff;z-index:2}
 
 /* ── Blog Section ── */
 .blog-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:60px}
-.blog-item{position:relative;aspect-ratio:3/4;overflow:hidden;cursor:pointer}
-.blog-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.blog-item{position:relative;aspect-ratio:3/4;overflow:hidden;cursor:pointer;transform-style:preserve-3d;perspective:1200px;transition:transform .15s ease-out}
+.blog-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s;transform:scale(1.05)}
 .blog-item:hover img{transform:scale(1.04)}
 .blog-item .overlay{position:absolute;inset:0;background:rgba(0,0,0,.3);transition:background .4s;display:flex;flex-direction:column;justify-content:flex-end;padding:30px}
 .blog-item:hover .overlay{background:rgba(0,0,0,.55)}
@@ -280,6 +287,100 @@ footer a:hover{color:#fff}
 </div>
 
 <script>
+// ═══════════════════════════════════════════════
+// 🔮 ADVANCED MOUSE-FOLLOWING EFFECTS
+// ═══════════════════════════════════════════════
+
+// ── Custom Cursor ──
+const dot=document.createElement('div');dot.className='cursor-dot';document.body.appendChild(dot);
+const ring=document.createElement('div');ring.className='cursor-ring';document.body.appendChild(ring);
+let mx=0,my=0,rx=0,ry=0;
+
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
+(function animRing(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing)})();
+
+// Ring expands on media elements
+document.querySelectorAll('video,img,.video-grid-item,.image-strip-item,.blog-item').forEach(el=>{
+  el.addEventListener('mouseenter',()=>ring.classList.add('on-media'));
+  el.addEventListener('mouseleave',()=>ring.classList.remove('on-media'));
+});
+
+// ── Hero Video Parallax ──
+const hero=document.querySelector('.hero');
+const heroVideo=document.querySelector('.hero-video');
+const heroContent=document.querySelector('.hero-content');
+if(hero){
+  hero.addEventListener('mousemove',e=>{
+    const w=hero.offsetWidth,h=hero.offsetHeight;
+    const x=(e.clientX/w-.5)*12; // -6 to +6 deg
+    const y=(e.clientY/h-.5)*8;
+    heroVideo.style.transform=`scale(1.08) translate(${-x*3}px,${-y*3}px)`;
+    heroContent.style.transform=`translate(${x*2}px,${y*2}px)`;
+  });
+  hero.addEventListener('mouseleave',()=>{
+    heroVideo.style.transform='scale(1.08) translate(0,0)';
+    heroContent.style.transform='translate(0,0)';
+    heroVideo.style.transition='transform 1.2s cubic-bezier(.25,.1,.25,1)';
+    heroContent.style.transition='transform 1.2s cubic-bezier(.25,.1,.25,1)';
+    setTimeout(()=>{heroVideo.style.transition='';heroContent.style.transition=''},1200);
+  });
+}
+
+// ── 3D Tilt on Grid Items ──
+function applyTilt(els, maxTilt=8, scale=1.03){
+  els.forEach(el=>{
+    el.addEventListener('mousemove',e=>{
+      const rect=el.getBoundingClientRect();
+      const x=(e.clientX-rect.left)/rect.width-.5;
+      const y=(e.clientY-rect.top)/rect.height-.5;
+      el.style.transform=`perspective(1000px) rotateY(${x*maxTilt}deg) rotateX(${-y*maxTilt}deg) scale3d(${scale},${scale},1)`;
+    });
+    el.addEventListener('mouseleave',()=>{
+      el.style.transition='transform .6s cubic-bezier(.25,.1,.25,1)';
+      el.style.transform='perspective(1000px) rotateY(0) rotateX(0) scale3d(1,1,1)';
+      setTimeout(()=>el.style.transition='transform .15s ease-out',600);
+    });
+  });
+}
+applyTilt(document.querySelectorAll('.video-grid-item'));
+applyTilt(document.querySelectorAll('.image-strip-item'));
+applyTilt(document.querySelectorAll('.blog-item'),6,1.02);
+
+// ── Magnetic Button ──
+const cta=document.querySelector('.hero-cta');
+if(cta){
+  cta.addEventListener('mousemove',e=>{
+    const rect=cta.getBoundingClientRect();
+    const x=(e.clientX-rect.left-rect.width/2)*.15;
+    const y=(e.clientY-rect.top-rect.height/2)*.15;
+    cta.style.transform=`translate(${x}px,${y}px)`;
+  });
+  cta.addEventListener('mouseleave',()=>{
+    cta.style.transition='transform .5s cubic-bezier(.25,1,.5,1)';
+    cta.style.transform='translate(0,0)';
+    setTimeout(()=>cta.style.transition='transform .12s ease-out',500);
+  });
+}
+
+// ── Section Spotlight ──
+document.querySelectorAll('.section,.text-section').forEach(sec=>{
+  sec.addEventListener('mousemove',e=>{
+    const rect=sec.getBoundingClientRect();
+    const x=((e.clientX-rect.left)/rect.width*100).toFixed(1);
+    const y=((e.clientY-rect.top)/rect.height*100).toFixed(1);
+    sec.style.background=`radial-gradient(800px circle at ${x}% ${y}%, rgba(255,255,255,.025) 0%, transparent 60%)`;
+  });
+  sec.addEventListener('mouseleave',()=>{
+    sec.style.transition='background .8s ease';
+    sec.style.background='';
+    setTimeout(()=>sec.style.transition='',800);
+  });
+});
+
+// ═══════════════════════════════════════════════
+// EXISTING SCRIPTS
+// ═══════════════════════════════════════════════
+
 // ── Scroll reveal ──
 const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
