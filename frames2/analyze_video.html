@@ -1,0 +1,62 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+body{font-family:monospace;background:#111;color:#0f0;padding:20px;margin:0}
+canvas{border:1px solid #333;margin:10px 0}
+#log{white-space:pre;font-size:12px;line-height:1.6;max-height:400px;overflow-y:auto}
+.frame-row{display:flex;gap:20px;align-items:flex-start;margin-bottom:15px;border-bottom:1px solid #222;padding-bottom:15px}
+.frame-row canvas{width:300px;height:169px}
+.frame-info{font-size:11px;color:#aaa}
+</style></head><body>
+<h2>noth.in Video Frame Analysis</h2>
+<div id="output"></div>
+<script>
+const VIDEO_URL='http://localhost:9876/%E5%B1%8F%E5%B9%95%E5%BD%95%E5%88%B6%202026-07-10%20213220.mp4';
+const v=document.createElement('video');
+v.crossOrigin='anonymous';
+v.src=VIDEO_URL;
+v.muted=true;
+const out=document.getElementById('output');
+
+v.addEventListener('loadedmetadata',async()=>{
+  out.innerHTML=`<p>Duration: ${v.duration.toFixed(1)}s | ${v.videoWidth}x${v.videoHeight}</p>`;
+  
+  const times=[0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,8,9,10];
+  
+  for(const t of times){
+    if(t>=v.duration)break;
+    v.currentTime=t;
+    await new Promise(r=>{v.onseeked=r});
+    
+    const c=document.createElement('canvas');
+    c.width=320;c.height=180;
+    const ctx=c.getContext('2d');
+    ctx.drawImage(v,0,0,320,180);
+    const d=ctx.getImageData(0,0,320,180).data;
+    
+    let total=0,dark=0,centerBright=0,centerCount=0;
+    for(let i=0;i<d.length;i+=4){
+      total++;
+      const b=d[i]+d[i+1]+d[i+2];
+      if(b<150)dark++;
+    }
+    // Center 80x80 area
+    for(let y=50;y<130;y++)for(let x=120;x<200;x++){
+      const idx=(y*320+x)*4;
+      centerBright+=d[idx]+d[idx+1]+d[idx+2];
+      centerCount++;
+    }
+    const avgCenter=Math.round(centerBright/centerCount);
+    
+    const row=document.createElement('div');
+    row.className='frame-row';
+    row.innerHTML=`
+      <div>
+        <canvas></canvas>
+        <div class="frame-info">⏱ ${t.toFixed(1)}s | dark=${Math.round(dark/total*100)}% | center=${avgCenter}</div>
+      </div>`;
+    row.querySelector('canvas').getContext('2d').drawImage(v,0,0,320,180);
+    out.appendChild(row);
+  }
+  out.innerHTML+=`<p>✅ Done. ${times.length} frames analyzed.</p>`;
+});
+</script>
+</body></html>

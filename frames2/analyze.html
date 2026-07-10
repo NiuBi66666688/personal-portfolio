@@ -1,0 +1,36 @@
+<!DOCTYPE html><html><body>
+<div id="results"></div>
+<script>
+const frames=[];
+for(let i=1;i<=20;i++)frames.push('f_'+String(i).padStart(2,'0')+'.png');
+
+async function analyze(){
+  const out=document.getElementById('results');
+  for(const f of frames){
+    const img=new Image();
+    await new Promise(r=>{img.onload=r;img.src=f});
+    const c=document.createElement('canvas');
+    c.width=200;c.height=200;
+    const ctx=c.getContext('2d');
+    ctx.drawImage(img,0,0,200,200);
+    const d=ctx.getImageData(0,0,200,200).data;
+    let total=0,dark=0;
+    for(let i=0;i<d.length;i+=4){total++;if(d[i]+d[i+1]+d[i+2]<150)dark++}
+    
+    // Check center 40x40 region for text
+    const cx=80,cy=80,cw=40,ch=40;
+    let centerBright=0,centerCount=0;
+    for(let y=cy;y<cy+ch;y++)for(let x=cx;x<cx+cw;x++){
+      const idx=(y*200+x)*4;
+      centerBright+=d[idx]+d[idx+1]+d[idx+2];
+      centerCount++;
+    }
+    const avgCenter=Math.round(centerBright/centerCount);
+    
+    const p=document.createElement('p');
+    p.textContent=f+': dark='+Math.round(dark/total*100)+'% center_avg='+avgCenter;
+    out.appendChild(p);
+  }
+}
+analyze();
+</script></body></html>

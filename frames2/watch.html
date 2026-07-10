@@ -1,0 +1,30 @@
+<!DOCTYPE html><html><body>
+<video id="v" controls autoplay style="width:100%;max-width:1000px" src="file:///C:/Users/WQZS6/Videos/%E5%B1%8F%E5%B9%95%E5%BD%95%E5%88%B6/%E5%B1%8F%E5%B9%95%E5%BD%95%E5%88%B6%202026-07-10%20213220.mp4"></video>
+<div id="log" style="font-family:monospace;margin-top:10px"></div>
+<script>
+const v=document.getElementById('v'),log=document.getElementById('log');
+v.addEventListener('loadedmetadata',()=>{
+  log.textContent=`Loaded: ${v.duration.toFixed(1)}s | ${v.videoWidth}x${v.videoHeight}`;
+  // Start capturing frames for analysis
+  const c=document.createElement('canvas');c.width=200;c.height=120;
+  const ctx=c.getContext('2d');
+  const times=[0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,7,8,9,10];
+  const results=[];
+  let idx=0;
+  function snap(){
+    if(idx>=times.length)return;
+    v.currentTime=times[idx];
+    v.onseeked=()=>{
+      ctx.drawImage(v,0,0,200,120);
+      const d=ctx.getImageData(0,0,200,120).data;
+      let total=0,dark=0;
+      for(let i=0;i<d.length;i+=4){total++;if(d[i]+d[i+1]+d[i+2]<150)dark++}
+      results.push(`t=${times[idx]}s dark=${Math.round(dark/total*100)}%`);
+      log.textContent=results.join('\n');
+      idx++;snap();
+    };
+  }
+  snap();
+});
+</script>
+</body></html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+body{font-family:monospace;background:#111;color:#0f0;padding:10px;font-size:12px}
+canvas{border:1px solid #333;margin:4px 0;width:320px;height:180px}
+.row{display:inline-block;margin:4px 8px 12px 0;vertical-align:top}
+</style></head><body>
+<div id="out"><p>Loading video...</p></div>
+<input type="file" id="fileInput" accept="video/*" style="display:none">
+<script>
+// Use the video file from the user's local path
+const VIDEO_PATH='../../Videos/屏幕录制/屏幕录制 2026-07-10 213220.mp4';
+
+async function main(){
+  const out=document.getElementById('out');
+  
+  // Load video via File API (avoids cross-origin)
+  const resp=await fetch(VIDEO_PATH);
+  const blob=await resp.blob();
+  const url=URL.createObjectURL(blob);
+  
+  const v=document.createElement('video');
+  v.src=url;
+  v.muted=true;
+  
+  await new Promise((resolve,reject)=>{
+    v.onloadedmetadata=resolve;
+    v.onerror=reject;
+    setTimeout(reject,10000);
+  });
+  
+  out.innerHTML=`<p>✅ Loaded: ${v.duration.toFixed(1)}s ${v.videoWidth}x${v.videoHeight}</p>`;
+  
+  const times=[0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,7,8,9,10];
+  
+  for(const t of times){
+    if(t>=v.duration)break;
+    v.currentTime=t;
+    await new Promise(r=>{v.onseeked=r;setTimeout(r,200)});
+    
+    const c=document.createElement('canvas');
+    c.width=320;c.height=180;
+    const ctx=c.getContext('2d');
+    ctx.drawImage(v,0,0,320,180);
+    
+    const d=ctx.getImageData(0,0,320,180).data;
+    let total=0,dark=0,centerSum=0,centerN=0;
+    for(let i=0;i<d.length;i+=4){total++;if(d[i]+d[i+1]+d[i+2]<150)dark++}
+    for(let y=50;y<130;y++)for(let x=120;x<200;x++){const idx=(y*320+x)*4;centerSum+=d[idx]+d[idx+1]+d[idx+2];centerN++}
+    
+    const div=document.createElement('div');div.className='row';
+    div.innerHTML=`<canvas></canvas><br>⏱${t.toFixed(1)}s dark:${Math.round(dark/total*100)}% center:${Math.round(centerSum/centerN)}`;
+    div.querySelector('canvas').getContext('2d').drawImage(v,0,0,320,180);
+    out.appendChild(div);
+  }
+  out.innerHTML+=`<p>✅ Complete</p>`;
+}
+
+main().catch(e=>out.innerHTML+=`<p style="color:red">Error: ${e.message}</p>`);
+</script>
+</body></html>

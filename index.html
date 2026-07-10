@@ -1,433 +1,353 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>W7W</title>
 <meta name="description" content="AI Agent Engineer & Full Stack Developer">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Noto+Sans+SC:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f5f3ef;--text:#1a1a1a;--muted:#777;--border:rgba(0,0,0,.08)}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:auto}
-body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
-::selection{background:rgba(0,0,0,.12)}
+/* ── Reset & Base ── */
+*,*::after,*::before{margin:0;padding:0;box-sizing:border-box}
+html{font-size:calc(0rem + 1vw);scrollbar-width:none}
+@media(max-width:991px){html{font-size:1rem}}
+body::-webkit-scrollbar{display:none}
+body{font-family:'Noto Sans SC','Inter',sans-serif;background:#fff;color:#121212;-webkit-font-smoothing:antialiased;overflow-x:hidden;width:100%}
+::selection{background:#121212;color:#fff}
+a{color:inherit;text-decoration:none}
 
-/* ── Fixed Left Sidebar ── */
-.sidebar{position:fixed;left:28px;top:50%;transform:translateY(-50%);z-index:90;display:flex;flex-direction:column;align-items:center;gap:20px;writing-mode:vertical-rl;font-size:11px;letter-spacing:2px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
-.sidebar a{color:var(--muted);text-decoration:none;transition:color .3s}
-.sidebar a:hover{color:var(--text)}
-.sidebar .sep{width:1px;height:30px;background:var(--border);margin:4px 0}
-.sidebar .lt{cursor:pointer}
-@media(max-width:900px){.sidebar{display:none}}
+/* ── Loader ── */
+.loader{position:fixed;inset:0;z-index:999;background:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity .5s}
+.loader.hidden{opacity:0;pointer-events:none}
+.loader-c{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.loader-anim{position:relative;width:min(30vw,200px);display:flex;align-items:center;justify-content:center}
+.loader-anim svg{width:100%;color:#121212}
+.loader-nbr-w{position:absolute;bottom:15%;left:50%;transform:translateX(-50%);font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:3px;color:#121212}
+.loader-img-w{position:absolute;inset:0;pointer-events:none}
+.loader-img{position:absolute;width:60px;opacity:0;transition:opacity .3s}
+.loader-img.coeur{top:10%;left:5%;width:80px}
+.loader-img.papier{top:15%;right:8%;width:70px}
+.loader-img.star{bottom:20%;left:10%;width:50px}
+.loader-img.bonbon{top:40%;right:5%;width:55px}
+.loader-img.chewinggum{bottom:10%;right:15%;width:65px}
+.loader-img.show{opacity:1}
 
-/* ── Top Menu ── */
-.top-menu{position:fixed;top:28px;right:32px;z-index:90;display:flex;align-items:center;gap:12px}
-.top-menu button{font-size:15px;font-weight:500;letter-spacing:1px;color:var(--muted);background:none;border:none;cursor:pointer;font-family:'Noto Sans SC','Inter',sans-serif}
-.top-menu button:hover{color:var(--text)}
-.top-menu .lines{display:flex;flex-direction:column;gap:5px;cursor:pointer}
-.top-menu .lines span{display:block;width:22px;height:1.5px;background:var(--text)}
-@media(max-width:900px){.top-menu{right:16px;top:16px}}
-
-.menu-overlay{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
+/* ── Nav ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:flex;justify-content:space-between;align-items:center;mix-blend-mode:difference}
+.nav-logo svg{width:120px;color:#fff}
+.menu-w{display:flex;align-items:center;gap:24px}
+.menu-btn{display:flex;align-items:center;gap:8px;cursor:pointer}
+.menu-btn-text{font-size:13px;font-weight:400;color:#fff;letter-spacing:1px;font-family:'Noto Sans SC','Inter',sans-serif}
+.menu-svg{width:8px;color:#fff}
+.menu-links-w{display:flex;gap:20px}
+.menu-links-w a{font-size:13px;color:rgba(255,255,255,.7);letter-spacing:1px;transition:color .3s}
+.menu-links-w a:hover{color:#fff}
+.menu-overlay{position:fixed;inset:0;z-index:200;background:#fff;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
 .menu-overlay.open{opacity:1;pointer-events:all}
-.menu-overlay .cls{position:absolute;top:28px;right:32px;background:none;border:none;font-size:15px;cursor:pointer;color:var(--muted);font-family:'Noto Sans SC','Inter',sans-serif}
-.menu-overlay nav{display:flex;flex-direction:column;align-items:center;gap:28px}
-.menu-overlay nav a{font-size:clamp(28px,5vw,48px);font-weight:500;color:var(--text);text-decoration:none;letter-spacing:-.02em;transition:opacity .3s}
+.menu-overlay .close-btn{position:absolute;top:24px;right:32px;background:none;border:none;font-size:14px;cursor:pointer;color:#121212;font-family:'Noto Sans SC','Inter',sans-serif}
+.menu-overlay nav{display:flex;flex-direction:column;align-items:center;gap:32px}
+.menu-overlay nav a{font-size:clamp(32px,5vw,52px);font-weight:500;color:#121212;transition:opacity .3s}
 .menu-overlay nav a:hover{opacity:.5}
+@media(max-width:991px){.menu-links-w{display:none}nav{padding:18px 20px}}
 
-/* ═══════════════════════════════════════════ */
-/* HERO — WebGL Mask Reveal + Countdown       */
-/* ═══════════════════════════════════════════ */
-.hero-wrap{position:relative;height:100vh;overflow:hidden}
-.hero-bg-video{position:absolute;inset:0;z-index:0}
-.hero-bg-video video{width:100%;height:100%;object-fit:cover}
-.hero-bg-overlay{position:absolute;inset:0;background:rgba(245,243,239,.3);z-index:1}
+/* ── Hero ── */
+.section-w{position:relative;height:100vh;overflow:hidden}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.hero-video-overlay{position:absolute;inset:0;background:rgba(0,0,0,.25);z-index:1}
+.hero-content{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center}
+.hero-svg{width:min(80vw,900px);color:#fff;opacity:.95}
+.hero-bottom{position:absolute;bottom:32px;left:32px;right:32px;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;font-size:12px;color:rgba(255,255,255,.7);letter-spacing:1px}
+.hero-links{display:flex;gap:16px;align-items:center}
+.hero-links a{color:rgba(255,255,255,.7);transition:color .3s;font-size:11px;letter-spacing:2px;font-family:'IBM Plex Mono',monospace}
+.hero-links a:hover{color:#fff}
+.lang-btn{cursor:pointer;font-size:11px;letter-spacing:2px;font-family:'IBM Plex Mono',monospace;color:rgba(255,255,255,.7)}
+@media(max-width:768px){.hero-bottom{flex-direction:column;gap:16px;align-items:flex-start}}
 
-/* Canvas mask layer — covers everything, reveals on countdown complete */
-#mask-canvas{position:absolute;inset:0;z-index:10;display:block}
-#mask-canvas.hidden{display:none}
-
-/* Hero text — hidden until mask reveals */
-.hero-text{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity .8s cubic-bezier(.16,1,.3,1)}
-.hero-text.show{opacity:1}
-.hero-text h1{font-size:clamp(28px,5vw,52px);font-weight:500;text-align:center;letter-spacing:-.02em;line-height:1.15}
-.hero-text h1 span{display:block}
-.hero-text h1 span:last-child{font-weight:300;font-size:.6em;margin-top:10px;letter-spacing:.04em}
-
-/* Final letter — drops in large after countdown */
-.final-letter{position:absolute;bottom:12%;left:50%;transform:translateX(-50%);z-index:11;font-size:clamp(140px,22vw,300px);font-weight:700;line-height:.85;opacity:0;transition:opacity .5s;font-family:'Noto Sans SC','Inter',sans-serif}
-.final-letter.show{opacity:1}
-
-/* ── Section ── */
-.section{padding:140px 60px;max-width:1400px;margin:0 auto;opacity:0;transform:translateY(60px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
+/* ── Sections ── */
+.section{padding:120px 60px;max-width:1400px;margin:0 auto;opacity:0;transform:translateY(60px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
 .section.visible{opacity:1;transform:translateY(0)}
-.section-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:24px}
-.section-title{font-size:clamp(28px,5vw,56px);font-weight:500;line-height:1.1;letter-spacing:-.02em;margin-bottom:20px}
-.section-desc{font-size:16px;color:var(--muted);max-width:500px;line-height:1.7}
-@media(max-width:768px){.section{padding:80px 24px}}
+.h1-home{font-size:clamp(28px,5vw,52px);font-weight:500;line-height:1.12;letter-spacing:-.02em}
+.h3-style{font-size:clamp(22px,3.5vw,36px);font-weight:400;line-height:1.2;letter-spacing:-.01em}
+.space-24{height:24px}.space-65{height:65px}.space-87{height:87px}.space-150{height:150px}
+@media(max-width:768px){.section{padding:80px 24px}.space-150{height:80px}.space-87{height:40px}}
 
-/* ── Blog List ── */
-.blog-list{margin-top:50px}
-.blog-item{display:flex;align-items:center;justify-content:space-between;padding:28px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:padding .4s}
-.blog-item:hover{padding-left:16px}
-.blog-item h3{font-size:clamp(18px,3vw,32px);font-weight:500;letter-spacing:-.02em;flex:1}
-.blog-item .desc{font-size:14px;color:var(--muted);max-width:300px;text-align:right;line-height:1.5}
-.blog-item .arrow{font-size:20px;color:var(--muted);margin-left:20px;transition:transform .4s}
-.blog-item:hover .arrow{transform:translateX(6px)}
-.view-all{display:inline-flex;align-items:center;gap:8px;margin-top:40px;font-size:13px;color:var(--muted);text-decoration:none;letter-spacing:2px;font-family:'IBM Plex Mono',monospace;transition:gap .3s}
-.view-all:hover{gap:14px}
+/* ── Showreel ── */
+.video-showreel-w{position:relative;border-radius:8px;overflow:hidden}
+.video-showreel-w video{width:100%;height:auto;display:block}
+.video-showreel-flip{display:flex;justify-content:space-between;gap:40px;margin-top:24px;font-size:14px;color:#777;line-height:1.6}
+.video-showreel-flip div:first-child{flex-shrink:0}
+@media(max-width:768px){.video-showreel-flip{flex-direction:column}}
 
-/* ── Gallery ── */
-.gallery{height:100vh;overflow:hidden;opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.16,1,.3,1) .2s,transform 1s cubic-bezier(.16,1,.3,1) .2s}
-.gallery.visible{opacity:1;transform:translateY(0)}
-.gallery-inner{display:flex;height:100%;width:100%}
-.gallery-item{flex:1;overflow:hidden;position:relative;transition:flex .6s cubic-bezier(.25,.1,.25,1)}
-.gallery-item:hover{flex:1.6}
-.gallery-item img,.gallery-item video{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform .6s}
-.gallery-item:hover img,.gallery-item:hover video{transform:scale(1)}
-@media(max-width:768px){.gallery{height:50vh}.gallery-inner{flex-direction:column}.gallery-item{flex:none;height:33.3%}.gallery-item:hover{flex:none}}
+/* ── Works ── */
+.works-word-w{display:flex;gap:8px;font-size:clamp(48px,10vw,120px);font-weight:500;line-height:.9}
+.work_list{display:flex;flex-direction:column;gap:0}
+.work_item{display:flex;align-items:center;justify-content:space-between;padding:32px 0;border-bottom:1px solid rgba(0,0,0,.08);cursor:pointer;position:relative;transition:padding .3s}
+.work_item:hover{padding-left:12px}
+.title-work{font-size:clamp(24px,4vw,40px);font-weight:500;letter-spacing:-.02em}
+.short-p-work{font-size:14px;color:#777;max-width:300px}
+.img-work-w{position:absolute;width:200px;height:140px;right:60px;top:50%;transform:translateY(-50%);opacity:0;pointer-events:none;transition:opacity .3s;overflow:hidden;border-radius:4px}
+.work_item:hover .img-work-w{opacity:1}
+.img-work-w img{width:100%;height:100%;object-fit:cover}
+.cursor-work{position:absolute;right:20px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:6px;color:#121212;font-size:12px;opacity:0;transition:opacity .3s}
+.work_item:hover .cursor-work{opacity:1}
+.view-all-w{display:flex;align-items:center;justify-content:space-between;margin-top:40px}
+.view-all-btn{display:flex;align-items:center;gap:8px;font-size:13px;letter-spacing:2px;font-family:'IBM Plex Mono',monospace;color:#121212}
+.nbr-works-w{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#777;display:flex;gap:4px}
+@media(max-width:768px){.work_item{flex-direction:column;align-items:flex-start;gap:8px}.img-work-w{display:none}.cursor-work{display:none}}
 
-/* ── Image Grid ── */
-.image-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:50px}
-.image-grid-item{aspect-ratio:1;overflow:hidden;position:relative}
-.image-grid-item img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform .6s cubic-bezier(.25,.1,.25,1)}
-.image-grid-item:hover img{transform:scale(1)}
-@media(max-width:900px){.image-grid{grid-template-columns:repeat(2,1fr)}}
+/* ── Studio Video ── */
+.video-studio-w{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:16/9}
+.video-studio-w video{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.video-reflet{opacity:.3;filter:blur(20px);transform:scaleY(-1)}
 
-/* ── Studio ── */
-.studio-row{display:flex;justify-content:space-between;align-items:flex-start;margin-top:50px;gap:40px}
-.studio-col h4{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:16px}
-.studio-col p{font-size:16px;line-height:1.8}
-@media(max-width:600px){.studio-row{flex-direction:column}}
+/* ── Info Section ── */
+.info-w{display:flex;gap:60px;align-items:flex-start}
+.info-w .label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:#777;flex-shrink:0}
+.img-block-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px}
+.img-block-left,.img-block-right-w{overflow:hidden;border-radius:8px;position:relative}
+.img-block-left img,.img-block-right-w img{width:100%;height:100%;object-fit:cover}
+.formes-w{display:flex;flex-wrap:wrap;gap:12px;margin-top:40px}
+.formes-w img{width:120px;height:120px;object-fit:cover;border-radius:4px}
+@media(max-width:768px){.info-w{flex-direction:column}.formes-w img{width:80px;height:80px}}
 
-/* ── Marquee ── */
-.marquee-wrap{overflow:hidden;padding:80px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.marquee{display:flex;gap:40px;white-space:nowrap}
-.marquee-row{font-size:clamp(48px,8vw,100px);font-weight:700;line-height:.9;letter-spacing:-.03em;display:flex;gap:60px;animation:marquee 30s linear infinite}
-.marquee-row var{font-style:normal;opacity:.13;transition:opacity .3s}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* ── Glitch Section ── */
+.glitch-section{position:relative;height:100vh;overflow:hidden;display:flex;align-items:center;background:#f5f3ef}
+.glitch-text-w{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2}
+.glitch-layer{position:absolute;font-size:clamp(48px,8vw,100px);font-weight:700;line-height:.9;text-align:center;white-space:nowrap}
+.glitch-layer._1{opacity:.03;transform:translate(-4px,2px)}
+.glitch-layer._2{opacity:.05;transform:translate(3px,-3px)}
+.glitch-layer._3{opacity:.1}
+.glitch-layer._4{opacity:.04;transform:translate(-2px,-1px)}
+.final-text{font-size:clamp(24px,4vw,42px);font-weight:500;line-height:1.2;text-align:center;color:#121212}
+.glitch-img{position:absolute;bottom:0;right:0;width:40%;max-width:400px;opacity:.6;z-index:1}
+@media(max-width:768px){.glitch-img{width:60%}}
 
 /* ── Footer ── */
-.footer{padding:100px 60px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:40px}
-.footer-cta h2{font-size:clamp(28px,5vw,48px);font-weight:500;letter-spacing:-.02em;margin-bottom:20px}
-.footer-cta a{display:inline-block;padding:14px 30px;border:1px solid var(--text);color:var(--text);text-decoration:none;font-size:12px;letter-spacing:2px;font-family:'IBM Plex Mono',monospace;transition:all .3s}
-.footer-cta a:hover{background:var(--text);color:var(--bg)}
-.footer-links{display:flex;flex-direction:column;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px}
-.footer-links a{color:var(--muted);text-decoration:none;transition:color .3s}
-.footer-links a:hover{color:var(--text)}
-.footer-bottom{padding:30px 60px;display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace;letter-spacing:1px;border-top:1px solid var(--border)}
-@media(max-width:768px){.footer,.footer-bottom{padding:60px 24px}}
+.footer-section{padding:120px 60px 40px}
+.footer-cta h2{font-size:clamp(28px,5vw,52px);font-weight:500;letter-spacing:-.02em;margin-bottom:20px}
+.footer-btns{display:flex;gap:12px;margin-bottom:60px}
+.btn{border:1px solid #121212;padding:14px 28px;font-size:12px;letter-spacing:2px;font-family:'IBM Plex Mono',monospace;display:inline-flex;align-items:center;gap:6px;transition:all .3s;color:#121212}
+.btn:hover{background:#121212;color:#fff}
+.footer-links{display:flex;gap:20px;font-size:12px;color:#777;font-family:'IBM Plex Mono',monospace}
+.footer-links a:hover{color:#121212}
+.footer-bottom{padding-top:40px;margin-top:40px;border-top:1px solid rgba(0,0,0,.08);display:flex;justify-content:space-between;font-size:11px;color:#aaa;font-family:'IBM Plex Mono',monospace}
+@media(max-width:768px){.footer-section{padding:80px 24px 30px}.footer-bottom{flex-direction:column;gap:8px}}
 </style>
 </head>
 <body>
 
-<!-- Fixed Left Sidebar -->
-<aside class="sidebar">
-  <a href="#" target="_blank">GITHUB</a><span class="sep"></span>
-  <a href="mailto:227110038@qq.com">EMAIL</a><span class="sep"></span>
-  <span class="lt" onclick="toggleLang()" id="lang-btn">EN</span>
-</aside>
-
-<!-- Top Menu -->
-<div class="top-menu">
-  <button onclick="document.querySelector('.menu-overlay').classList.add('open')">MENU</button>
-  <div class="lines" onclick="document.querySelector('.menu-overlay').classList.add('open')"><span></span><span></span></div>
+<!-- ══════════════ LOADER ══════════════ -->
+<div class="loader" id="loader">
+  <div class="loader-c">
+    <div class="loader-anim">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 99 120" fill="none"><path d="M97.5773 0C98.5258 0 99 0.474199 99 1.42259V118.577C99 119.526 98.5258 120 97.5773 120H73.2249C72.6669 120 72.2764 119.805 72.0533 119.414L31.3821 62.3431C30.9358 61.7852 30.3779 61.6178 29.7084 61.841C29.0389 62.0084 28.7041 62.4547 28.7041 63.1799L29.2899 118.494C29.2899 119.498 28.8157 120 27.8673 120H1.50634C0.502113 120 0 119.526 0 118.577V1.42259C0 0.474199 0.502113 0 1.50634 0H25.5241C26.082 0 26.5004 0.223152 26.7794 0.669456L67.6179 62.092C68.0085 62.6499 68.5385 62.8452 69.2079 62.6778C69.9332 62.4547 70.2959 61.9805 70.2959 61.2552L69.7101 1.42259C69.7101 0.474199 70.1843 0 71.1327 0H97.5773Z" fill="currentColor"/></svg>
+    </div>
+    <div class="loader-nbr-w" id="loader-count">000</div>
+  </div>
 </div>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav>
+  <div class="nav-logo">
+    <svg viewBox="0 0 1398 291" fill="none"><path d="M224.949 7.33105C227.135 7.33105 228.228 8.42429 228.228 10.6108V280.703C228.228 282.89 227.135 283.983 224.949 283.983H168.808C167.522 283.983 166.622 283.533 166.107 282.633L72.3463 151.059C71.3174 149.773 70.0312 149.387 68.4878 149.901C66.9444 150.287 66.1727 151.316 66.1727 152.988L67.5232 280.511C67.5232 282.826 66.43 283.983 64.2435 283.983H3.47262C1.15754 283.983 0 282.89 0 280.703V10.6108C0 8.42429 1.15754 7.33105 3.47262 7.33105H224.949Z" fill="currentColor"/></svg>
+  </div>
+  <div class="menu-w">
+    <div class="menu-btn" onclick="document.querySelector('.menu-overlay').classList.add('open')">
+      <span class="menu-btn-text">menu</span>
+      <svg class="menu-svg" viewBox="0 0 6 6"><rect y="4" width="2" height="2"/><rect x="4" y="4" width="2" height="2"/><rect width="2" height="2"/><rect x="4" width="2" height="2"/></svg>
+    </div>
+    <div class="menu-links-w">
+      <a href="#works">works</a>
+      <a href="#studio">studio</a>
+      <a href="#footer">contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Menu Overlay -->
 <div class="menu-overlay">
-  <button class="cls" onclick="document.querySelector('.menu-overlay').classList.remove('open')">CLOSE</button>
+  <button class="close-btn" onclick="document.querySelector('.menu-overlay').classList.remove('open')">CLOSE</button>
   <nav>
-    <a href="#hero-wrap" onclick="document.querySelector('.menu-overlay').classList.remove('open')">首页 / Home</a>
-    <a href="#blog" onclick="document.querySelector('.menu-overlay').classList.remove('open')">博客 / Blog</a>
-    <a href="#gallery" onclick="document.querySelector('.menu-overlay').classList.remove('open')">画廊 / Gallery</a>
-    <a href="#hobbies" onclick="document.querySelector('.menu-overlay').classList.remove('open')">爱好 / Hobbies</a>
-    <a href="#connect" onclick="document.querySelector('.menu-overlay').classList.remove('open')">联系 / Contact</a>
+    <a href="#works" onclick="document.querySelector('.menu-overlay').classList.remove('open')">Works</a>
+    <a href="#studio" onclick="document.querySelector('.menu-overlay').classList.remove('open')">Studio</a>
+    <a href="#footer" onclick="document.querySelector('.menu-overlay').classList.remove('open')">Contact</a>
   </nav>
 </div>
 
 <!-- ══════════════ HERO ══════════════ -->
-<div class="hero-wrap" id="hero-wrap">
-  <div class="hero-bg-video">
-    <video autoplay muted loop playsinline>
-      <source src="https://assets.mixkit.co/videos/13038/13038-720.mp4" type="video/mp4">
-    </video>
-    <div class="hero-bg-overlay"></div>
+<section class="section-w" id="hero">
+  <video class="hero-video" autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/13038/13038-720.mp4"></video>
+  <div class="hero-video-overlay"></div>
+  <div class="hero-content">
+    <svg class="hero-svg" viewBox="0 0 1408 294" fill="none"><path d="M226.68 7.38751C228.884 7.38751 229.985 8.48916 229.985 10.6925V282.864C229.985 285.068 228.884 286.169 226.68 286.169H170.107C168.811 286.169 167.904 285.716 167.386 284.808L72.9032 152.222C71.8663 150.926 70.5703 150.537 69.015 151.055C67.4597 151.444 66.6821 152.481 66.6821 154.166L68.043 282.67C68.043 285.003 66.9413 286.169 64.738 286.169H3.49935C1.16645 286.169 0 285.068 0 282.864V10.6925C0 8.48916 1.16645 7.38751 3.49935 7.38751H59.2946C60.5906 7.38751 61.5627 7.90594 62.2107 8.94278L157.082 151.639C157.989 152.935 159.221 153.388 160.776 152.999C162.461 152.481 163.303 151.379 163.303 149.694L161.942 10.6925C161.942 8.48916 163.044 7.38751 165.247 7.38751H226.68Z" fill="currentColor"/><path d="M330.643 11.6645C348.269 3.88817 366.803 0 386.244 0C405.685 0 424.218 3.88817 441.845 11.6645L487.531 42.9643C500.362 56.0544 510.536 71.6719 518.053 89.8167C525.7 107.832 529.523 126.754 529.523 146.584C529.523 166.414 525.7 185.401 518.053 203.546L487.531 250.204L441.845 281.503L386.244 293.168L330.643 281.503L284.957 250.204L254.241 203.546C246.723 185.401 242.965 166.414 242.965 146.584C242.965 126.754 246.723 107.832 254.241 89.8167L284.957 42.9643L330.643 11.6645ZM330.837 203.157C346.131 218.839 364.6 226.68 386.244 226.68L441.65 203.157L464.59 146.584L441.65 90.0111L386.244 66.4877L330.837 90.0111L307.897 146.584L330.837 203.157Z" fill="currentColor"/><path d="M704.685 7.19312C706.888 7.19312 707.99 8.29476 707.99 10.4981V68.043C707.99 70.2463 706.888 71.3479 704.685 71.3479H655.11C652.907 71.3479 651.805 72.5144 651.805 74.8473V282.864C651.805 285.068 650.639 286.169 648.306 286.169H584.151C581.818 286.169 580.652 285.068 580.652 282.864V74.8473C580.652 72.5144 579.55 71.3479 577.347 71.3479H527.384C525.181 71.3479 524.079 70.2463 524.079 68.043V10.4981C524.079 8.29476 525.181 7.19312 527.384 7.19312H704.685Z" fill="currentColor"/><path d="M952.793 7.97076L955.126 9.13721L956.292 11.4701V283.253L955.126 285.78L952.793 286.752H888.638L886.111 285.78L885.139 283.253V180.994L883.972 178.661L881.639 177.495H802.126L798.627 180.8V283.253L797.655 285.78L795.128 286.752H731.167L728.64 285.78L727.668 283.253V11.4701L728.64 9.13721L731.167 7.97076H795.128L797.655 9.13721L798.627 11.4701V110.23L802.126 113.535H881.639L883.972 112.562L885.139 110.035V11.4701L886.111 9.13721L888.638 7.97076H952.793Z" fill="currentColor"/><path d="M1043.58 7.58191L1046.11 8.74836L1047.08 11.0813V282.864L1046.11 285.392L1043.58 286.364H979.62L977.093 285.392L976.121 282.864V11.0813L977.093 8.74836L979.62 7.58191H1043.58Z" fill="currentColor"/><path d="M1293.78 7.38751C1295.99 7.38751 1297.09 8.48916 1297.09 10.6925V282.864C1297.09 285.068 1295.99 286.169 1293.78 286.169H1237.21L1234.49 284.808L1140.01 152.222L1136.12 151.055L1133.79 154.166L1135.15 282.67L1131.84 286.169H1070.6L1067.1 282.864V10.6925L1070.6 7.38751H1126.4L1129.32 8.94278L1224.19 151.639L1227.88 152.999L1230.41 149.694L1229.05 10.6925L1232.35 7.38751H1293.78Z" fill="currentColor"/><path d="M1404.6 7L1407.13 8.36086L1407.9 11.277L1361.44 120.923L1358.13 123.256H1316.14L1313.42 122.09L1312.84 119.174L1339.08 9.72172L1342.39 7H1404.6Z" fill="currentColor"/></svg>
   </div>
-
-  <!-- WebGL Mask Reveal Canvas -->
-  <canvas id="mask-canvas"></canvas>
-
-  <!-- Final letter -->
-  <div class="final-letter" id="final-letter">W</div>
-
-  <!-- Hero text (revealed after mask dissolves) -->
-  <div class="hero-text" id="hero-text">
-    <h1>
-      <span>我从零构建</span>
-      <span>会思考的 AI 系统</span>
-    </h1>
-  </div>
-</div>
-
-<!-- ══════════════ BLOG ══════════════ -->
-<section class="section" id="blog">
-  <div class="section-label">博客</div>
-  <h2 class="section-title">好的代码解决问题。<br>好的文章启发思考。</h2>
-  <p class="section-desc">技术实战教程、工具深度测评、AI 领域前沿观察 — 写给想真正落地的开发者。</p>
-  <div class="blog-list">
-    <div class="blog-item" onclick="openBlog('post1')"><h3>2026 最值得关注的 10 个 AI 开源工具</h3><span class="desc">从小白到进阶 · 12 min</span><span class="arrow">→</span></div>
-    <div class="blog-item" onclick="openBlog('post2')"><h3>GitHub 必收藏的 8 个开发者效率工具</h3><span class="desc">亲测排名 · 10 min</span><span class="arrow">→</span></div>
-    <div class="blog-item" onclick="openBlog('post3')"><h3>Python 爬虫从入门到实战</h3><span class="desc">5 个必学库 · 15 min</span><span class="arrow">→</span></div>
-  </div>
-  <a href="#" class="view-all">查看全部 →</a>
-</section>
-
-<!-- ══════════════ GALLERY ══════════════ -->
-<div class="gallery" id="gallery">
-  <div class="gallery-inner">
-    <div class="gallery-item"><video autoplay muted loop playsinline><source src="https://assets.mixkit.co/videos/13037/13037-720.mp4" type="video/mp4"></video></div>
-    <div class="gallery-item"><video autoplay muted loop playsinline><source src="https://assets.mixkit.co/videos/28780/28780-720.mp4" type="video/mp4"></video></div>
-    <div class="gallery-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Crect fill='%23e8e5df' width='600' height='600'/%3E%3Ctext x='300' y='320' text-anchor='middle' fill='%23ccc' font-size='100'%3E🏸%3C/text%3E%3C/svg%3E" alt=""></div>
-  </div>
-</div>
-
-<!-- ══════════════ HOBBIES ══════════════ -->
-<section class="section" id="hobbies">
-  <div class="section-label">个人爱好</div>
-  <h2 class="section-title">代码之外，<br>我在运动里找到节奏。</h2>
-  <p class="section-desc">🏸 羽毛球 · 🏓 乒乓 · 🏀 篮球 · 🏊 游泳 · 🏎️ F1 · 🍜 美食 · 💐 插花 · 📈 投资</p>
-  <div class="image-grid">
-    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e8e5df' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23ccc' font-size='80'%3E🏸%3C/text%3E%3C/svg%3E" alt=""></div>
-    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e0dcd5' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23bbb' font-size='80'%3E🏓%3C/text%3E%3C/svg%3E" alt=""></div>
-    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e5e0d8' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23ccc' font-size='80'%3E🏀%3C/text%3E%3C/svg%3E" alt=""></div>
-    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23d8d8f0' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23aac' font-size='80'%3E🏊%3C/text%3E%3C/svg%3E" alt=""></div>
-    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e8e0d5' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23ccb' font-size='80'%3E🏎️%3C/text%3E%3C/svg%3E" alt=""></div>
-    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23ebe5db' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23cba' font-size='80'%3E🍜%3C/text%3E%3C/svg%3E" alt=""></div>
-    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23f0e8f0' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23cac' font-size='80'%3E💐%3C/text%3E%3C/svg%3E" alt=""></div>
-    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e0e8d8' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23aca' font-size='80'%3E📈%3C/text%3E%3C/svg%3E" alt=""></div>
+  <div class="hero-bottom">
+    <span>AI Agent Engineer · Full Stack Developer</span>
+    <div class="hero-links">
+      <a href="https://github.com/NiuBi66666688">GITHUB</a>
+      <span>/</span>
+      <a href="mailto:227110038@qq.com">EMAIL</a>
+      <span class="lang-btn" onclick="toggleLang()" id="lang-btn">EN</span>
+    </div>
   </div>
 </section>
 
-<!-- ══════════════ STUDIO ══════════════ -->
-<section class="section" id="about">
-  <div class="studio-row">
-    <div class="studio-col"><h4>关于我</h4><p>AI Agent 工程师 & 全栈开发者<br>专注于 LangGraph · RAG · 多Agent协作</p></div>
-    <div class="studio-col"><h4>联系</h4><p>227110038@qq.com<br>GitHub: NiuBi66666688</p></div>
+<!-- ══════════════ SHOWREEL ══════════════ -->
+<section class="section" id="showreel">
+  <div class="space-150"></div>
+  <h2 class="h1-home">I build AI systems<br>that think & act.</h2>
+  <div class="space-65"></div>
+  <div class="video-showreel-w">
+    <video autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/13037/13037-720.mp4"></video>
+  </div>
+  <div class="video-showreel-flip">
+    <div>( The approach )</div>
+    <div>AI Agent engineering is about making intelligent systems that reason, use tools, and deliver real value — from prompt to production.</div>
   </div>
 </section>
 
-<!-- ══════════════ MARQUEE ══════════════ -->
-<div class="marquee-wrap">
-  <div class="marquee">
-    <div class="marquee-row"><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var></div>
-    <div class="marquee-row" aria-hidden="true"><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var></div>
+<!-- ══════════════ WORKS ══════════════ -->
+<section class="section" id="works">
+  <div class="works-word-w">
+    <span>w</span><span>o</span><span>r</span><span>k</span><span>s</span>
   </div>
-</div>
+  <div class="space-87"></div>
+  <h2 class="h3-style">Good code solves problems.<br>Great code inspires.</h2>
+  <div class="space-87"></div>
+  <div class="work_list">
+    <div class="work_item"><h2 class="title-work">AI Shopping Agent</h2><p class="short-p-work">Multi-agent procurement system with intent understanding</p><div class="img-work-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%2311182a' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23335577' font-size='48'%3E🤖%3C/text%3E%3C/svg%3E" alt=""></div><div class="cursor-work"><span>explore</span><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M8.6.35L13.12 4.87 8.6 9.39" stroke="#121212"/><line y1="5" x2="13.12" y2="5" stroke="#121212"/></svg></div></div>
+    <div class="work_item"><h2 class="title-work">Campus Marketplace</h2><p class="short-p-work">High-performance trading with real-time search & Redis caching</p><div class="img-work-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%230a1f1a' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23224433' font-size='48'%3E🏪%3C/text%3E%3C/svg%3E" alt=""></div><div class="cursor-work"><span>explore</span><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M8.6.35L13.12 4.87 8.6 9.39" stroke="#121212"/><line y1="5" x2="13.12" y2="5" stroke="#121212"/></svg></div></div>
+    <div class="work_item"><h2 class="title-work">AI Report Generator</h2><p class="short-p-work">Weekly reports from Git history via LLM prompt chains</p><div class="img-work-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%232a1510' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23443322' font-size='48'%3E✍️%3C/text%3E%3C/svg%3E" alt=""></div><div class="cursor-work"><span>explore</span><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M8.6.35L13.12 4.87 8.6 9.39" stroke="#121212"/><line y1="5" x2="13.12" y2="5" stroke="#121212"/></svg></div></div>
+    <div class="work_item"><h2 class="title-work">AI Chat Platform</h2><p class="short-p-work">Multi-model chat with streaming & conversation history</p><div class="img-work-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%23111' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23333' font-size='48'%3E💬%3C/text%3E%3C/svg%3E" alt=""></div><div class="cursor-work"><span>explore</span><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M8.6.35L13.12 4.87 8.6 9.39" stroke="#121212"/><line y1="5" x2="13.12" y2="5" stroke="#121212"/></svg></div></div>
+    <div class="work_item"><h2 class="title-work">Web Scraping Toolkit</h2><p class="short-p-work">Production crawlers with anti-bot strategies</p><div class="img-work-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%231a1a0a' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23443322' font-size='48'%3E🕷️%3C/text%3E%3C/svg%3E" alt=""></div><div class="cursor-work"><span>explore</span><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M8.6.35L13.12 4.87 8.6 9.39" stroke="#121212"/><line y1="5" x2="13.12" y2="5" stroke="#121212"/></svg></div></div>
+  </div>
+  <div class="space-150"></div>
+  <div class="view-all-w">
+    <a href="#" class="view-all-btn">View all<svg width="24" height="12" viewBox="-8 -1 26 14" fill="none"><polyline points="0.5,0 0.5,7.5 15.5,7.5" stroke="currentColor" stroke-width="1.5" fill="none"/><polyline points="12,4 15.5,7.5 12,11" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
+    <div class="nbr-works-w"><span>(</span><span>05</span><span>)</span></div>
+  </div>
+</section>
+
+<!-- ══════════════ STUDIO VIDEO ══════════════ -->
+<section class="section" id="studio">
+  <div class="video-studio-w">
+    <video autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/28780/28780-720.mp4"></video>
+    <video class="video-reflet" autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/28780/28780-720.mp4"></video>
+  </div>
+</section>
+
+<!-- ══════════════ INFO ══════════════ -->
+<section class="section">
+  <div class="info-w">
+    <div class="label">( The Studio )</div>
+    <div style="font-size:16px;color:#777;line-height:1.7;max-width:500px">I called it W7W because it represents the constant iteration — building from zero, always shipping, never settling. AI Agent engineering, full-stack development, and a relentless drive to create.</div>
+  </div>
+  <div class="space-87"></div>
+  <h2 class="h1-home">Code follows<br>curiosity.</h2>
+  <div class="space-87"></div>
+  <div class="img-block-grid">
+    <div class="img-block-left"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23e8e5df' width='600' height='400'/%3E%3Ctext x='300' y='220' text-anchor='middle' fill='%23ccc' font-size='60'%3E🏸%3C/text%3E%3C/svg%3E" alt=""><div style="position:absolute;bottom:16px;left:16px;font-size:14px;color:#777">or something<br>unexpected.</div></div>
+    <div class="img-block-right-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23d8d8f0' width='600' height='400'/%3E%3Ctext x='300' y='220' text-anchor='middle' fill='%23aac' font-size='60'%3E🏊%3C/text%3E%3C/svg%3E" alt=""></div>
+  </div>
+  <div class="space-87"></div>
+  <h2 class="h1-home">Forms follow<br>perspective.</h2>
+  <div class="space-87"></div>
+  <div class="formes-w">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23e8e5df' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23ccc' font-size='40'%3E🏸%3C/text%3E%3C/svg%3E" alt="">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23e0dcd5' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23bbb' font-size='40'%3E🏓%3C/text%3E%3C/svg%3E" alt="">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23e5e0d8' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23ccc' font-size='40'%3E🏀%3C/text%3E%3C/svg%3E" alt="">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23e8e0d5' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23ccb' font-size='40'%3E🏎️%3C/text%3E%3C/svg%3E" alt="">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23ebe5db' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23cba' font-size='40'%3E🍜%3C/text%3E%3C/svg%3E" alt="">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23f0e8f0' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23cac' font-size='40'%3E💐%3C/text%3E%3C/svg%3E" alt="">
+  </div>
+</section>
+
+<!-- ══════════════ GLITCH ══════════════ -->
+<section class="glitch-section">
+  <div class="glitch-text-w">
+    <div class="glitch-layer _1">W7W7W'<br>W7W7W'<br>W7W7W'</div>
+    <div class="glitch-layer _2">W7W7W'<br>W7W7W'<br>W7W7W'</div>
+    <div class="glitch-layer _3">W7W7W'<br>W7W7W'<br>W7W7W'</div>
+    <div class="glitch-layer _4">W7W7W'<br>W7W7W'<br>W7W7W'</div>
+    <div class="final-text">Building AI systems<br>from zero to<br>production.</div>
+  </div>
+  <img class="glitch-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Crect fill='%23ddd' width='400' height='600'/%3E%3Ctext x='200' y='320' text-anchor='middle' fill='%23aaa' font-size='80'%3E🏎️%3C/text%3E%3C/svg%3E" alt="">
+</section>
 
 <!-- ══════════════ FOOTER ══════════════ -->
-<section class="footer" id="connect">
-  <div class="footer-cta"><h2>从零开始<br>一起构建。</h2><a href="mailto:227110038@qq.com">BOOK A CALL</a></div>
-  <div class="footer-links"><a href="https://github.com/NiuBi66666688">GitHub</a><a href="mailto:227110038@qq.com">Email</a><a href="#blog">Blog</a><a href="#hobbies">Hobbies</a></div>
-</section>
-<div class="footer-bottom"><span>©2026 W7W</span><span>Built from scratch · All rights reserved</span></div>
-
-<!-- Blog Modals -->
-<div id="post1-modal" style="display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto;padding:80px 40px"><button onclick="closeBlog('post1')" style="position:fixed;top:28px;right:32px;z-index:301;background:none;border:none;font-size:15px;cursor:pointer;color:var(--muted);font-family:'Noto Sans SC',sans-serif">CLOSE</button><div style="max-width:700px;margin:0 auto"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted)">AI 工具</span><h2 style="font-size:36px;font-weight:500;margin:16px 0 8px;letter-spacing:-.02em">2026 年最值得关注的 10 个 AI 开源工具</h2><p style="color:var(--muted);font-size:13px;margin-bottom:32px">2026-07-06 · 12 min</p><p style="font-size:15px;line-height:1.8"><strong>1. Ollama</strong> · <strong>2. Open WebUI</strong> · <strong>3. Dify</strong> · <strong>4. FastGPT</strong> · <strong>5. LangGraph</strong> · 6. vLLM · 7. CrewAI · 8. AnythingLLM · 9. n8n+AI · 10. Mem0</p></div></div>
-<div id="post2-modal" style="display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto;padding:80px 40px"><button onclick="closeBlog('post2')" style="position:fixed;top:28px;right:32px;z-index:301;background:none;border:none;font-size:15px;cursor:pointer;color:var(--muted);font-family:'Noto Sans SC',sans-serif">CLOSE</button><div style="max-width:700px;margin:0 auto"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted)">DEV 工具</span><h2 style="font-size:36px;font-weight:500;margin:16px 0 8px">GitHub 必收藏的 8 个开发者效率工具</h2><p style="color:var(--muted);font-size:13px;margin-bottom:32px">2026-07-05 · 10 min</p><table style="width:100%;border-collapse:collapse;font-size:14px"><tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">🥇</td><td style="padding:10px 8px"><strong>Raycast</strong></td><td style="padding:10px 8px">20K+</td></tr><tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">🥈</td><td style="padding:10px 8px"><strong>Warp</strong></td><td style="padding:10px 8px">22K+</td></tr><tr><td style="padding:10px 8px">🥉</td><td style="padding:10px 8px"><strong>Nushell</strong></td><td style="padding:10px 8px">32K+</td></tr></table></div></div>
-<div id="post3-modal" style="display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto;padding:80px 40px"><button onclick="closeBlog('post3')" style="position:fixed;top:28px;right:32px;z-index:301;background:none;border:none;font-size:15px;cursor:pointer;color:var(--muted);font-family:'Noto Sans SC',sans-serif">CLOSE</button><div style="max-width:700px;margin:0 auto"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted)">爬虫</span><h2 style="font-size:36px;font-weight:500;margin:16px 0 8px">Python 爬虫从入门到实战</h2><p style="color:var(--muted);font-size:13px;margin-bottom:32px">2026-07-04 · 15 min</p><p style="font-size:15px;line-height:1.8"><strong>requests</strong>→<strong>BeautifulSoup</strong>→<strong>Scrapy</strong>→<strong>Playwright</strong>→<strong>httpx</strong></p></div></div>
+<footer class="footer-section" id="footer">
+  <div class="footer-cta"><h2>Let's start<br>from scratch.</h2></div>
+  <div class="space-24"></div>
+  <div class="footer-btns">
+    <a href="mailto:227110038@qq.com" class="btn">book a call<svg width="16" height="8" viewBox="0 0 16 8"><line x1="0" y1="4" x2="14" y2="4" stroke="currentColor" stroke-width="1"/><polyline points="11,1 14,4 11,7" stroke="currentColor" stroke-width="1" fill="none"/></svg></a>
+    <a href="mailto:227110038@qq.com" class="btn">drop an email <span style="font-size:16px">@</span></a>
+  </div>
+  <div class="space-150"></div>
+  <div class="footer-links">
+    <a href="https://github.com/NiuBi66666688">GitHub</a>
+    <a href="mailto:227110038@qq.com">Email</a>
+    <a href="#works">Works</a>
+  </div>
+  <div class="footer-bottom">
+    <span>©2026 W7W</span>
+    <span>Built from scratch</span>
+  </div>
+</footer>
 
 <script>
-// ═══════════════════════════════════════════════
-// MASK REVEAL CANVAS — noth.in replica
-// Semi-transparent overlay + glitch numbers + particle explosion + scale reveal
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// LOADER — Countdown then reveal (noth.in style)
+// ═══════════════════════════════════════════
 (function(){
-  const canvas=document.getElementById('mask-canvas');
-  const ctx=canvas.getContext('2d');
-  const finalLetter=document.getElementById('final-letter');
-  const heroText=document.getElementById('hero-text');
-  let W,H,particles=[],countdownNum=100,phase='countdown';
-  const TOTAL_DURATION=5200;
-  const COUNTDOWN_END=3400;
-  const DISSOLVE_END=5200;
-  let startTime=null,lastNum=-1;
-
-  function resize(){W=canvas.width=canvas.scrollWidth||window.innerWidth;H=canvas.height=window.innerHeight}
-
-  // Noise texture for grain
-  const noiseCanvas=document.createElement('canvas');noiseCanvas.width=256;noiseCanvas.height=256;
-  const nctx=noiseCanvas.getContext('2d');
-  function regenNoise(){const d=nctx.createImageData(256,256);for(let i=0;i<d.data.length;i+=4){const v=Math.random()*40;d.data[i]=v;d.data[i+1]=v;d.data[i+2]=v;d.data[i+3]=255}nctx.putImageData(d,0,0)}
-  regenNoise();
-
-  class Particle{
-    constructor(){this.reset()}
-    reset(){
-      const angle=Math.random()*Math.PI*2;
-      const radius=Math.random()*Math.min(W,H)*.3;
-      this.x=W/2+Math.cos(angle)*radius;
-      this.y=H/2+Math.sin(angle)*radius;
-      this.vx=(Math.random()-.5)*.3;
-      this.vy=(Math.random()-.5)*.3;
-      this.size=Math.random()*2.5+.3;
-      this.opacity=Math.random()*.35+.08;
-      this.life=Math.random()*150+50;
-    }
-    update(dt){
-      this.x+=this.vx*dt*.05;
-      this.y+=this.vy*dt*.05;
-      this.life-=dt*.05;
-      if(this.life<=0)this.reset();
-      if(phase==='dissolve'){
-        const dx=this.x-W/2,dy=this.y-H/2;
-        const dist=Math.sqrt(dx*dx+dy*dy)||1;
-        const force=8/(dist+10);
-        this.vx+=dx/dist*force*dt*.05;
-        this.vy+=dy/dist*force*dt*.05;
-      }
-    }
-    draw(){
-      ctx.fillStyle=`rgba(255,255,255,${this.opacity})`;
-      ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();
-    }
-  }
-
-  for(let i=0;i<200;i++)particles.push(new Particle());
-
-  function drawFrame(timestamp){
-    if(!startTime)startTime=timestamp;
-    const elapsed=timestamp-startTime;
-
-    // Clear
-    ctx.clearRect(0,0,W,H);
-
-    if(elapsed<COUNTDOWN_END){
-      phase='countdown';
-      const eased=1-Math.pow(1-elapsed/COUNTDOWN_END,3);
-      countdownNum=Math.floor(100*(1-eased));
-
-      // Semi-transparent dark overlay (video visible underneath!)
-      ctx.fillStyle='rgba(0,0,0,.6)';
-      ctx.fillRect(0,0,W,H);
-
-      // Film grain
-      ctx.globalAlpha=.04;ctx.drawImage(noiseCanvas,0,0,W,H);ctx.globalAlpha=1;
-
-      // Glitch countdown number
-      const fontSize=Math.min(W*.28,320);
-      const mainX=W/2,mainY=H/2;
-      ctx.save();
-      ctx.fillStyle='rgba(255,255,255,.92)';
-      ctx.font=`${fontSize}px "IBM Plex Mono",monospace`;
-      ctx.textAlign='center';ctx.textBaseline='middle';
-
-      // Primary number with subtle shake
-      const shake=elapsed<800?4*(1-elapsed/800):0;
-      const sx=shake*(Math.random()-.5),sy=shake*(Math.random()-.5);
-      ctx.fillText(countdownNum,mainX+sx,mainY+sy);
-
-      // Secondary ghost number (glitch layer)
-      if(countdownNum>0&&elapsed>500){
-        ctx.fillStyle='rgba(255,255,255,.15)';
-        ctx.fillText(countdownNum,mainX+(Math.random()-1)*6,mainY+(Math.random()-.5)*6);
-        ctx.fillText(countdownNum,mainX+(Math.random())*4,mainY+(Math.random()-.5)*4);
-      }
-      ctx.restore();
-
-      // Pulse ring at each number change
-      if(countdownNum!==lastNum&&countdownNum>0){
-        lastNum=countdownNum;
-        ctx.strokeStyle=`rgba(255,255,255,${.15+.1*(1-elapsed/COUNTDOWN_END)})`;
-        ctx.lineWidth=1.5;
-        ctx.beginPath();ctx.arc(mainX,mainY,fontSize*.7,0,Math.PI*2);ctx.stroke();
-      }
-
-      particles.forEach(p=>{p.update(16);p.draw()});
-
-    }else if(elapsed<TOTAL_DURATION){
-      phase='dissolve';
-
-      // Fading overlay
-      const dissolveProgress=(elapsed-COUNTDOWN_END)/(TOTAL_DURATION-COUNTDOWN_END);
-      const alpha=.6*(1-dissolveProgress);
-      ctx.fillStyle=`rgba(0,0,0,${alpha})`;
-      ctx.fillRect(0,0,W,H);
-
-      ctx.globalAlpha=.04*(1-dissolveProgress);ctx.drawImage(noiseCanvas,0,0,W,H);ctx.globalAlpha=1;
-
-      // Final "W" scale animation
-      if(!finalLetter.classList.contains('show')){
-        finalLetter.classList.add('show');
-        finalLetter.style.transform='translateX(-50%) scale(0)';
-        finalLetter.style.transition='transform .8s cubic-bezier(.16,1,.3,1)';
-        requestAnimationFrame(()=>{finalLetter.style.transform='translateX(-50%) scale(1.2)'});
-        setTimeout(()=>{finalLetter.style.transform='translateX(-50%) scale(1)'},800);
-      }
-
-      particles.forEach(p=>{p.update(16);p.draw()});
-
+  const loader=document.getElementById('loader');
+  const count=document.getElementById('loader-count');
+  
+  // Check if already played this session
+  try{if(sessionStorage.getItem('w7w:loader-played')==='1'){loader.classList.add('hidden');return}}catch(e){}
+  
+  const TOTAL=4200; // 4.2s
+  const start=performance.now();
+  
+  function tick(now){
+    const elapsed=now-start;
+    const progress=Math.min(elapsed/TOTAL,1);
+    const eased=1-Math.pow(1-progress,3);
+    const num=Math.floor(100*(1-eased));
+    count.textContent=String(num).padStart(3,'0');
+    
+    if(progress<1){
+      requestAnimationFrame(tick);
     }else{
-      canvas.style.display='none';
-      heroText.classList.add('show');
-      return;
+      count.textContent='000';
+      setTimeout(()=>{loader.classList.add('hidden');try{sessionStorage.setItem('w7w:loader-played','1')}catch(e){}},400);
     }
-    requestAnimationFrame(drawFrame);
   }
-
-  resize();window.addEventListener('resize',resize);
-  requestAnimationFrame(drawFrame);
+  requestAnimationFrame(tick);
 })();
 
-// ═══════════════════════════════════════════════
-// SCROLL REVEAL (noth.in style)
-// ═══════════════════════════════════════════════
-const revealObserver=new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      entry.target.classList.add('visible');
-    }
-  });
-},{threshold:.08,rootMargin:'0px 0px -60px 0px'});
-document.querySelectorAll('.section,.gallery').forEach(el=>revealObserver.observe(el));
-setTimeout(()=>{
-  document.querySelectorAll('.section,.gallery').forEach(el=>{
-    if(el.getBoundingClientRect().top<innerHeight)el.classList.add('visible');
-  });
-},500);
+// ═══════════════════════════════════════════
+// SCROLL REVEAL
+// ═══════════════════════════════════════════
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.08,rootMargin:'0px 0px -60px 0px'});
+document.querySelectorAll('.section').forEach(el=>obs.observe(el));
+setTimeout(()=>document.querySelectorAll('.section').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight)el.classList.add('visible')}),800);
 
-// ═══════════════════════════════════════════════
-// BLOG MODALS
-// ═══════════════════════════════════════════════
-function openBlog(id){document.getElementById(id+'-modal').style.display='block';document.body.style.overflow='hidden'}
-function closeBlog(id){document.getElementById(id+'-modal').style.display='none';document.body.style.overflow=''}
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('[id$="-modal"]').forEach(el=>el.style.display='none');document.body.style.overflow=''}});
-
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // LANGUAGE TOGGLE
-// ═══════════════════════════════════════════════
-let lang='zh';
-const t={
-  zh:{hero1:'我从零构建',hero2:'会思考的 AI 系统',blog:'博客',blogTitle1:'好的代码解决问题。',blogTitle2:'好的文章启发思考。',blogDesc:'技术实战教程、工具深度测评、AI 领域前沿观察 — 写给想真正落地的开发者。',viewAll:'查看全部 →',hobbies:'个人爱好',hobbiesTitle1:'代码之外，',hobbiesTitle2:'我在运动里找到节奏。',hobbiesDesc:'🏸 羽毛球 · 🏓 乒乓 · 🏀 篮球 · 🏊 游泳 · 🏎️ F1 · 🍜 美食 · 💐 插花 · 📈 投资',aboutMe:'关于我',aboutDesc:'AI Agent 工程师 & 全栈开发者<br>专注于 LangGraph · RAG · 多Agent协作',contact:'联系',footerTitle1:'从零开始',footerTitle2:'一起构建。',close:'CLOSE'},
-  en:{hero1:'I build AI systems',hero2:'that think & act',blog:'Blog',blogTitle1:'Good code solves problems.',blogTitle2:'Great articles inspire thinking.',blogDesc:'Tutorials, tool reviews, AI frontier insights — for devs who ship.',viewAll:'View all →',hobbies:'Hobbies',hobbiesTitle1:'Beyond the terminal,',hobbiesTitle2:'I find rhythm in motion.',hobbiesDesc:'🏸 Badminton · 🏓 Ping Pong · 🏀 Basketball · 🏊 Swimming · 🏎️ F1 · 🍜 Food · 💐 Flowers · 📈 Stocks',aboutMe:'About',aboutDesc:'AI Agent Engineer & Full Stack Dev<br>LangGraph · RAG · Multi-Agent',contact:'Contact',footerTitle1:"Let's start",footerTitle2:'from scratch.',close:'CLOSE'}
-};
+// ═══════════════════════════════════════════
+let lang='en';
 function toggleLang(){
-  lang=lang==='zh'?'en':'zh';
-  const d=t[lang];
-  document.getElementById('lang-btn').textContent=lang==='zh'?'EN':'中';
-  document.querySelector('#hero-text h1 span:first-child').textContent=d.hero1;
-  document.querySelector('#hero-text h1 span:last-child').textContent=d.hero2;
-  document.querySelector('#blog .section-label').textContent=d.blog;
-  document.querySelector('#blog .section-title').innerHTML=d.blogTitle1+'<br>'+d.blogTitle2;
-  document.querySelector('#blog .section-desc').textContent=d.blogDesc;
-  document.querySelector('#blog .view-all').textContent=d.viewAll;
-  document.querySelector('#hobbies .section-label').textContent=d.hobbies;
-  document.querySelector('#hobbies .section-title').innerHTML=d.hobbiesTitle1+'<br>'+d.hobbiesTitle2;
-  document.querySelector('#hobbies .section-desc').textContent=d.hobbiesDesc;
-  document.querySelector('#about .studio-col:first-child h4').textContent=d.aboutMe;
-  document.querySelector('#about .studio-col:first-child p').innerHTML=d.aboutDesc;
-  document.querySelector('#about .studio-col:last-child h4').textContent=d.contact;
-  document.querySelector('.footer-cta h2').innerHTML=d.footerTitle1+'<br>'+d.footerTitle2;
-  document.querySelector('.menu-overlay .cls').textContent=d.close;
+  lang=lang==='en'?'zh':'en';
+  document.getElementById('lang-btn').textContent=lang==='en'?'EN':'中';
+  if(lang==='zh'){
+    document.querySelector('.h1-home').innerHTML='我构建会思考<br>的 AI 系统。';
+    document.querySelector('.h3-style').innerHTML='好的代码解决问题。<br>好的作品启发思考。';
+    document.querySelector('.hero-bottom>span').textContent='AI Agent 工程师 · 全栈开发者';
+  }else{
+    document.querySelector('.h1-home').innerHTML='I build AI systems<br>that think & act.';
+    document.querySelector('.h3-style').innerHTML='Good code solves problems.<br>Great code inspires.';
+    document.querySelector('.hero-bottom>span').textContent='AI Agent Engineer · Full Stack Developer';
+  }
 }
 </script>
 </body>

@@ -1,0 +1,20 @@
+<!DOCTYPE html><html><body><pre id="out"></pre>
+<script>
+const out=document.getElementById('out');
+const fs=['f_01.png','f_02.png','f_03.png','f_04.png','f_05.png','f_06.png','f_07.png','f_08.png','f_09.png','f_10.png','f_11.png','f_12.png','f_13.png','f_14.png','f_15.png','f_16.png','f_17.png','f_18.png','f_19.png','f_20.png'];
+(async()=>{
+for(const f of fs){
+const img=new Image();img.crossOrigin='anonymous';
+await new Promise(r=>{img.onload=r;img.src=f});
+const c=document.createElement('canvas');c.width=200;c.height=200;
+const ctx=c.getContext('2d');ctx.drawImage(img,0,0,200,200);
+const d=ctx.getImageData(0,0,200,200).data;
+let total=0,dark=0;
+for(let i=0;i<d.length;i+=4){total++;if(d[i]+d[i+1]+d[i+2]<150)dark++}
+const cx=80,cy=80;let cb=0,cc=0;
+for(let y=cy;y<cy+40;y++)for(let x=cx;x<cx+40;x++){
+const idx=(y*200+x)*4;cb+=d[idx]+d[idx+1]+d[idx+2];cc++}
+out.textContent+='\n'+f+': dark='+Math.round(dark/total*100)+'% center='+Math.round(cb/cc);
+}
+})();
+</script></body></html>
