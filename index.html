@@ -389,8 +389,8 @@ footer a:hover{color:var(--ink)}
 <!-- ═══════════════════════════════════════════ -->
 <div class="ideas-wrap" id="ideas"><div class="ideas-inner">
   <div class="section-label reveal">// Community</div>
-  <h2 class="section-title reveal d1">建议 & 好点子<br><span style="font-size:22px;font-weight:400;color:var(--muted);line-height:2.5">Crowd Wisdom, AI-Powered</span></h2>
-  <p class="section-desc reveal d2">两个频道：左边是给我的建议，右边是你自己的好主意 — 提交后 AI 自动分析可行性并呈递给我。</p>
+  <h2 class="section-title reveal d1">建议 & 好点子</h2>
+  <p class="section-desc reveal d2">有建议想对我说？或者你有一个好主意想分享？在这里告诉我，我会认真阅读每一条。</p>
 
   <!-- Tabs -->
   <div class="ideas-tabs reveal d2">
@@ -459,61 +459,22 @@ footer a:hover{color:var(--ink)}
         <div class="ideas-form-group">
           <label>详细描述 ✱</label>
           <textarea placeholder="详细说说你的想法：它解决什么问题？面向谁？怎么实现？越具体越好..." name="content" id="i-content" required></textarea>
-          <span class="ideas-form-hint">提交后 AI 会自动分析可行性，给出优势/风险和实施建议。分析结果会一起发到我的邮箱。</span>
+          <span class="ideas-form-hint">你的好点子会直接发送到我的邮箱，我会认真评估每一条。</span>
         </div>
         <button type="submit" class="ideas-submit" id="i-submit">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-          提交并分析
+          提交好点子
         </button>
       </form>
-
-      <!-- Analysis Preview -->
-      <div class="ideas-preview" id="i-preview">
-        <h4>🤖 AI 自动分析结果</h4>
-        <div class="ideas-analysis-grid">
-          <div class="ideas-analysis-card">
-            <div class="alabel">可行性评分</div>
-            <div class="analysis-feasibility">
-              <span class="avalue" id="i-score">--</span>
-              <div class="feasibility-bar"><div class="feasibility-fill" id="i-bar" style="width:0%"></div></div>
-            </div>
-          </div>
-          <div class="ideas-analysis-card">
-            <div class="alabel">预估难度</div>
-            <div class="avalue" id="i-difficulty">--</div>
-          </div>
-          <div class="ideas-analysis-card">
-            <div class="alabel">推荐技术栈</div>
-            <div class="avalue" id="i-tech">--</div>
-          </div>
-          <div class="ideas-analysis-card">
-            <div class="alabel">建议优先级</div>
-            <div class="avalue" id="i-priority">--</div>
-          </div>
-        </div>
-        <div class="analysis-pros-cons">
-          <div class="analysis-section pros"><h5>✅ 优势</h5><ul id="i-pros"></ul></div>
-          <div class="analysis-section cons"><h5>⚠️ 风险/挑战</h5><ul id="i-cons"></ul></div>
-        </div>
-      </div>
 
       <div class="ideas-success" id="i-success">
         <div class="ideas-success-icon">🚀</div>
         <h4>好点子已提交！</h4>
-        <p>AI 已完成可行性分析，结果已发送到我的 QQ 邮箱。如果点子被采纳，我会联系你！</p>
+        <p>感谢你的分享！我会认真阅读每一条，如果点子被采纳会联系你。</p>
       </div>
     </div>
   </div>
-
-  <!-- Community Feed -->
-  <div class="ideas-feed reveal d4">
-    <h4>📬 最近收到的好点子和建议</h4>
-    <div class="ideas-feed-grid" id="ideas-feed">
-      <div class="idea-card"><span class="idea-card-type suggestion">建议</span><p>"建议多写一些 LangGraph 实战教程，现在网上的资料太少了，而且质量参差不齐。"</p><div class="idea-card-footer"><span>匿名 · 3 小时前</span></div></div>
-      <div class="idea-card"><span class="idea-card-type idea">好点子</span><p>"做一个 AI 驱动的代码审查工具，自动检查 PR 中的逻辑错误和安全隐患，生成修改建议。"</p><div class="idea-card-footer"><span>@dev_wang · 5 小时前</span><span class="analysis-badge high">可行性: 高</span></div></div>
-      <div class="idea-card"><span class="idea-card-type suggestion">建议</span><p>"网站可以考虑加一个暗色/亮色模式切换，有些人习惯白天看亮色。"</p><div class="idea-card-footer"><span>@design_lover · 1 天前</span></div></div>
-    </div>
-  </div>
+</div></div>
 </div></div>
 
 <!-- BLOG FULL CONTENT (Post 1) -->
@@ -601,171 +562,36 @@ function switchIdeasTab(type){
 async function handleSubmit(e,type){
   e.preventDefault();
   const btn=document.getElementById(type==='suggestion'?'s-submit':'i-submit');
+  const origText=btn.innerHTML;
   btn.disabled=true;btn.textContent='提交中...';
 
-  // Collect form data
   const data={
     type,
     name:document.getElementById((type==='suggestion'?'s':'i')+'-name').value||'匿名',
     category:document.getElementById((type==='suggestion'?'s':'i')+'-category').value,
     content:document.getElementById((type==='suggestion'?'s':'i')+'-content').value,
   };
-  if(type==='idea'){
-    data.title=document.getElementById('i-title').value;
-  }
+  if(type==='idea') data.title=document.getElementById('i-title').value;
 
-  // Submit to serverless API
+  // Submit silently to server (analysis happens server-side, results go to QQ)
   try{
-    const resp=await fetch('/api/submit',{
+    await fetch('/api/submit',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify(data)
     });
-    const result=await resp.json();
-
-    if(type==='suggestion'){
-      document.getElementById('form-suggestion').style.display='none';
-      document.getElementById('s-success').classList.add('show');
-    }else{
-      // Show AI analysis from server
-      if(result.analysis){
-        renderAnalysis(result.analysis);
-      }else{
-        // Fallback: client-side analysis
-        runAIAnalysis(data.title,data.content,data.category);
-      }
-      btn.disabled=false;btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg> 提交并分析';
-    }
-  }catch(err){
-    console.warn('API unreachable, using client-side fallback:',err.message);
-    // Fallback when API not available (e.g. local file://)
-    if(type==='suggestion'){
-      document.getElementById('form-suggestion').style.display='none';
-      document.getElementById('s-success').classList.add('show');
-    }else{
-      runAIAnalysis(data.title||'',data.content,data.category);
-      btn.disabled=false;btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg> 提交并分析';
-    }
+  }catch(e){
+    console.log('Background submit (analysis runs server-side):',e.message);
   }
-}
 
-// ═══════════════════════════════════════════
-// 🤖 AI AUTOMATIC FEASIBILITY ANALYSIS      
-// ═══════════════════════════════════════════
-function renderAnalysis(a){
-  const preview=document.getElementById('i-preview');
-  preview.classList.add('show');
-  document.getElementById('i-score').textContent=a.score+'/100';
-  const barEl=document.getElementById('i-bar');
-  barEl.style.width=a.score+'%';
-  barEl.className='feasibility-fill '+(a.level==='高'?'high':a.level==='中'?'med':'low');
-  document.getElementById('i-difficulty').textContent=a.difficulty;
-  document.getElementById('i-tech').textContent=a.techStack;
-  document.getElementById('i-priority').textContent=a.priority;
-  const prosList=document.getElementById('i-pros');prosList.innerHTML='';
-  (a.pros||[]).forEach(p=>{const li=document.createElement('li');li.textContent=p;prosList.appendChild(li)});
-  const consList=document.getElementById('i-cons');consList.innerHTML='';
-  (a.cons||[]).forEach(c=>{const li=document.createElement('li');li.textContent=c;consList.appendChild(li)});
-  setTimeout(()=>{preview.scrollIntoView({behavior:'smooth',block:'center'})},200);
-  setTimeout(()=>{
+  // Show simple success — audience sees nothing about AI
+  if(type==='suggestion'){
+    document.getElementById('form-suggestion').style.display='none';
+    document.getElementById('s-success').classList.add('show');
+  }else{
     document.getElementById('form-idea').style.display='none';
     document.getElementById('i-success').classList.add('show');
-    addToFeed((document.getElementById('i-title')||{}).value||'未命名',a.score,a.level);
-  },2500);
-}
-
-function runAIAnalysis(title,content,category){
-  const preview=document.getElementById('i-preview');
-  preview.classList.add('show');
-
-  // Simple NLP-like analysis based on content
-  const text=(title+' '+content).toLowerCase();
-  
-  // Detect domain keywords
-  const aiKws=['ai','llm','gpt','langchain','agent','rag','模型','智能','machine learning','nlp','深度学习'];
-  const webKws=['web','react','vue','next','frontend','backend','api','网站','saas','app'];
-  const toolKws=['tool','工具','自动化','效率','cli','爬虫','scraper'];
-  
-  let score=55+Math.floor(Math.random()*25); // base 55-80
-  
-  // Boost score based on keyword relevance
-  if(aiKws.some(k=>text.includes(k))) score+=Math.floor(Math.random()*12)+5;
-  if(webKws.some(k=>text.includes(k))) score+=Math.floor(Math.random()*8)+3;
-  if(toolKws.some(k=>text.includes(k))) score+=Math.floor(Math.random()*6)+2;
-  
-  score=Math.min(score,97);
-  
-  const level=score>=75?'高':score>=55?'中':'低';
-  const scoreEl=document.getElementById('i-score');
-  const barEl=document.getElementById('i-bar');
-  scoreEl.textContent=score+'/100';
-  barEl.style.width=score+'%';
-  barEl.className='feasibility-fill '+(score>=75?'high':score>=55?'med':'low');
-
-  // Difficulty
-  const difficulties=['🟢 入门级 — 2-3周可完成MVP','🟡 中等 — 需要1-2个月','🟡 进阶 — 需要2-3个月+团队协作','🔴 较难 — 需要专业知识和3-6个月'];
-  document.getElementById('i-difficulty').textContent=difficulties[Math.floor(Math.random()*difficulties.length)];
-
-  // Tech stack
-  const stacks={
-    ai:['Python + LangGraph + FastAPI + ChromaDB','Next.js + Vercel AI SDK + Pinecone','Python + CrewAI + Streamlit'],
-    web:['Next.js + TypeScript + Tailwind + Vercel','React + Node.js + PostgreSQL + Redis','Vue + Nuxt + Supabase'],
-    mobile:['React Native + Expo + Firebase','Flutter + Supabase','Tauri + React'],
-    tool:['Python + Click + Rich','Rust + Clap','Go + Cobra'],
-    business:['Next.js + Stripe + Supabase','No-code: Bubble/Webflow + Zapier','Python + FastAPI + React Admin'],
-    other:['待进一步评估后推荐','需要更多信息来确定技术栈']
-  }[category]||stacks.other;
-  document.getElementById('i-tech').textContent=stacks[Math.floor(Math.random()*stacks.length)];
-
-  // Priority
-  document.getElementById('i-priority').textContent=score>=80?'🔝 高优先级 — 建议尽快调研':score>=65?'📌 中优先级 — 值得深入研究':'📎 低优先级 — 可以作为Side Project';
-
-  // Pros
-  const prosList=document.getElementById('i-pros');
-  prosList.innerHTML='';
-  const pros=[
-    '市场需求明确，目标用户群体清晰',
-    '技术栈成熟，开源工具丰富，开发成本可控',
-    '差异化空间大，竞品功能不完善',
-    '可快速验证MVP，试错成本低',
-    '与当前AI趋势高度契合，容易获得关注',
-    '变现路径清晰，商业模式可复制',
-  ];
-  const selectedPros=[...pros].sort(()=>Math.random()-.5).slice(0,3);
-  selectedPros.forEach(p=>{const li=document.createElement('li');li.textContent=p;prosList.appendChild(li)});
-
-  // Cons
-  const consList=document.getElementById('i-cons');
-  consList.innerHTML='';
-  const cons=[
-    '大厂同类产品竞争激烈，需要差异化策略',
-    '用户获取成本可能较高，冷启动是个挑战',
-    '技术门槛较高，需要专业团队支撑',
-    '数据合规和隐私问题需要提前规划',
-    '盈利模式需要进一步验证',
-    '需要持续迭代才能保持竞争力',
-  ];
-  const selectedCons=[...cons].sort(()=>Math.random()-.5).slice(0,3);
-  selectedCons.forEach(c=>{const li=document.createElement('li');li.textContent=c;consList.appendChild(li)});
-
-  // Scroll to preview
-  setTimeout(()=>{preview.scrollIntoView({behavior:'smooth',block:'center'})},200);
-
-  // Show success after delay
-  setTimeout(()=>{
-    document.getElementById('form-idea').style.display='none';
-    document.getElementById('i-success').classList.add('show');
-    // Add to feed
-    addToFeed(title,score,level);
-  },2500);
-}
-
-function addToFeed(title,score,level){
-  const feed=document.getElementById('ideas-feed');
-  const card=document.createElement('div');
-  card.className='idea-card';
-  card.innerHTML=`<span class="idea-card-type idea">好点子</span><p>"${(title||'未命名').slice(0,80)}"</p><div class="idea-card-footer"><span>@匿名 · 刚刚</span><span class="analysis-badge ${level==='高'?'high':level==='中'?'med':'low'}">可行性: ${score}%</span></div>`;
-  feed.insertBefore(card,feed.firstChild);
+  }
 }
 
 // ── Initial reveal ──
