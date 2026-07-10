@@ -3,599 +3,289 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>W7W — Building at the Edge of AI</title>
-<meta name="description" content="Full Stack Developer & AI Agent Engineer.">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;460;500;540;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<title>W7W</title>
+<meta name="description" content="AI Agent Engineer & Full Stack Developer">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --void:#000;--mysteria:#1b1938;--ink:#f7f8f8;--silver:#a6a6a6;--muted:#8a8f98;--ghost:#62666d;
-  --accent:#7170ff;--accent-bg:#5e6ad2;--accent-glow:rgba(113,112,255,.2);
-  --cream:#e9e5dd;--parchment:#dcd7d3;
-  --border-subtle:rgba(255,255,255,.06);--border-standard:rgba(255,255,255,.10);--border-frost:rgba(255,255,255,.15);
-  --green:#10b981;--orange:#fb923c;--red:#ef4444;
-  --font:'Inter','Noto Sans SC',system-ui,-apple-system,sans-serif;
-  --font-mono:'JetBrains Mono',ui-monospace,monospace;
-  --radius-sm:6px;--radius-md:8px;--radius-lg:12px;--radius-xl:16px;--radius-pill:100px;
-  --ease-out:cubic-bezier(.16,1,.3,1);--ease-spring:cubic-bezier(.34,1.56,.64,1);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+*{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{font-family:var(--font);background:var(--void);color:var(--silver);line-height:1.5;overflow-x:hidden;cursor:default;font-feature-settings:'cv01','ss03'}
+body{font-family:'Noto Sans SC','Inter',system-ui,sans-serif;background:#000;color:#fff;overflow-x:hidden}
 
-/* ── Cursor ── */
-.cursor-dot,.cursor-ring{position:fixed;pointer-events:none;z-index:9999}
-.cursor-dot{width:5px;height:5px;background:#fff;border-radius:50%;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s}
-.cursor-ring{width:28px;height:28px;border:1px solid rgba(255,255,255,.2);border-radius:50%;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
-.cursor-ring.hover{width:44px;height:44px;border-color:var(--accent)}
-.cursor-dot.hover{width:9px;height:9px;background:var(--accent)}
+/* ── Navigation ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 40px;display:flex;justify-content:space-between;align-items:center;mix-blend-mode:difference}
+.nav-logo{font-size:16px;font-weight:600;letter-spacing:2px;color:#fff;text-decoration:none}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{color:rgba(255,255,255,.7);text-decoration:none;font-size:13px;font-weight:400;letter-spacing:1px;transition:color .3s}
+.nav-links a:hover{color:#fff}
+.nav-toggle{display:none;background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
+@media(max-width:768px){nav{padding:20px 24px}.nav-links{display:none}.nav-toggle{display:block}}
 
-/* ── Particles ── */
-#particles{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.35}
-
-/* ── Nav ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;background:rgba(0,0,0,.72);backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);border-bottom:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:space-between;padding:0 28px;transition:background .3s}
-nav.scrolled{background:rgba(0,0,0,.92)}
-.nav-logo{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-.2px}
-.nav-links{display:flex;gap:26px;align-items:center;list-style:none}
-.nav-links a{font-size:12.5px;font-weight:460;color:var(--muted);text-decoration:none;transition:color .15s;letter-spacing:-.1px;position:relative}
-.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--accent);transition:width .3s var(--ease-out)}
-.nav-links a:hover{color:var(--ink)}
-.nav-links a:hover::after{width:100%}
-.nav-cta{display:inline-flex;align-items:center;gap:5px;background:var(--accent-bg);color:#fff!important;padding:7px 15px;border-radius:var(--radius-pill);font-weight:500!important;font-size:12.5px!important;transition:all .2s var(--ease-out)!important}
-.nav-cta::after{display:none!important}
-.nav-cta:hover{background:var(--accent)!important;transform:translateY(-1px);box-shadow:0 6px 24px rgba(94,106,210,.35)}
-.nav-toggle{display:none;background:none;border:none;color:var(--ink);font-size:20px;cursor:pointer}
-
-/* ── Hero ── */
-.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 28px 80px;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,var(--mysteria) 0%,transparent 70%);opacity:.85;z-index:0}
-.hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,transparent 0%,rgba(0,0,0,.5) 100%);z-index:1}
-.hero-glow{position:absolute;border-radius:50%;filter:blur(140px);pointer-events:none;z-index:0}
-.hero-glow-1{background:var(--accent);width:600px;height:600px;top:-200px;right:-100px;opacity:.12;animation:hf 16s ease-in-out infinite}
-.hero-glow-2{background:#10b981;width:400px;height:400px;bottom:-150px;left:-80px;opacity:.05;animation:hf 22s ease-in-out infinite reverse}
-@keyframes hf{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-30px) scale(1.08)}66%{transform:translate(-25px,20px) scale(.94)}}
-.hero-content{text-align:center;max-width:780px;position:relative;z-index:2}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:7px;padding:4px 14px 4px 8px;border-radius:var(--radius-pill);border:1px solid var(--border-standard);background:rgba(255,255,255,.015);font-size:11px;font-weight:500;color:var(--muted);font-family:var(--font-mono);letter-spacing:.05em;font-feature-settings:normal;margin-bottom:40px;animation:hr .8s var(--ease-out) .2s both}
-.hero-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:dp 2s ease-in-out infinite}
-@keyframes dp{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(16,185,129,.4)}50%{opacity:.5;box-shadow:0 0 0 8px rgba(16,185,129,0)}}
-@keyframes hr{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.hero h1{font-size:clamp(42px,9vw,88px);font-weight:600;color:var(--ink);line-height:.88;letter-spacing:-.032em;margin-bottom:24px;animation:hr .8s var(--ease-out) .35s both}
-.hero h1 .accent{color:transparent;background:linear-gradient(135deg,#7170ff,#cbb7fb,#828fff);-webkit-background-clip:text;background-clip:text}
-.hero-tagline{font-size:18px;font-weight:400;color:var(--muted);line-height:1.65;letter-spacing:-.12px;max-width:520px;margin:0 auto 42px;animation:hr .8s var(--ease-out) .5s both}
-.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:hr .8s var(--ease-out) .65s both}
-.btn-primary{display:inline-flex;align-items:center;gap:7px;background:var(--accent-bg);color:#fff;padding:11px 24px;border-radius:var(--radius-pill);font-size:14px;font-weight:500;text-decoration:none;transition:all .25s var(--ease-out);font-family:var(--font);position:relative;overflow:hidden}
-.btn-primary::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15) 0%,transparent 50%);opacity:0;transition:opacity .3s}
-.btn-primary:hover{background:var(--accent);transform:translateY(-2px);box-shadow:0 10px 40px rgba(94,106,210,.4)}
-.btn-primary:hover::after{opacity:1}
-.btn-ghost{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.03);color:var(--silver);padding:11px 24px;border-radius:var(--radius-pill);border:1px solid var(--border-standard);font-size:14px;font-weight:460;text-decoration:none;transition:all .25s var(--ease-out);font-family:var(--font)}
-.btn-ghost:hover{border-color:var(--border-frost);color:var(--ink);background:rgba(255,255,255,.05)}
-.hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--ghost);animation:sb 2.4s ease-in-out infinite;z-index:2}
-.hero-scroll span{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase}
-@keyframes sb{0%,100%{transform:translateX(-50%) translateY(0);opacity:.6}50%{transform:translateX(-50%) translateY(12px);opacity:1}}
+/* ── Hero Video Section ── */
+.hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.hero-overlay{position:absolute;inset:0;background:rgba(0,0,0,.55);z-index:1}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:900px;padding:0 40px}
+.hero h1{font-family:'Noto Serif SC','Georgia',serif;font-size:clamp(36px,7vw,80px);font-weight:600;line-height:1.08;letter-spacing:-.01em;margin-bottom:24px;animation:fadeUp 1s ease-out}
+.hero h1 span{display:block;font-weight:300;font-size:.5em;letter-spacing:.08em;margin-bottom:10px;font-family:'Noto Sans SC','Inter',sans-serif}
+.hero-tagline{font-size:16px;color:rgba(255,255,255,.65);line-height:1.7;max-width:480px;margin:0 auto 32px;animation:fadeUp 1s ease-out .2s both}
+.hero-cta{display:inline-block;padding:14px 36px;border:1px solid rgba(255,255,255,.3);color:#fff;text-decoration:none;font-size:13px;letter-spacing:2px;text-transform:uppercase;transition:all .4s;animation:fadeUp 1s ease-out .4s both}
+.hero-cta:hover{background:#fff;color:#000;border-color:#fff}
+.hero-scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;color:rgba(255,255,255,.4);font-size:11px;letter-spacing:3px;text-transform:uppercase;animation:fadeUp 1s ease-out .8s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 
 /* ── Section ── */
-.section{padding:130px 28px;max-width:1140px;margin:0 auto;position:relative;z-index:1}
-.section-label{font-family:var(--font-mono);font-size:10px;font-weight:500;color:var(--accent);text-transform:uppercase;letter-spacing:.12em;margin-bottom:16px;font-feature-settings:normal}
-.section-title{font-size:clamp(32px,5.5vw,54px);font-weight:600;color:var(--ink);line-height:.94;letter-spacing:-.028em;margin-bottom:20px}
-.section-desc{font-size:16px;color:var(--muted);max-width:540px;line-height:1.65;letter-spacing:-.12px}
+.section{position:relative;padding:120px 60px;max-width:1400px;margin:0 auto}
+.section-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:20px;font-weight:400}
+.section-title{font-family:'Noto Serif SC','Georgia',serif;font-size:clamp(28px,5vw,56px);font-weight:600;line-height:1.1;letter-spacing:-.01em;margin-bottom:20px}
+.section-desc{font-size:16px;color:rgba(255,255,255,.55);max-width:500px;line-height:1.7}
+@media(max-width:768px){.section{padding:80px 24px}}
 
-/* ── Reveal ── */
-.reveal{opacity:0;transform:translateY(48px);transition:opacity .9s var(--ease-out),transform .9s var(--ease-out)}
-.reveal.visible{opacity:1;transform:translateY(0)}
-.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+/* ── Video Grid ── */
+.video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:60px}
+.video-grid-item{position:relative;aspect-ratio:16/10;overflow:hidden;cursor:pointer}
+.video-grid-item video,.video-grid-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.25,.1,.25,1)}
+.video-grid-item:hover video,.video-grid-item:hover img{transform:scale(1.04)}
+.video-grid-item .caption{position:absolute;bottom:0;left:0;right:0;padding:40px 24px 20px;background:linear-gradient(transparent,rgba(0,0,0,.7));z-index:2}
+.video-grid-item .caption h3{font-size:14px;font-weight:500;letter-spacing:1px}
+.video-grid-item .caption span{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:1px}
+@media(max-width:900px){.video-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.video-grid{grid-template-columns:1fr}}
+
+/* ── Full-width Image Strip ── */
+.image-strip{display:flex;gap:4px;margin-top:60px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.image-strip::-webkit-scrollbar{display:none}
+.image-strip-item{flex:0 0 45vw;min-width:300px;aspect-ratio:4/5;overflow:hidden;position:relative}
+.image-strip-item video,.image-strip-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.image-strip-item:hover video,.image-strip-item:hover img{transform:scale(1.03)}
+.image-strip-item .label{position:absolute;bottom:20px;left:20px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#fff;z-index:2}
 
 /* ── Blog Section ── */
-.blog-wrap{background:rgba(255,255,255,.008);border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)}
-.blog-inner{max-width:1140px;margin:0 auto;padding:130px 28px}
-.blog-hero-card{background:linear-gradient(135deg,rgba(113,112,255,.08),rgba(16,185,129,.05));border:1px solid var(--border-standard);border-radius:var(--radius-xl);padding:48px 40px;margin-bottom:48px;position:relative;overflow:hidden}
-.blog-hero-card::before{content:'';position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:var(--accent);filter:blur(120px);opacity:.1;border-radius:50%}
-.blog-hero-card h3{font-size:28px;font-weight:600;color:var(--ink);margin-bottom:12px;position:relative}
-.blog-hero-card p{font-size:15px;color:var(--muted);max-width:600px;line-height:1.7;position:relative}
-.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.blog-post{background:rgba(255,255,255,.012);border:1px solid var(--border-subtle);border-radius:var(--radius-xl);overflow:hidden;transition:all .4s var(--ease-out);cursor:pointer;position:relative}
-.blog-post:hover{border-color:var(--border-standard);transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,.3)}
-.blog-post-img{height:180px;display:flex;align-items:center;justify-content:center;font-size:56px;position:relative;overflow:hidden}
-.blog-post-img.grad-1{background:linear-gradient(135deg,rgba(94,106,210,.25),rgba(113,112,255,.08))}
-.blog-post-img.grad-2{background:linear-gradient(135deg,rgba(16,185,129,.2),rgba(94,106,210,.08))}
-.blog-post-img.grad-3{background:linear-gradient(135deg,rgba(251,146,60,.2),rgba(16,185,129,.08))}
-.blog-post-body{padding:22px 20px}
-.blog-post-cat{font-family:var(--font-mono);font-size:9.5px;font-weight:500;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;font-feature-settings:normal}
-.blog-post h4{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:6px;letter-spacing:-.2px;line-height:1.35}
-.blog-post .excerpt{font-size:12.5px;color:var(--muted);line-height:1.6;letter-spacing:-.08px;margin-bottom:12px}
-.blog-post .meta{font-size:10.5px;color:var(--ghost);font-family:var(--font-mono);display:flex;align-items:center;gap:12px;font-feature-settings:normal}
+.blog-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:60px}
+.blog-item{position:relative;aspect-ratio:3/4;overflow:hidden;cursor:pointer}
+.blog-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.blog-item:hover img{transform:scale(1.04)}
+.blog-item .overlay{position:absolute;inset:0;background:rgba(0,0,0,.3);transition:background .4s;display:flex;flex-direction:column;justify-content:flex-end;padding:30px}
+.blog-item:hover .overlay{background:rgba(0,0,0,.55)}
+.blog-item .overlay h4{font-family:'Noto Serif SC','Georgia',serif;font-size:20px;font-weight:600;margin-bottom:6px}
+.blog-item .overlay span{font-size:11px;color:rgba(255,255,255,.6);letter-spacing:1px}
+@media(max-width:900px){.blog-strip{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.blog-strip{grid-template-columns:1fr}}
 
-/* ── Blog Full ── */
-.blog-full{display:none;position:fixed;inset:0;z-index:200;overflow-y:auto}
-.blog-full.open{display:block}
-.blog-full-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);z-index:199}
-.blog-full-content{position:relative;z-index:201;max-width:800px;margin:60px auto;background:var(--void);border:1px solid var(--border-standard);border-radius:var(--radius-xl);padding:48px 40px}
-.blog-full-close{position:fixed;top:20px;right:28px;z-index:202;width:40px;height:40px;border-radius:50%;border:1px solid var(--border-standard);background:rgba(0,0,0,.8);color:var(--ink);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.blog-full-close:hover{background:rgba(255,255,255,.1);border-color:var(--border-frost)}
-.blog-full h2{font-size:32px;font-weight:600;color:var(--ink);line-height:1.15;margin-bottom:16px}
-.blog-full .blog-meta{font-family:var(--font-mono);font-size:12px;color:var(--ghost);margin-bottom:32px;display:flex;gap:16px;align-items:center}
-.blog-full h3{font-size:20px;font-weight:600;color:var(--ink);margin:32px 0 12px}
-.blog-full p{font-size:15px;color:var(--silver);line-height:1.75;margin-bottom:14px;letter-spacing:-.08px}
-.blog-full ul,.blog-full ol{margin:12px 0 20px 20px;color:var(--silver);font-size:15px;line-height:1.8}
-.blog-full li{margin-bottom:6px}
-.blog-full code{font-family:var(--font-mono);font-size:13px;background:rgba(255,255,255,.06);padding:2px 6px;border-radius:3px;color:var(--accent);font-feature-settings:normal}
-.blog-full pre{background:rgba(255,255,255,.04);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:20px;overflow-x:auto;margin:16px 0;font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--silver);font-feature-settings:normal}
-.blog-full .highlight{color:var(--accent);font-weight:600}
-.blog-full .tip{background:rgba(16,185,129,.08);border-left:2px solid var(--green);padding:14px 18px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:20px 0;font-size:14px;color:var(--silver)}
-.blog-full .tip strong{color:var(--green)}
-.blog-full table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px}
-.blog-full th{text-align:left;padding:10px 14px;background:rgba(255,255,255,.04);color:var(--ink);font-weight:600;border-bottom:1px solid var(--border-standard)}
-.blog-full td{padding:10px 14px;border-bottom:1px solid var(--border-subtle);color:var(--silver)}
-.blog-full tr:hover td{background:rgba(255,255,255,.02)}
-.blog-full .badge-hot{background:rgba(251,146,60,.15);color:#fb923c;display:inline-block;font-family:var(--font-mono);font-size:11px;padding:2px 8px;border-radius:var(--radius-sm);font-weight:500;letter-spacing:.03em}
-.blog-full .badge-new{background:rgba(16,185,129,.15);color:var(--green);display:inline-block;font-family:var(--font-mono);font-size:11px;padding:2px 8px;border-radius:var(--radius-sm);font-weight:500;letter-spacing:.03em}
-.blog-full .badge-pro{background:rgba(113,112,255,.15);color:var(--accent);display:inline-block;font-family:var(--font-mono);font-size:11px;padding:2px 8px;border-radius:var(--radius-sm);font-weight:500;letter-spacing:.03em}
+/* ── Text Section ── */
+.text-section{padding:160px 60px;text-align:center;max-width:800px;margin:0 auto}
+.text-section .big-text{font-family:'Noto Serif SC','Georgia',serif;font-size:clamp(24px,4vw,40px);font-weight:400;line-height:1.5;color:rgba(255,255,255,.85)}
+.text-section .author{font-size:13px;letter-spacing:2px;color:rgba(255,255,255,.35);margin-top:30px}
 
-/* ══════════════════════════════════════════════ */
-/* 🆕 IDEAS & SUGGESTIONS FORM                  */
-/* ══════════════════════════════════════════════ */
-.ideas-wrap{background:linear-gradient(180deg,rgba(113,112,255,.03) 0%,rgba(16,185,129,.02) 100%)}
-.ideas-inner{max-width:1140px;margin:0 auto;padding:130px 28px}
+/* ── Footer ── */
+footer{padding:60px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:rgba(255,255,255,.3);letter-spacing:1px}
+footer a{color:rgba(255,255,255,.4);text-decoration:none;transition:color .3s}
+footer a:hover{color:#fff}
+@media(max-width:768px){footer{flex-direction:column;gap:20px;text-align:center;padding:40px 24px}}
 
-.ideas-tabs{display:flex;gap:8px;margin-bottom:40px}
-.ideas-tab{
-  padding:10px 22px;border-radius:var(--radius-pill);
-  border:1px solid var(--border-standard);
-  background:rgba(255,255,255,.02);
-  color:var(--muted);font-size:14px;font-weight:500;
-  cursor:pointer;transition:all .25s var(--ease-out);
-  font-family:var(--font);
-}
-.ideas-tab.active{background:var(--accent-bg);border-color:var(--accent-bg);color:#fff}
-.ideas-tab:hover:not(.active){border-color:var(--border-frost);color:var(--ink)}
-
-.ideas-panels{position:relative}
-.ideas-panel{display:none}
-.ideas-panel.active{display:block}
-
-.ideas-form{display:grid;gap:20px;max-width:680px}
-.ideas-form-group{display:flex;flex-direction:column;gap:6px}
-.ideas-form-group label{
-  font-family:var(--font-mono);font-size:11px;font-weight:500;
-  color:var(--accent);text-transform:uppercase;letter-spacing:.08em;
-  font-feature-settings:normal;
-}
-.ideas-form-group input,
-.ideas-form-group textarea,
-.ideas-form-group select{
-  background:rgba(255,255,255,.02);border:1px solid var(--border-standard);
-  border-radius:var(--radius-md);padding:12px 16px;
-  font-family:var(--font);font-size:14px;color:var(--ink);
-  transition:border-color .2s;outline:none;resize:vertical;
-}
-.ideas-form-group input:focus,
-.ideas-form-group textarea:focus,
-.ideas-form-group select:focus{
-  border-color:var(--accent);
-  box-shadow:0 0 0 3px rgba(113,112,255,.1);
-}
-.ideas-form-group textarea{min-height:120px}
-.ideas-form-group select{appearance:none;cursor:pointer}
-.ideas-form-group select option{background:var(--void);color:var(--ink)}
-.ideas-form-hint{
-  font-size:11px;color:var(--ghost);font-family:var(--font-mono);
-  font-feature-settings:normal;
-}
-
-.ideas-submit{
-  display:inline-flex;align-items:center;gap:8px;
-  background:var(--accent-bg);color:#fff;
-  padding:12px 28px;border-radius:var(--radius-pill);
-  font-size:14px;font-weight:500;border:none;cursor:pointer;
-  transition:all .25s var(--ease-out);
-  font-family:var(--font);width:fit-content;
-}
-.ideas-submit:hover{background:var(--accent);transform:translateY(-2px);box-shadow:0 10px 40px rgba(94,106,210,.4)}
-.ideas-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
-
-.ideas-preview{
-  margin-top:40px;display:none;
-  background:rgba(255,255,255,.02);
-  border:1px solid var(--border-standard);
-  border-radius:var(--radius-xl);padding:32px;
-}
-.ideas-preview.show{display:block}
-.ideas-preview h4{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:16px}
-.ideas-analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
-.ideas-analysis-card{
-  background:rgba(255,255,255,.015);border:1px solid var(--border-subtle);
-  border-radius:var(--radius-md);padding:16px;
-}
-.ideas-analysis-card .alabel{font-family:var(--font-mono);font-size:9.5px;color:var(--ghost);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;font-feature-settings:normal}
-.ideas-analysis-card .avalue{font-size:14px;color:var(--ink);font-weight:500}
-.analysis-feasibility{display:flex;align-items:center;gap:8px}
-.feasibility-bar{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
-.feasibility-fill{height:100%;border-radius:3px;transition:width .6s var(--ease-out)}
-.feasibility-fill.high{background:var(--green)}
-.feasibility-fill.med{background:var(--orange)}
-.feasibility-fill.low{background:var(--red)}
-.analysis-pros-cons{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
-.analysis-section h5{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:8px}
-.analysis-section ul{list-style:none;font-size:13px;color:var(--silver);line-height:1.7}
-.analysis-section li::before{content:'•';margin-right:6px}
-.analysis-section.pros li::before{color:var(--green)}
-.analysis-section.cons li::before{color:var(--red)}
-.ideas-success{
-  display:none;text-align:center;padding:40px;
-}
-.ideas-success.show{display:block}
-.ideas-success-icon{font-size:56px;margin-bottom:16px;animation:hr .5s var(--ease-spring)}
-.ideas-success h4{font-size:22px;font-weight:600;color:var(--ink);margin-bottom:8px}
-.ideas-success p{font-size:14px;color:var(--muted);line-height:1.6}
-
-.ideas-feed{margin-top:48px}
-.ideas-feed h4{font-size:18px;font-weight:600;color:var(--ink);margin-bottom:20px}
-.ideas-feed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
-.idea-card{
-  background:rgba(255,255,255,.012);border:1px solid var(--border-subtle);
-  border-radius:var(--radius-lg);padding:20px;transition:all .3s var(--ease-out);
-}
-.idea-card:hover{border-color:var(--border-standard)}
-.idea-card-type{
-  font-family:var(--font-mono);font-size:9px;font-weight:500;
-  padding:2px 8px;border-radius:var(--radius-sm);
-  display:inline-block;margin-bottom:10px;
-  letter-spacing:.05em;font-feature-settings:normal;
-}
-.idea-card-type.suggestion{background:rgba(113,112,255,.12);color:var(--accent)}
-.idea-card-type.idea{background:rgba(16,185,129,.12);color:var(--green)}
-.idea-card p{font-size:13px;color:var(--silver);line-height:1.55;letter-spacing:-.08px}
-.idea-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;font-family:var(--font-mono);font-size:10px;color:var(--ghost);font-feature-settings:normal}
-.idea-card-footer .analysis-badge{font-weight:500}
-.idea-card-footer .analysis-badge.high{color:var(--green)}
-.idea-card-footer .analysis-badge.med{color:var(--orange)}
-.idea-card-footer .analysis-badge.low{color:var(--red)}
-
-/* ── About ── */
-.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:56px;align-items:start}
-.about-text p{color:var(--muted);font-size:15px;line-height:1.78;letter-spacing:-.12px;margin-bottom:18px}
-.about-text strong{color:var(--ink);font-weight:600}
-.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat-card{background:rgba(255,255,255,.012);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:22px 20px;text-align:center;transition:all .35s var(--ease-out);position:relative;overflow:hidden}
-.stat-card::before{content:'';position:absolute;inset:0;background:radial-gradient(500px circle at var(--mx,50%) var(--my,50%),var(--accent-glow),transparent 50%);opacity:0;transition:opacity .35s}
-.stat-card:hover{border-color:var(--border-standard);transform:translateY(-3px)}
-.stat-card:hover::before{opacity:1}
-.stat-number{font-size:38px;font-weight:700;color:var(--ink);letter-spacing:-.9px;line-height:1.05}
-.stat-label{font-size:10px;font-weight:500;color:var(--ghost);margin-top:6px;font-family:var(--font-mono);letter-spacing:.03em;font-feature-settings:normal}
-
-/* ── Projects ── */
-.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px}
-.project-card{background:rgba(255,255,255,.012);border:1px solid var(--border-subtle);border-radius:var(--radius-xl);padding:32px 26px;transition:all .4s var(--ease-out);position:relative;overflow:hidden;text-decoration:none;display:block;cursor:pointer}
-.project-card::before{content:'';position:absolute;inset:0;background:radial-gradient(600px circle at var(--mx,50%) var(--my,50%),rgba(113,112,255,.06),transparent 60%);opacity:0;transition:opacity .4s}
-.project-card:hover{border-color:var(--border-standard);transform:translateY(-5px);box-shadow:0 24px 64px rgba(0,0,0,.35)}
-.project-card:hover::before{opacity:1}
-.project-icon-box{width:42px;height:42px;border-radius:var(--radius-md);background:rgba(255,255,255,.03);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:19px;transition:transform .3s var(--ease-spring)}
-.project-card:hover .project-icon-box{transform:scale(1.1)}
-.project-card h3{font-size:17px;font-weight:600;color:var(--ink);margin-bottom:8px;letter-spacing:-.3px}
-.project-card p{font-size:12.5px;color:var(--muted);line-height:1.6;letter-spacing:-.1px;margin-bottom:14px}
-.project-tags{display:flex;flex-wrap:wrap;gap:5px}
-.project-tag{font-family:var(--font-mono);font-size:9.5px;font-weight:500;color:var(--ghost);background:rgba(255,255,255,.035);padding:3px 7px;border-radius:var(--radius-sm);font-feature-settings:normal;letter-spacing:.02em}
-.project-link-hint{display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:500;color:var(--accent);margin-top:16px;opacity:0;transform:translateX(-8px);transition:all .3s var(--ease-out)}
-.project-card:hover .project-link-hint{opacity:1;transform:translateX(0)}
-
-/* ── Skills ── */
-.skills-wrap{background:rgba(255,255,255,.008);border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)}
-.skills-inner{max-width:1140px;margin:0 auto;padding:130px 28px}
-.skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-top:56px}
-.skill-group h4{font-family:var(--font-mono);font-size:9.5px;font-weight:500;color:var(--ghost);text-transform:uppercase;letter-spacing:.12em;margin-bottom:16px;font-feature-settings:normal}
-.skill-items{display:flex;flex-direction:column;gap:7px}
-.skill-item{display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:var(--radius-sm);background:rgba(255,255,255,.012);border:1px solid transparent;transition:all .2s;font-size:13px;font-weight:400;color:var(--silver);letter-spacing:-.1px}
-.skill-item:hover{background:rgba(255,255,255,.035);border-color:var(--border-subtle)}
-.skill-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
-.skill-dot.a{background:var(--accent)}.skill-dot.m{background:var(--ghost)}
-
-/* ── Hobbies ── */
-.hobbies-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-top:52px}
-.hobby-card{background:rgba(255,255,255,.012);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:22px 16px;text-align:center;transition:all .35s var(--ease-out);cursor:default;position:relative;overflow:hidden}
-.hobby-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0;transition:opacity .35s}
-.hobby-card:hover{border-color:var(--border-standard);transform:translateY(-4px);background:rgba(255,255,255,.022)}
-.hobby-card:hover::after{opacity:.5}
-.hobby-icon{font-size:34px;display:block;margin-bottom:10px;transition:transform .35s var(--ease-spring)}
-.hobby-card:hover .hobby-icon{transform:scale(1.18) rotate(-6deg)}
-.hobby-name{font-size:12.5px;font-weight:540;color:var(--silver);letter-spacing:-.1px}
-.hobby-sub{font-size:9.5px;font-weight:400;color:var(--ghost);font-family:var(--font-mono);letter-spacing:.02em;margin-top:3px}
-.hobby-badminton{display:inline-block;animation:bad 2s ease-in-out infinite}
-.hobby-food{display:inline-block;animation:stm 2.2s ease-in-out infinite}
-.hobby-movie{display:inline-block;animation:spn 5s linear infinite}
-@keyframes bad{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-14px) rotate(12deg)}60%{transform:translateY(-3px) rotate(-6deg)}}
-@keyframes stm{0%,100%{opacity:.5;transform:translateY(0) scale(1)}50%{opacity:1;transform:translateY(-12px) scale(1.15)}}
-@keyframes spn{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-
-/* ── CTA ── */
-.cta-section{text-align:center;padding:150px 28px;position:relative;z-index:1}
-.cta-title{font-size:clamp(34px,6vw,56px);font-weight:600;color:var(--ink);line-height:.94;letter-spacing:-.028em;margin-bottom:20px}
-.cta-text{font-size:16px;color:var(--muted);max-width:460px;margin:0 auto 34px;line-height:1.65}
-.cta-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
-
-footer{border-top:1px solid var(--border-subtle);padding:36px 28px;text-align:center;font-size:11px;color:var(--ghost);font-family:var(--font-mono);font-feature-settings:normal}
-footer a{color:var(--muted);text-decoration:none}
-footer a:hover{color:var(--ink)}
-
-/* ── Responsive ── */
-@media(max-width:900px){.about-grid{grid-template-columns:1fr}.projects-grid,.blog-grid{grid-template-columns:1fr 1fr}.skills-grid{grid-template-columns:1fr 1fr}.hobbies-grid{grid-template-columns:repeat(3,1fr)}.blog-full-content{margin:40px 16px;padding:32px 24px}.ideas-analysis-grid{grid-template-columns:1fr}.ideas-feed-grid{grid-template-columns:1fr}}
-@media(max-width:640px){
-  .nav-links{display:none}.nav-toggle{display:block}
-  .nav-links.mobile-open{display:flex;flex-direction:column;position:absolute;top:56px;left:0;right:0;background:rgba(0,0,0,.95);border-bottom:1px solid var(--border-subtle);padding:20px;gap:10px;z-index:99}
-  .hero{padding:100px 18px 60px}.hero h1{font-size:38px}
-  .section{padding:80px 18px}.section-title{font-size:34px}
-  .projects-grid,.blog-grid{grid-template-columns:1fr}
-  .skills-grid{grid-template-columns:1fr}.skills-inner{padding:80px 18px}
-  .hobbies-grid{grid-template-columns:repeat(2,1fr)}
-  .blog-full-content{margin:20px 12px;padding:24px 20px}
-  .blog-full-content h2{font-size:24px}
-  .ideas-form{max-width:100%}
-  .ideas-analysis-grid{grid-template-columns:1fr}
-  .ideas-analysis-grid.grid-2{grid-template-columns:1fr 1fr}
-  .cursor-dot,.cursor-ring{display:none}
-}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-::selection{background:var(--accent-glow);color:var(--ink)}
+/* ── Scroll reveal ── */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.25,.1,.25,1),transform .8s cubic-bezier(.25,.1,.25,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.05s}.d2{transition-delay:.15s}.d3{transition-delay:.25s}.d4{transition-delay:.35s}
+::selection{background:rgba(255,255,255,.2)}
 </style>
 </head>
 <body>
 
-<canvas id="particles"></canvas>
-<div class="cursor-dot"></div><div class="cursor-ring"></div>
-
-<nav id="navbar">
-  <div class="nav-logo">W7W</div>
-  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('mobile-open')">☰</button>
-  <ul class="nav-links">
-    <li><a href="#blog">Blog</a></li>
-    <li><a href="#ideas">💡 Ideas</a></li>
+<!-- Navigation -->
+<nav>
+  <a href="#" class="nav-logo">W7W</a>
+  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">☰</button>
+  <ul class="nav-links" id="nav-menu">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#motion">Motion</a></li>
+    <li><a href="#blog">Journal</a></li>
     <li><a href="#about">About</a></li>
-    <li><a href="#projects">Work</a></li>
-    <li><a href="#skills">Stack</a></li>
-    <li><a href="#life">Life</a></li>
-    <li><a href="#contact" class="nav-cta">Say Hello</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
 
-<!-- HERO -->
+<!-- ██ HERO — Full Screen Video ██ -->
 <section class="hero">
-  <div class="hero-bg"></div><div class="hero-vignette"></div>
-  <div class="hero-glow hero-glow-1"></div><div class="hero-glow hero-glow-2"></div>
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="https://assets.mixkit.co/videos/13038/13038-720.mp4" type="video/mp4">
+  </video>
+  <div class="hero-overlay"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Building in Production</div>
-    <h1>I craft<br><span class="accent">AI Agents</span> that<br>actually ship.</h1>
-    <p class="hero-tagline">Full-stack developer at the frontier of large language models and production engineering.</p>
-    <div class="hero-actions">
-      <a href="#blog" class="btn-primary"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Read the Blog</a>
-      <a href="#ideas" class="btn-ghost">💡 Share Ideas</a>
-    </div>
+    <h1>
+      <span>AI AGENT ENGINEER</span>
+      Building systems<br>that think & act
+    </h1>
+    <p class="hero-tagline">Full-stack developer at the frontier of language models and production engineering. I build intelligent agents that reason, use tools, and ship.</p>
+    <a href="#work" class="hero-cta">Explore Work</a>
   </div>
-  <div class="hero-scroll"><span>Scroll</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5"/></svg></div>
+  <div class="hero-scroll-hint">Scroll</div>
 </section>
 
-<!-- BLOG -->
-<div class="blog-wrap" id="blog"><div class="blog-inner">
-  <div class="section-label reveal">// Writing</div>
-  <h2 class="section-title reveal d1">Thoughts on<br>AI & Engineering.</h2>
-  <p class="section-desc reveal d2">Practical tutorials, tool deep-dives, and lessons from building at the frontier.</p>
-  <div class="blog-hero-card reveal d2"><h3>📝 从零到一：写给开发者的实战笔记</h3><p>这里没有"AI将改变世界"的大话，只有能跑通的代码、能复现的实验，和我在实际项目中踩过的坑与学到的经验。</p></div>
-  <div class="blog-grid">
-    <div class="blog-post reveal d1" onclick="openBlog('post1')"><div class="blog-post-img grad-1">🤖</div><div class="blog-post-body"><div class="blog-post-cat">AI 工具 · 热门推荐</div><h4>2026 年最值得关注的 10 个 AI 开源工具</h4><p class="excerpt">LangChain 过时了吗？Dify 和 FastGPT 怎么选？这篇文章帮你理清 AI 工具版图。</p><div class="meta"><span>📅 2026-07-06</span><span>⏱️ 12 min</span></div></div></div>
-    <div class="blog-post reveal d2" onclick="openBlog('post2')"><div class="blog-post-img grad-2">⭐</div><div class="blog-post-body"><div class="blog-post-cat">GitHub · 效率工具</div><h4>GitHub 上最值得收藏的 8 个开发者效率工具</h4><p class="excerpt">从代码补全到项目管理，这些工具让我的开发效率翻倍。附带优缺点对比。</p><div class="meta"><span>📅 2026-07-05</span><span>⏱️ 10 min</span></div></div></div>
-    <div class="blog-post reveal d3" onclick="openBlog('post3')"><div class="blog-post-img grad-3">🕷️</div><div class="blog-post-body"><div class="blog-post-cat">爬虫 · 数据采集</div><h4>Python 爬虫从入门到实战 — 5 个必学库</h4><p class="excerpt">从 requests 到 Playwright，手把手教你搭建生产级爬虫。含反爬对抗策略。</p><div class="meta"><span>📅 2026-07-04</span><span>⏱️ 15 min</span></div></div></div>
-  </div>
-</div></div>
+<!-- ██ WORK — Project Grid ██ -->
+<section class="section" id="work">
+  <div class="section-label reveal">Selected Work</div>
+  <h2 class="section-title reveal d1">Projects that<br>demonstrate craft.</h2>
+  <p class="section-desc reveal d2">Production-grade applications — each one designed, engineered, and deployed from concept to completion.</p>
 
-<!-- ═══════════════════════════════════════════ -->
-<!-- 🆕 IDEAS & SUGGESTIONS — 建议 & 好点子    -->
-<!-- ═══════════════════════════════════════════ -->
-<div class="ideas-wrap" id="ideas"><div class="ideas-inner">
-  <div class="section-label reveal">// Community</div>
-  <h2 class="section-title reveal d1">建议 & 好点子</h2>
-  <p class="section-desc reveal d2">有建议想对我说？或者你有一个好主意想分享？在这里告诉我，我会认真阅读每一条。</p>
-
-  <!-- Tabs -->
-  <div class="ideas-tabs reveal d2">
-    <button class="ideas-tab active" onclick="switchIdeasTab('suggestion')" id="tab-suggestion">💜 给我建议</button>
-    <button class="ideas-tab" onclick="switchIdeasTab('idea')" id="tab-idea">💡 好点子投稿</button>
-  </div>
-
-  <div class="ideas-panels">
-    <!-- Panel 1: Suggestions -->
-    <div class="ideas-panel active" id="panel-suggestion">
-      <form class="ideas-form" id="form-suggestion" onsubmit="handleSubmit(event,'suggestion')">
-        <div class="ideas-form-group">
-          <label>你的名字 / 昵称</label>
-          <input type="text" placeholder="怎么称呼你？（可选）" name="name" id="s-name">
-        </div>
-        <div class="ideas-form-group">
-          <label>建议类型</label>
-          <select name="category" id="s-category">
-            <option value="tech">技术方向建议</option>
-            <option value="career">职业发展建议</option>
-            <option value="project">项目灵感</option>
-            <option value="design">设计/UI 建议</option>
-            <option value="life">生活方式建议</option>
-            <option value="other">其他</option>
-          </select>
-        </div>
-        <div class="ideas-form-group">
-          <label>你的建议 ✱</label>
-          <textarea placeholder="任何想对我说的话 — 技术方向、职业建议、项目灵感、或者只是想打个招呼都可以..." name="content" id="s-content" required></textarea>
-          <span class="ideas-form-hint">你的建议会直接发送到我的 QQ 邮箱，我会认真阅读每一条。</span>
-        </div>
-        <button type="submit" class="ideas-submit" id="s-submit">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-          发送建议
-        </button>
-      </form>
-      <div class="ideas-success" id="s-success">
-        <div class="ideas-success-icon">💜</div>
-        <h4>感谢你的建议！</h4>
-        <p>已发送到我的 QQ 邮箱，我会认真阅读每一条。</p>
-      </div>
+  <div class="video-grid">
+    <div class="video-grid-item reveal d1">
+      <video autoplay muted loop playsinline>
+        <source src="https://assets.mixkit.co/videos/13037/13037-720.mp4" type="video/mp4">
+      </video>
+      <div class="caption"><h3>AI Shopping Agent</h3><span>LangGraph · ChromaDB · FastAPI</span></div>
     </div>
-
-    <!-- Panel 2: Ideas -->
-    <div class="ideas-panel" id="panel-idea">
-      <form class="ideas-form" id="form-idea" onsubmit="handleSubmit(event,'idea')">
-        <div class="ideas-form-group">
-          <label>你的名字 / 昵称</label>
-          <input type="text" placeholder="怎么称呼你？（可选）" name="name" id="i-name">
-        </div>
-        <div class="ideas-form-group">
-          <label>好点子标题 ✱</label>
-          <input type="text" placeholder="用一句话描述你的好主意..." name="title" id="i-title" required>
-        </div>
-        <div class="ideas-form-group">
-          <label>领域</label>
-          <select name="category" id="i-category">
-            <option value="ai">AI / 机器学习</option>
-            <option value="web">Web 开发</option>
-            <option value="mobile">移动应用</option>
-            <option value="tool">效率工具</option>
-            <option value="business">商业 / 创业</option>
-            <option value="other">其他</option>
-          </select>
-        </div>
-        <div class="ideas-form-group">
-          <label>详细描述 ✱</label>
-          <textarea placeholder="详细说说你的想法：它解决什么问题？面向谁？怎么实现？越具体越好..." name="content" id="i-content" required></textarea>
-          <span class="ideas-form-hint">你的好点子会直接发送到我的邮箱，我会认真评估每一条。</span>
-        </div>
-        <button type="submit" class="ideas-submit" id="i-submit">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-          提交好点子
-        </button>
-      </form>
-
-      <div class="ideas-success" id="i-success">
-        <div class="ideas-success-icon">🚀</div>
-        <h4>好点子已提交！</h4>
-        <p>感谢你的分享！我会认真阅读每一条，如果点子被采纳会联系你。</p>
-      </div>
+    <div class="video-grid-item reveal d2">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500'%3E%3Crect fill='%23111' width='800' height='500'/%3E%3Ctext x='400' y='260' text-anchor='middle' fill='%23333' font-size='60'%3E🏪%3C/text%3E%3C/svg%3E" alt="Campus Marketplace">
+      <div class="caption"><h3>Campus Marketplace</h3><span>Next.js · Redis · PostgreSQL</span></div>
     </div>
-  </div>
-</div></div>
-</div></div>
-
-<!-- BLOG FULL CONTENT (Post 1) -->
-<div class="blog-full" id="post1-full"><div class="blog-full-backdrop" onclick="closeBlog('post1')"></div><div class="blog-full-content"><div class="blog-full-close" onclick="closeBlog('post1')">✕</div><span class="blog-post-cat">AI 工具 · 热门推荐</span><h2>2026 年最值得关注的 10 个 AI 开源工具</h2><div class="blog-meta"><span>📅 2026-07-06</span><span>⏱️ 12 min read</span></div><p>2026 年的 AI 工具生态已经和两年前完全不同了。如果你还在用最基础的 ChatGPT 套壳，或者还在纠结 LangChain vs LlamaIndex — 这篇文章就是为你写的。我会按<span class="highlight">"从入门到进阶"</span>的顺序，把当前最值得关注的 10 个 AI 开源工具排一遍。</p><h3>🥇 入门必装</h3><h3>1. Ollama — 本地跑大模型</h3><pre>ollama run qwen2.5:7b\nollama run deepseek-r1:8b</pre><h3>2. Open WebUI — 把 Ollama 变 ChatGPT</h3><pre>docker run -d -p 3000:8080 -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main</pre><h3>🥈 进阶之选</h3><h3>3. Dify — 低代码 AI 平台 <span class="badge-hot">HOT</span></h3><pre>git clone https://github.com/langgenius/dify.git\ncd dify/docker && docker compose up -d</pre><h3>4. FastGPT — 中文场景更优 <span class="badge-new">NEW</span></h3><h3>5. LangGraph — 真正的 AI Agent</h3><pre>pip install langgraph</pre><h3>🥉 专业玩家</h3><p><strong>6. vLLM</strong> — 高性能推理 | <strong>7. CrewAI</strong> — 多Agent协作 <span class="badge-pro">PRO</span> | <strong>8. AnythingLLM</strong> — 万能客户端 | <strong>9. n8n + AI</strong> — 自动化工作流 | <strong>10. Mem0</strong> — AI记忆层 <span class="badge-new">NEW</span></p><div class="tip"><strong>💡 小白选型建议：</strong>推荐顺序：Ollama → Open WebUI → Dify → LangGraph。先把前两个跑通，再用 Dify 搭一个自己的 RAG 应用，最后用 LangGraph 做深度定制。</div></div></div>
-
-<!-- BLOG FULL CONTENT (Post 2) -->
-<div class="blog-full" id="post2-full"><div class="blog-full-backdrop" onclick="closeBlog('post2')"></div><div class="blog-full-content"><div class="blog-full-close" onclick="closeBlog('post2')">✕</div><span class="blog-post-cat">GitHub · 效率工具</span><h2>GitHub 上最值得收藏的 8 个开发者效率工具</h2><div class="blog-meta"><span>📅 2026-07-05</span><span>⏱️ 10 min read</span></div><p>我花了整整一个周末，把 GitHub 上 Star 数最高、社区最活跃的开发者效率工具全部体验了一遍。下面是经过<span class="highlight">真实使用</span>后筛选出的 8 个，按实用度排序。</p><table><tr><th>排名</th><th>工具</th><th>⭐ Stars</th><th>核心功能</th><th>推荐理由</th></tr><tr><td>🥇</td><td><strong>Raycast</strong></td><td>20K+</td><td>macOS 启动器</td><td>取代 Spotlight，AI集成、剪贴板历史、窗口管理</td></tr><tr><td>🥈</td><td><strong>Warp</strong></td><td>22K+</td><td>AI 终端</td><td>自然语言转命令、团队共享工作区</td></tr><tr><td>🥉</td><td><strong>Nushell</strong></td><td>32K+</td><td>结构化Shell</td><td>用SQL风格处理命令行数据</td></tr><tr><td>4</td><td><strong>Lazygit</strong></td><td>50K+</td><td>Git终端UI</td><td>交互式暂存、比记git命令快10倍</td></tr><tr><td>5</td><td><strong>fzf</strong></td><td>65K+</td><td>模糊搜索</td><td>Ctrl+R终极替代</td></tr><tr><td>6</td><td><strong>Bruno</strong></td><td>25K+</td><td>API客户端</td><td>Postman开源替代，数据存Git</td></tr><tr><td>7</td><td><strong>devcontainers</strong></td><td>10K+</td><td>容器化开发</td><td>新成员加入项目，一键启动</td></tr><tr><td>8</td><td><strong>ghostty</strong></td><td>25K+</td><td>GPU终端</td><td>2025年最火新终端，原生GPU渲染</td></tr></table><div class="tip"><strong>💡 如果只装一个：</strong>选 Raycast（macOS）或 fzf（跨平台）。这两个是"一旦用了就回不去"级别的工具。</div></div></div>
-
-<!-- BLOG FULL CONTENT (Post 3) -->
-<div class="blog-full" id="post3-full"><div class="blog-full-backdrop" onclick="closeBlog('post3')"></div><div class="blog-full-content"><div class="blog-full-close" onclick="closeBlog('post3')">✕</div><span class="blog-post-cat">爬虫 · 数据采集</span><h2>Python 爬虫从入门到实战 — 5 个必学库 + 3 个真实案例</h2><div class="blog-meta"><span>📅 2026-07-04</span><span>⏱️ 15 min read</span></div><p>爬虫是每个开发者迟早都要掌握的技能。这篇文章从<span class="highlight">最基础的 requests</span>讲到<span class="highlight">生产级 Playwright</span>，附带 3 个可以直接复用的案例。</p><table><tr><th>库</th><th>定位</th><th>⭐ Stars</th><th>一句话</th></tr><tr><td><code>requests</code></td><td>HTTP请求</td><td>52K+</td><td>爬虫第一步，API比urllib优雅100倍</td></tr><tr><td><code>BeautifulSoup</code></td><td>HTML解析</td><td>—</td><td>CSS选择器，10行代码提取任何网页</td></tr><tr><td><code>Scrapy</code></td><td>爬虫框架</td><td>53K+</td><td>企业级，异步引擎+中间件+自动限速</td></tr><tr><td><code>Playwright</code></td><td>浏览器自动化</td><td>68K+</td><td>Selenium替代，自动等待+网络拦截</td></tr><tr><td><code>httpx</code></td><td>异步HTTP</td><td>13K+</td><td>requests异步版，支持HTTP/2</td></tr></table><h3>🔰 案例1：requests + BeautifulSoup</h3><pre>import requests\nfrom bs4 import BeautifulSoup\nsoup = BeautifulSoup(requests.get(url).text,'html.parser')\nfor item in soup.select('.titleline > a')[:10]:\n    print(item.text)</pre><h3>🚀 案例2：Playwright — 动态页面</h3><pre>from playwright.sync_api import sync_playwright\nwith sync_playwright() as p:\n    browser = p.chromium.launch()\n    page = browser.new_page()\n    page.goto('https://example.com')\n    print(page.content())</pre><h3>🛡️ 反爬策略</h3><ol><li>User-Agent 轮换</li><li>请求间隔随机化（1-3秒）</li><li>IP 代理池（快代理/芝麻代理）</li><li>Cookie 管理 + 会话保持</li><li>验证码识别（ddddocr / 打码平台）</li></ol><div class="tip"><strong>⚠️ 重要提醒：</strong>始终检查 robots.txt，控制并发和频率，遵守数据使用法规。</div></div></div>
-
-<!-- ABOUT -->
-<section class="section" id="about">
-  <div class="section-label reveal">// About</div>
-  <h2 class="section-title reveal d1">Engineer by craft,<br>builder by instinct.</h2>
-  <p class="section-desc reveal d2">I don't just write code — I ship products end-to-end.</p>
-  <div class="about-grid"><div class="about-text reveal d2"><p>I'm a <strong>full-stack developer</strong> with a deep focus on <strong>AI Agent engineering</strong>. My work sits at the intersection of large language models and production systems.</p><p>I believe the best engineers are <strong>T-shaped</strong>: deep in AI/LLM applications, broad across frontend, backend, and infrastructure.</p><p>When I step away from the terminal, you'll find me on the <strong>badminton court</strong>, hunting down <strong>new restaurants</strong>, or catching the latest <strong>films</strong>.</p></div><div class="about-stats reveal d3"><div class="stat-card" data-mt><div class="stat-number">15+</div><div class="stat-label">Products Shipped</div></div><div class="stat-card" data-mt><div class="stat-number">1K+</div><div class="stat-label">GitHub Contributions</div></div><div class="stat-card" data-mt><div class="stat-number">3</div><div class="stat-label">AI Agent Projects</div></div><div class="stat-card" data-mt><div class="stat-number">∞</div><div class="stat-label">Curiosity</div></div></div></div>
-</section>
-
-<!-- PROJECTS -->
-<section class="section" id="projects">
-  <div class="section-label reveal">// Featured</div><h2 class="section-title reveal d1">Projects with real impact.</h2>
-  <div class="projects-grid">
-    <a href="#" class="project-card reveal d1" data-mt><div class="project-icon-box">🤖</div><h3>AI Shopping Agent</h3><p>Multi-agent procurement with intent understanding, RAG, and tool-calling.</p><div class="project-tags"><span class="project-tag">LangGraph</span><span class="project-tag">ChromaDB</span><span class="project-tag">FastAPI</span><span class="project-tag">Next.js</span></div></a>
-    <a href="#" class="project-card reveal d2" data-mt><div class="project-icon-box">🏪</div><h3>Campus Marketplace</h3><p>High-performance trading with real-time search, AB testing, Redis caching.</p><div class="project-tags"><span class="project-tag">Next.js</span><span class="project-tag">Redis</span><span class="project-tag">PostgreSQL</span><span class="project-tag">TypeScript</span></div></a>
-    <a href="#" class="project-card reveal d3" data-mt><div class="project-icon-box">✍️</div><h3>AI Report Generator</h3><p>Weekly report tool pulling Git history, summarizing via LLM prompt chains.</p><div class="project-tags"><span class="project-tag">Python</span><span class="project-tag">Streamlit</span><span class="project-tag">Qwen API</span><span class="project-tag">Git</span></div></a>
+    <div class="video-grid-item reveal d3">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500'%3E%3Crect fill='%23111' width='800' height='500'/%3E%3Ctext x='400' y='260' text-anchor='middle' fill='%23333' font-size='60'%3E✍️%3C/text%3E%3C/svg%3E" alt="AI Report Generator">
+      <div class="caption"><h3>AI Report Generator</h3><span>Python · Streamlit · Qwen API</span></div>
+    </div>
   </div>
 </section>
 
-<!-- SKILLS -->
-<div class="skills-wrap" id="skills"><div class="skills-inner">
-  <div class="section-label reveal">// Arsenal</div><h2 class="section-title reveal d1">Tools I reach for every day.</h2>
-  <div class="skills-grid">
-    <div class="skill-group reveal d1"><h4>AI & LLM</h4><div class="skill-items"><div class="skill-item"><span class="skill-dot a"></span>LangGraph / LangChain</div><div class="skill-item"><span class="skill-dot a"></span>RAG & Vector Search</div><div class="skill-item"><span class="skill-dot a"></span>Prompt Engineering</div><div class="skill-item"><span class="skill-dot a"></span>Agent Orchestration</div></div></div>
-    <div class="skill-group reveal d2"><h4>Frontend</h4><div class="skill-items"><div class="skill-item"><span class="skill-dot a"></span>React / Next.js</div><div class="skill-item"><span class="skill-dot m"></span>TypeScript</div><div class="skill-item"><span class="skill-dot m"></span>Tailwind CSS</div><div class="skill-item"><span class="skill-dot m"></span>SSR / Edge Runtime</div></div></div>
-    <div class="skill-group reveal d3"><h4>Backend</h4><div class="skill-items"><div class="skill-item"><span class="skill-dot a"></span>Python / FastAPI</div><div class="skill-item"><span class="skill-dot a"></span>Node.js</div><div class="skill-item"><span class="skill-dot m"></span>MySQL / Redis</div><div class="skill-item"><span class="skill-dot m"></span>Docker / Nginx</div></div></div>
-    <div class="skill-group reveal d4"><h4>Engineering</h4><div class="skill-items"><div class="skill-item"><span class="skill-dot a"></span>Git / GitHub Flow</div><div class="skill-item"><span class="skill-dot m"></span>Linux / CLI</div><div class="skill-item"><span class="skill-dot m"></span>CI/CD</div><div class="skill-item"><span class="skill-dot m"></span>REST & API Design</div></div></div>
+<!-- ██ MOTION — Sports & Life Clips ██ -->
+<section class="section" id="motion">
+  <div class="section-label reveal">In Motion</div>
+  <h2 class="section-title reveal d1">Life beyond<br>the terminal.</h2>
+  <p class="section-desc reveal d2">When I'm not building AI systems, I'm in constant motion — on the court, in the water, or chasing the next great meal.</p>
+
+  <div class="image-strip reveal d2">
+    <div class="image-strip-item">
+      <video autoplay muted loop playsinline>
+        <source src="https://assets.mixkit.co/videos/13038/13038-720.mp4" type="video/mp4">
+      </video>
+      <div class="label">🏸 Badminton</div>
+    </div>
+    <div class="image-strip-item">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='750'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%231a1a2e'/%3E%3Cstop offset='1' stop-color='%230d1117'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='600' height='750'/%3E%3Ctext x='300' y='390' text-anchor='middle' fill='%23222' font-size='90'%3E🏓%3C/text%3E%3C/svg%3E" alt="Ping Pong">
+      <div class="label">🏓 Ping Pong</div>
+    </div>
+    <div class="image-strip-item">
+      <video autoplay muted loop playsinline>
+        <source src="https://assets.mixkit.co/videos/13037/13037-720.mp4" type="video/mp4">
+      </video>
+      <div class="label">🏀 Basketball</div>
+    </div>
+    <div class="image-strip-item">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='750'%3E%3Cdefs%3E%3ClinearGradient id='g2' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2306233d'/%3E%3Cstop offset='1' stop-color='%2306101c'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g2)' width='600' height='750'/%3E%3Ctext x='300' y='390' text-anchor='middle' fill='%23222' font-size='90'%3E🏊%3C/text%3E%3C/svg%3E" alt="Swimming">
+      <div class="label">🏊 Swimming</div>
+    </div>
+    <div class="image-strip-item">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='750'%3E%3Cdefs%3E%3ClinearGradient id='g3' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%231a0a0a'/%3E%3Cstop offset='1' stop-color='%230d0505'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g3)' width='600' height='750'/%3E%3Ctext x='300' y='390' text-anchor='middle' fill='%23222' font-size='90'%3E🍜%3C/text%3E%3C/svg%3E" alt="Food">
+      <div class="label">🍜 Food Explorer</div>
+    </div>
   </div>
-</div></div>
+</section>
 
-<!-- LIFE -->
-<section class="section" id="life"><div class="section-label reveal">// Beyond the Screen</div><h2 class="section-title reveal d1">Life outside the terminal.</h2><div class="hobbies-grid"><div class="hobby-card reveal d1"><span class="hobby-icon hobby-badminton">🏸</span><div class="hobby-name">Badminton</div><div class="hobby-sub">competitive smasher</div></div><div class="hobby-card reveal d2"><span class="hobby-icon hobby-food">🍜</span><div class="hobby-name">Food Explorer</div><div class="hobby-sub">always hunting</div></div><div class="hobby-card reveal d3"><span class="hobby-icon hobby-movie">🎬</span><div class="hobby-name">Film Buff</div><div class="hobby-sub">cinema lover</div></div><div class="hobby-card reveal d1"><span class="hobby-icon">🏓</span><div class="hobby-name">Ping Pong</div><div class="hobby-sub">table tennis</div></div><div class="hobby-card reveal d2"><span class="hobby-icon">🏀</span><div class="hobby-name">Basketball</div><div class="hobby-sub">pickup games</div></div><div class="hobby-card reveal d3"><span class="hobby-icon">🏊</span><div class="hobby-name">Swimming</div><div class="hobby-sub">lap swimmer</div></div><div class="hobby-card reveal d1"><span class="hobby-icon">💐</span><div class="hobby-name">Flower Art</div><div class="hobby-sub">ikebana style</div></div><div class="hobby-card reveal d2"><span class="hobby-icon">📈</span><div class="hobby-name">Stocks</div><div class="hobby-sub">active investor</div></div></div></section>
+<!-- ██ BLOG — Journal ██ -->
+<section class="section" id="blog">
+  <div class="section-label reveal">Journal</div>
+  <h2 class="section-title reveal d1">Notes on AI,<br>engineering & life.</h2>
+  <p class="section-desc reveal d2">Practical tutorials, deep-dives, and lessons from building at the frontier.</p>
 
-<!-- CTA -->
-<section class="cta-section" id="contact"><div class="section-label reveal">// Connect</div><h2 class="cta-title reveal d1">Got something worth building?</h2><p class="cta-text reveal d2">I'm open to collaborations, opportunities, and conversations about AI, engineering, or badminton.</p><div class="cta-actions reveal d3"><a href="mailto:227110038@qq.com" class="btn-primary"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/></svg>Send Email</a><a href="https://github.com/NiuBi66666688" class="btn-ghost" target="_blank" rel="noopener">GitHub</a><a href="#" class="btn-ghost">Résumé ↓</a></div></section>
-<footer><p>Designed & built from scratch · © 2026 · <a href="#">GitHub</a></p></footer>
+  <div class="blog-strip reveal d2">
+    <div class="blog-item" onclick="openBlog('post1')">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='800'%3E%3Cdefs%3E%3ClinearGradient id='b1' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2311182a'/%3E%3Cstop offset='1' stop-color='%23080d18'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23b1)' width='600' height='800'/%3E%3Ctext x='300' y='420' text-anchor='middle' fill='%23223355' font-size='120'%3E🤖%3C/text%3E%3C/svg%3E" alt="AI Tools">
+      <div class="overlay"><h4>2026 最值得关注的 10 个 AI 开源工具</h4><span>从小白到进阶 · 12 min</span></div>
+    </div>
+    <div class="blog-item" onclick="openBlog('post2')">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='800'%3E%3Cdefs%3E%3ClinearGradient id='b2' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230a1f1a'/%3E%3Cstop offset='1' stop-color='%23051010'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23b2)' width='600' height='800'/%3E%3Ctext x='300' y='420' text-anchor='middle' fill='%23224433' font-size='120'%3E⭐%3C/text%3E%3C/svg%3E" alt="GitHub Tools">
+      <div class="overlay"><h4>GitHub 必收藏的 8 个开发者效率工具</h4><span>亲测排名 · 10 min</span></div>
+    </div>
+    <div class="blog-item" onclick="openBlog('post3')">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='800'%3E%3Cdefs%3E%3ClinearGradient id='b3' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%232a1510'/%3E%3Cstop offset='1' stop-color='%23180804'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23b3)' width='600' height='800'/%3E%3Ctext x='300' y='420' text-anchor='middle' fill='%23443322' font-size='120'%3E🕷️%3C/text%3E%3C/svg%3E" alt="Web Scraping">
+      <div class="overlay"><h4>Python 爬虫从入门到实战</h4><span>5 个必学库 · 15 min</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ██ ABOUT — Text Section ██ -->
+<section class="text-section reveal" id="about">
+  <p class="big-text">"I believe the best engineers are those who can see the full picture — from the elegance of a well-designed prompt chain to the precision of a production deployment pipeline."</p>
+  <p class="author">— W7W, AI Agent Engineer & Full Stack Developer</p>
+</section>
+
+<!-- ██ CONTACT ██ -->
+<section class="text-section" id="contact" style="padding-bottom:200px">
+  <div class="section-label reveal" style="margin-bottom:30px">Contact</div>
+  <p class="big-text reveal d1" style="font-size:clamp(20px,3vw,32px)">Have a project in mind?<br>Let's build something together.</p>
+  <p class="reveal d2" style="margin-top:30px">
+    <a href="mailto:227110038@qq.com" style="color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.3);padding-bottom:2px;font-size:15px;letter-spacing:1px">227110038@qq.com</a>
+  </p>
+</section>
+
+<!-- Footer -->
+<footer>
+  <span>© W7W 2026</span>
+  <span><a href="https://github.com/NiuBi66666688">GitHub</a> · <a href="#work">Work</a> · <a href="#contact">Contact</a></span>
+</footer>
+
+<!-- Blog Modals -->
+<div id="post1-modal" style="display:none;position:fixed;inset:0;z-index:200;background:#000;overflow-y:auto;padding:80px 40px">
+  <button onclick="closeBlog('post1')" style="position:fixed;top:30px;right:40px;z-index:201;background:none;border:1px solid rgba(255,255,255,.2);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:16px">✕</button>
+  <div style="max-width:700px;margin:0 auto">
+    <span style="font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.4)">AI TOOLS</span>
+    <h2 style="font-family:'Noto Serif SC',serif;font-size:36px;font-weight:600;margin:16px 0 8px">2026 年最值得关注的 10 个 AI 开源工具</h2>
+    <p style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:32px">2026-07-06 · 12 min read</p>
+    <p style="color:rgba(255,255,255,.7);font-size:15px;line-height:1.8;margin-bottom:24px">2026 年的 AI 工具生态已经和两年前完全不同了。按"从入门到进阶"的顺序，把当前最值得关注的 10 个 AI 开源工具排一遍。</p>
+    <h3 style="font-size:20px;margin:32px 0 12px;color:#fff">🥇 入门必装</h3>
+    <p style="color:rgba(255,255,255,.7);font-size:15px;line-height:1.8"><strong>1. Ollama</strong> — 本地跑大模型：<code>ollama run qwen2.5:7b</code></p>
+    <p style="color:rgba(255,255,255,.7);font-size:15px;line-height:1.8"><strong>2. Open WebUI</strong> — Docker 一键部署 ChatGPT 风格界面</p>
+    <h3 style="font-size:20px;margin:32px 0 12px;color:#fff">🥈 进阶之选</h3>
+    <p style="color:rgba(255,255,255,.7);font-size:15px;line-height:1.8"><strong>3. Dify</strong> · <strong>4. FastGPT</strong> · <strong>5. LangGraph</strong> — 构建真正的AI Agent</p>
+    <h3 style="font-size:20px;margin:32px 0 12px;color:#fff">🥉 专业玩家</h3>
+    <p style="color:rgba(255,255,255,.7);font-size:15px;line-height:1.8">6. vLLM · 7. CrewAI · 8. AnythingLLM · 9. n8n+AI · 10. Mem0</p>
+  </div>
+</div>
+
+<div id="post2-modal" style="display:none;position:fixed;inset:0;z-index:200;background:#000;overflow-y:auto;padding:80px 40px">
+  <button onclick="closeBlog('post2')" style="position:fixed;top:30px;right:40px;z-index:201;background:none;border:1px solid rgba(255,255,255,.2);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:16px">✕</button>
+  <div style="max-width:700px;margin:0 auto">
+    <span style="font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.4)">DEV TOOLS</span>
+    <h2 style="font-family:'Noto Serif SC',serif;font-size:36px;font-weight:600;margin:16px 0 8px">GitHub 必收藏的 8 个开发者效率工具</h2>
+    <p style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:32px">2026-07-05 · 10 min read</p>
+    <table style="width:100%;border-collapse:collapse;font-size:14px;color:rgba(255,255,255,.7)">
+      <tr style="border-bottom:1px solid rgba(255,255,255,.1)"><td style="padding:10px 8px">🥇</td><td style="padding:10px 8px"><strong>Raycast</strong></td><td style="padding:10px 8px">20K+ ⭐</td><td style="padding:10px 8px;color:rgba(255,255,255,.5)">macOS 效率启动器</td></tr>
+      <tr style="border-bottom:1px solid rgba(255,255,255,.1)"><td style="padding:10px 8px">🥈</td><td style="padding:10px 8px"><strong>Warp</strong></td><td style="padding:10px 8px">22K+ ⭐</td><td style="padding:10px 8px;color:rgba(255,255,255,.5)">AI 原生终端</td></tr>
+      <tr style="border-bottom:1px solid rgba(255,255,255,.1)"><td style="padding:10px 8px">🥉</td><td style="padding:10px 8px"><strong>Nushell</strong></td><td style="padding:10px 8px">32K+ ⭐</td><td style="padding:10px 8px;color:rgba(255,255,255,.5)">结构化 Shell</td></tr>
+      <tr style="border-bottom:1px solid rgba(255,255,255,.1)"><td style="padding:10px 8px">4</td><td style="padding:10px 8px"><strong>Lazygit</strong></td><td style="padding:10px 8px">50K+ ⭐</td><td style="padding:10px 8px;color:rgba(255,255,255,.5)">Git 终端 UI</td></tr>
+      <tr style="border-bottom:1px solid rgba(255,255,255,.1)"><td style="padding:10px 8px">5</td><td style="padding:10px 8px"><strong>fzf</strong></td><td style="padding:10px 8px">65K+ ⭐</td><td style="padding:10px 8px;color:rgba(255,255,255,.5)">模糊搜索</td></tr>
+      <tr style="border-bottom:1px solid rgba(255,255,255,.1)"><td style="padding:10px 8px">6</td><td style="padding:10px 8px"><strong>Bruno</strong></td><td style="padding:10px 8px">25K+ ⭐</td><td style="padding:10px 8px;color:rgba(255,255,255,.5)">API 客户端</td></tr>
+      <tr style="border-bottom:1px solid rgba(255,255,255,.1)"><td style="padding:10px 8px">7</td><td style="padding:10px 8px"><strong>devcontainers</strong></td><td style="padding:10px 8px">10K+ ⭐</td><td style="padding:10px 8px;color:rgba(255,255,255,.5)">容器化开发</td></tr>
+      <tr><td style="padding:10px 8px">8</td><td style="padding:10px 8px"><strong>Ghostty</strong></td><td style="padding:10px 8px">25K+ ⭐</td><td style="padding:10px 8px;color:rgba(255,255,255,.5)">GPU 终端</td></tr>
+    </table>
+  </div>
+</div>
+
+<div id="post3-modal" style="display:none;position:fixed;inset:0;z-index:200;background:#000;overflow-y:auto;padding:80px 40px">
+  <button onclick="closeBlog('post3')" style="position:fixed;top:30px;right:40px;z-index:201;background:none;border:1px solid rgba(255,255,255,.2);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:16px">✕</button>
+  <div style="max-width:700px;margin:0 auto">
+    <span style="font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.4)">WEB SCRAPING</span>
+    <h2 style="font-family:'Noto Serif SC',serif;font-size:36px;font-weight:600;margin:16px 0 8px">Python 爬虫从入门到实战</h2>
+    <p style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:32px">2026-07-04 · 15 min read</p>
+    <p style="color:rgba(255,255,255,.7);font-size:15px;line-height:1.8">从最基础的 requests 讲到生产级 Playwright，附带 3 个可复用的实战案例。</p>
+    <h3 style="font-size:20px;margin:32px 0 12px;color:#fff">📦 5 个必学库</h3>
+    <p style="color:rgba(255,255,255,.7);font-size:15px;line-height:1.8"><strong>requests</strong> (52K⭐) → <strong>BeautifulSoup</strong> → <strong>Scrapy</strong> (53K⭐) → <strong>Playwright</strong> (68K⭐) → <strong>httpx</strong> (13K⭐)</p>
+    <h3 style="font-size:20px;margin:32px 0 12px;color:#fff">🛡️ 反爬策略</h3>
+    <p style="color:rgba(255,255,255,.7);font-size:15px;line-height:1.8">UA轮换 · 请求间隔随机化 · IP代理池 · Cookie管理 · 验证码识别</p>
+  </div>
+</div>
 
 <script>
-// ── Particles ──
-(function(){const c=document.getElementById('particles'),x=c.getContext('2d');let W,H,ps=[];function rs(){W=c.width=innerWidth;H=c.height=document.documentElement.scrollHeight}class P{constructor(){this.reset();this.y=Math.random()*H}reset(){this.x=Math.random()*W;this.y=-8;this.s=Math.random()*1.4+.4;this.sp=Math.random()*.35+.08;this.o=Math.random()*.45+.08}up(){this.y+=this.sp;if(this.y>H+8)this.reset()}dr(){x.fillStyle=`rgba(113,112,255,${this.o})`;x.beginPath();x.arc(this.x,this.y,this.s,0,Math.PI*2);x.fill()}}for(let i=0;i<70;i++)ps.push(new P());function an(){x.clearRect(0,0,W,H);ps.forEach(p=>{p.up();p.dr()});requestAnimationFrame(an)}rs();an();addEventListener('resize',rs)})();
+// ── Scroll reveal ──
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight)el.classList.add('in')}),300);
 
-// ── Cursor ──
-const dot=document.querySelector('.cursor-dot'),ring=document.querySelector('.cursor-ring');let mx=0,my=0,rx=0,ry=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});(function up(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;dot.style.left=mx+'px';dot.style.top=my+'px';ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(up)})();document.querySelectorAll('a,button,.project-card,.stat-card,.hobby-card,.skill-item,.blog-post,.idea-card').forEach(el=>{el.addEventListener('mouseenter',()=>{ring.classList.add('hover');dot.classList.add('hover')});el.addEventListener('mouseleave',()=>{ring.classList.remove('hover');dot.classList.remove('hover')})});
+// ── Blog modals ──
+function openBlog(id){document.getElementById(id+'-modal').style.display='block';document.body.style.overflow='hidden'}
+function closeBlog(id){document.getElementById(id+'-modal').style.display='none';document.body.style.overflow=''}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('[id$="-modal"]').forEach(el=>el.style.display='none');document.body.style.overflow=''}});
 
-// ── Reveal ──
-const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.1,rootMargin:'0px 0px -30px 0px'});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-
-// ── Parallax ──
-addEventListener('scroll',()=>{const sy=pageYOffset;document.querySelector('.hero-bg').style.transform=`translateY(${sy*.15}px)`;document.querySelector('.hero-vignette').style.transform=`translateY(${sy*.08}px)`;document.querySelectorAll('.hero-glow').forEach((g,i)=>{g.style.transform=`translateY(${sy*(i===0?.12:-.08)}px)`});document.getElementById('navbar').classList.toggle('scrolled',sy>60)});
-
-// ── Mouse track ──
-document.querySelectorAll('[data-mt]').forEach(card=>{card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();card.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');card.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%')});card.addEventListener('mouseleave',()=>{card.style.setProperty('--mx','50%');card.style.setProperty('--my','50%')})});
-
-// ── Smooth scroll ──
-document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',function(e){const t=document.querySelector(this.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});document.querySelector('.nav-links').classList.remove('mobile-open')}})});
-
-// ── Blog open/close ──
-function openBlog(id){document.getElementById(id+'-full').classList.add('open');document.body.style.overflow='hidden'}
-function closeBlog(id){document.getElementById(id+'-full').classList.remove('open');document.body.style.overflow=''}
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.blog-full.open').forEach(el=>el.classList.remove('open'));document.body.style.overflow=''}});
-
-// ═══════════════════════════════════════════
-// 🆕 IDEAS TAB SWITCHING                   
-// ═══════════════════════════════════════════
-function switchIdeasTab(type){
-  document.querySelectorAll('.ideas-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.ideas-panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('tab-'+type).classList.add('active');
-  document.getElementById('panel-'+type).classList.add('active');
-}
-
-// ═══════════════════════════════════════════
-// 🆕 FORM SUBMISSION WITH AI ANALYSIS        
-// ═══════════════════════════════════════════
-async function handleSubmit(e,type){
-  e.preventDefault();
-  const btn=document.getElementById(type==='suggestion'?'s-submit':'i-submit');
-  const origText=btn.innerHTML;
-  btn.disabled=true;btn.textContent='提交中...';
-
-  const data={
-    type,
-    name:document.getElementById((type==='suggestion'?'s':'i')+'-name').value||'匿名',
-    category:document.getElementById((type==='suggestion'?'s':'i')+'-category').value,
-    content:document.getElementById((type==='suggestion'?'s':'i')+'-content').value,
-  };
-  if(type==='idea') data.title=document.getElementById('i-title').value;
-
-  // Submit silently to server (analysis happens server-side, results go to QQ)
-  try{
-    await fetch('/api/submit',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(data)
-    });
-  }catch(e){
-    console.log('Background submit (analysis runs server-side):',e.message);
-  }
-
-  // Show simple success — audience sees nothing about AI
-  if(type==='suggestion'){
-    document.getElementById('form-suggestion').style.display='none';
-    document.getElementById('s-success').classList.add('show');
-  }else{
-    document.getElementById('form-idea').style.display='none';
-    document.getElementById('i-success').classList.add('show');
-  }
-}
-
-// ── Initial reveal ──
-setTimeout(()=>{document.querySelectorAll('.reveal').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight)el.classList.add('visible')})},400);
+// ── Mobile nav ──
+document.querySelector('.nav-toggle').addEventListener('click',()=>{document.getElementById('nav-menu').classList.toggle('show')});
 </script>
 </body>
 </html>
