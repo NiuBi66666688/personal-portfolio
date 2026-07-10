@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,19 +23,9 @@ a{color:inherit;text-decoration:none}
 .loader-anim{position:relative;width:min(30vw,200px);display:flex;align-items:center;justify-content:center}
 .loader-anim svg{width:100%;color:#121212}
 .loader-nbr-w{position:absolute;bottom:15%;left:50%;transform:translateX(-50%);font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:3px;color:#121212}
-.loader-img-w{position:absolute;inset:0;pointer-events:none}
-.loader-img{position:absolute;width:60px;opacity:0;transition:opacity .3s}
-.loader-img.coeur{top:10%;left:5%;width:80px}
-.loader-img.papier{top:15%;right:8%;width:70px}
-.loader-img.star{bottom:20%;left:10%;width:50px}
-.loader-img.bonbon{top:40%;right:5%;width:55px}
-.loader-img.chewinggum{bottom:10%;right:15%;width:65px}
-.loader-img.show{opacity:1}
 
 /* ── Nav ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:flex;justify-content:space-between;align-items:center;mix-blend-mode:difference}
-.nav-logo svg{width:120px;color:#fff}
-.menu-w{display:flex;align-items:center;gap:24px}
 .menu-btn{display:flex;align-items:center;gap:8px;cursor:pointer}
 .menu-btn-text{font-size:17px;font-weight:400;color:#fff;letter-spacing:1px;font-family:'Noto Sans SC','Inter',sans-serif}
 .menu-svg{width:10px;color:#fff}
@@ -44,19 +34,21 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:fl
 .menu-links-w a:hover{color:#fff}
 .menu-overlay{position:fixed;inset:0;z-index:200;background:#fff;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
 .menu-overlay.open{opacity:1;pointer-events:all}
-.menu-overlay .close-btn{position:absolute;top:24px;right:32px;background:none;border:none;font-size:14px;cursor:pointer;color:#121212;font-family:'Noto Sans SC','Inter',sans-serif}
+.menu-overlay .close-btn{position:absolute;top:24px;right:32px;background:none;border:none;font-size:14px;cursor:pointer;color:#121212}
 .menu-overlay nav{display:flex;flex-direction:column;align-items:center;gap:32px}
 .menu-overlay nav a{font-size:clamp(32px,5vw,52px);font-weight:500;color:#121212;transition:opacity .3s}
 .menu-overlay nav a:hover{opacity:.5}
 @media(max-width:991px){.menu-links-w{display:none}nav{padding:18px 20px}}
 
 /* ── Hero ── */
-.section-w{position:relative;height:100vh;overflow:hidden}
-.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-.hero-video-overlay{position:absolute;inset:0;background:rgba(0,0,0,.25);z-index:1}
-.hero-content{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center}
-.hero-svg{width:min(80vw,900px);color:#fff;opacity:.95}
+.hero-wrap{position:relative;height:100vh;overflow:hidden}
+#hero-bg-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.hero-bg-overlay{position:absolute;inset:0;background:rgba(0,0,0,.25);z-index:1}
+#fluid-canvas{position:absolute;inset:0;z-index:10;pointer-events:none}
+.hero-content{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .hero-w7w{font-size:clamp(80px,18vw,340px);font-weight:700;line-height:.85;letter-spacing:-.03em;color:#fff;font-family:'Noto Sans SC','Inter',sans-serif;text-shadow:0 0 80px rgba(0,0,0,.15)}
+.hero-content-text{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .8s}
+.hero-content-text.show{opacity:1}
 .hero-bottom{position:absolute;bottom:32px;left:32px;right:32px;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;font-size:12px;color:rgba(255,255,255,.7);letter-spacing:1px}
 .hero-links{display:flex;gap:16px;align-items:center}
 .hero-links a{color:rgba(255,255,255,.7);transition:color .3s;font-size:11px;letter-spacing:2px;font-family:'IBM Plex Mono',monospace}
@@ -68,14 +60,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:fl
 .section{padding:120px 60px;max-width:1400px;margin:0 auto;opacity:0;transform:translateY(60px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
 .section.visible{opacity:1;transform:translateY(0)}
 .h1-home{font-size:clamp(28px,5vw,52px);font-weight:500;line-height:1.12;letter-spacing:-.02em}
-.h1-home .line{display:block;opacity:0;transform:translateY(30px);animation:lineReveal .8s cubic-bezier(.16,1,.3,1) forwards}
-.h1-home .line:nth-child(1){animation-delay:.1s}
-.h1-home .line:nth-child(2){animation-delay:.3s}
-@keyframes lineReveal{to{opacity:1;transform:translateY(0)}}
+.h1-home .line{display:block;opacity:0;transform:translateY(30px);animation:lineIn .8s cubic-bezier(.16,1,.3,1) forwards}
+.h1-home .line:nth-child(1){animation-delay:.1s}.h1-home .line:nth-child(2){animation-delay:.3s}
+@keyframes lineIn{to{opacity:1;transform:translateY(0)}}
 .h3-style{font-size:clamp(22px,3.5vw,36px);font-weight:400;line-height:1.2;letter-spacing:-.01em}
-.h3-style .line{display:block;opacity:0;transform:translateY(20px);animation:lineReveal .7s cubic-bezier(.16,1,.3,1) forwards}
-.h3-style .line:nth-child(1){animation-delay:.15s}
-.h3-style .line:nth-child(2){animation-delay:.35s}
+.h3-style .line{display:block;opacity:0;transform:translateY(20px);animation:lineIn .7s cubic-bezier(.16,1,.3,1) forwards}
+.h3-style .line:nth-child(1){animation-delay:.15s}.h3-style .line:nth-child(2){animation-delay:.35s}
 .space-24{height:24px}.space-65{height:65px}.space-87{height:87px}.space-150{height:150px}
 @media(max-width:768px){.section{padding:80px 24px}.space-150{height:80px}.space-87{height:40px}}
 
@@ -89,13 +79,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:fl
 /* ── Works ── */
 .works-word-w{display:flex;gap:8px;font-size:clamp(48px,10vw,120px);font-weight:500;line-height:.9}
 .work_list{display:flex;flex-direction:column;gap:0}
-.work_item{display:flex;align-items:center;justify-content:space-between;padding:32px 0;border-bottom:1px solid rgba(0,0,0,.08);cursor:pointer;position:relative;transition:padding .3s;opacity:0;transform:translateY(30px);animation:workStagger .6s cubic-bezier(.16,1,.3,1) forwards}
-.work_item:nth-child(1){animation-delay:.1s}
-.work_item:nth-child(2){animation-delay:.2s}
-.work_item:nth-child(3){animation-delay:.3s}
-.work_item:nth-child(4){animation-delay:.4s}
-.work_item:nth-child(5){animation-delay:.5s}
-@keyframes workStagger{to{opacity:1;transform:translateY(0)}}
+.work_item{display:flex;align-items:center;justify-content:space-between;padding:32px 0;border-bottom:1px solid rgba(0,0,0,.08);cursor:pointer;position:relative;transition:padding .3s;opacity:0;transform:translateY(30px);animation:ws .6s cubic-bezier(.16,1,.3,1) forwards}
+.work_item:nth-child(1){animation-delay:.1s}.work_item:nth-child(2){animation-delay:.2s}.work_item:nth-child(3){animation-delay:.3s}.work_item:nth-child(4){animation-delay:.4s}.work_item:nth-child(5){animation-delay:.5s}
+@keyframes ws{to{opacity:1;transform:translateY(0)}}
 .work_item:hover{padding-left:12px}
 .title-work{font-size:clamp(24px,4vw,40px);font-weight:500;letter-spacing:-.02em}
 .short-p-work{font-size:14px;color:#777;max-width:300px}
@@ -124,7 +110,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:fl
 .formes-w img{width:120px;height:120px;object-fit:cover;border-radius:4px}
 @media(max-width:768px){.info-w{flex-direction:column}.formes-w img{width:80px;height:80px}}
 
-/* ── Glitch Section ── */
+/* ── Glitch ── */
 .glitch-section{position:relative;height:100vh;overflow:hidden;display:flex;align-items:center;background:#f5f3ef}
 .glitch-text-w{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2}
 .glitch-layer{position:absolute;font-size:clamp(48px,8vw,100px);font-weight:700;line-height:.9;text-align:center;white-space:nowrap}
@@ -150,99 +136,69 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:fl
 </head>
 <body>
 
-<!-- ══════════════ LOADER ══════════════ -->
-<div class="loader" id="loader">
-  <div class="loader-c">
-    <div class="loader-anim">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 99 120" fill="none"><path d="M97.5773 0C98.5258 0 99 0.474199 99 1.42259V118.577C99 119.526 98.5258 120 97.5773 120H73.2249C72.6669 120 72.2764 119.805 72.0533 119.414L31.3821 62.3431C30.9358 61.7852 30.3779 61.6178 29.7084 61.841C29.0389 62.0084 28.7041 62.4547 28.7041 63.1799L29.2899 118.494C29.2899 119.498 28.8157 120 27.8673 120H1.50634C0.502113 120 0 119.526 0 118.577V1.42259C0 0.474199 0.502113 0 1.50634 0H25.5241C26.082 0 26.5004 0.223152 26.7794 0.669456L67.6179 62.092C68.0085 62.6499 68.5385 62.8452 69.2079 62.6778C69.9332 62.4547 70.2959 61.9805 70.2959 61.2552L69.7101 1.42259C69.7101 0.474199 70.1843 0 71.1327 0H97.5773Z" fill="currentColor"/></svg>
-    </div>
-    <div class="loader-nbr-w" id="loader-count">000</div>
+<!-- Loader -->
+<div class="loader" id="loader"><div class="loader-c">
+  <div class="loader-anim">
+    <svg viewBox="0 0 99 120" fill="none"><path d="M97.5773 0C98.5258 0 99 0.474199 99 1.42259V118.577C99 119.526 98.5258 120 97.5773 120H73.2249C72.6669 120 72.2764 119.805 72.0533 119.414L31.3821 62.3431C30.9358 61.7852 30.3779 61.6178 29.7084 61.841C29.0389 62.0084 28.7041 62.4547 28.7041 63.1799L29.2899 118.494C29.2899 119.498 28.8157 120 27.8673 120H1.50634C0.502113 120 0 119.526 0 118.577V1.42259C0 0.474199 0.502113 0 1.50634 0H25.5241C26.082 0 26.5004 0.223152 26.7794 0.669456L67.6179 62.092C68.0085 62.6499 68.5385 62.8452 69.2079 62.6778C69.9332 62.4547 70.2959 61.9805 70.2959 61.2552L69.7101 1.42259C69.7101 0.474199 70.1843 0 71.1327 0H97.5773Z" fill="currentColor"/></svg>
   </div>
-</div>
+  <div class="loader-nbr-w" id="loader-count">000</div>
+</div></div>
 
-<!-- ══════════════ NAV ══════════════ -->
+<!-- Nav -->
 <nav>
-  <div class="nav-logo">
-    <svg viewBox="0 0 1398 291" fill="none"><path d="M224.949 7.33105C227.135 7.33105 228.228 8.42429 228.228 10.6108V280.703C228.228 282.89 227.135 283.983 224.949 283.983H168.808C167.522 283.983 166.622 283.533 166.107 282.633L72.3463 151.059C71.3174 149.773 70.0312 149.387 68.4878 149.901C66.9444 150.287 66.1727 151.316 66.1727 152.988L67.5232 280.511C67.5232 282.826 66.43 283.983 64.2435 283.983H3.47262C1.15754 283.983 0 282.89 0 280.703V10.6108C0 8.42429 1.15754 7.33105 3.47262 7.33105H224.949Z" fill="currentColor"/></svg>
-  </div>
   <div class="menu-w">
     <div class="menu-btn" onclick="document.querySelector('.menu-overlay').classList.add('open')">
-      <span class="menu-btn-text">menu</span>
-      <svg class="menu-svg" viewBox="0 0 6 6"><rect y="4" width="2" height="2"/><rect x="4" y="4" width="2" height="2"/><rect width="2" height="2"/><rect x="4" width="2" height="2"/></svg>
+      <span class="menu-btn-text">menu</span><svg class="menu-svg" viewBox="0 0 6 6"><rect y="4" width="2" height="2"/><rect x="4" y="4" width="2" height="2"/><rect width="2" height="2"/><rect x="4" width="2" height="2"/></svg>
     </div>
-    <div class="menu-links-w">
-      <a href="#blog">博客</a>
-      <a href="#studio">关于</a>
-      <a href="#footer">联系</a>
-    </div>
+    <div class="menu-links-w"><a href="#blog">博客</a><a href="#studio">关于</a><a href="#footer">联系</a></div>
   </div>
 </nav>
-
-<!-- Menu Overlay -->
 <div class="menu-overlay">
   <button class="close-btn" onclick="document.querySelector('.menu-overlay').classList.remove('open')">CLOSE</button>
-  <nav>
-    <a href="#blog" onclick="document.querySelector('.menu-overlay').classList.remove('open')">博客</a>
-    <a href="#studio" onclick="document.querySelector('.menu-overlay').classList.remove('open')">关于</a>
-    <a href="#footer" onclick="document.querySelector('.menu-overlay').classList.remove('open')">联系</a>
-  </nav>
+  <nav><a href="#blog" onclick="document.querySelector('.menu-overlay').classList.remove('open')">博客</a><a href="#studio" onclick="document.querySelector('.menu-overlay').classList.remove('open')">关于</a><a href="#footer" onclick="document.querySelector('.menu-overlay').classList.remove('open')">联系</a></nav>
 </div>
 
-<!-- ══════════════ HERO ══════════════ -->
-<section class="section-w" id="hero">
-  <video class="hero-video" autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/13038/13038-720.mp4"></video>
-  <div class="hero-video-overlay"></div>
-  <div class="hero-content">
-    <div class="hero-w7w">W7W</div>
+<!-- Hero -->
+<section class="hero-wrap">
+  <video id="hero-bg-video" autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/13038/13038-720.mp4"></video>
+  <div class="hero-bg-overlay"></div>
+  <canvas id="fluid-canvas"></canvas>
+  <div class="hero-content"><div class="hero-w7w">W7W</div></div>
+  <div class="hero-content-text" id="hero-text">
+    <h1 style="font-size:clamp(28px,5vw,52px);font-weight:500;text-align:center;color:#fff;line-height:1.15">
+      <span style="display:block">我从零构建</span>
+      <span style="display:block;font-weight:300;font-size:.6em;margin-top:10px;letter-spacing:.04em">会思考的 AI 系统</span>
+    </h1>
   </div>
   <div class="hero-bottom">
     <span>AI Agent 工程师 · 全栈开发者</span>
-    <div class="hero-links">
-      <a href="https://github.com/NiuBi66666688">GITHUB</a>
-      <span>/</span>
-      <a href="mailto:227110038@qq.com">EMAIL</a>
-      <span class="lang-btn" onclick="toggleLang()" id="lang-btn">EN</span>
-    </div>
+    <div class="hero-links"><a href="https://github.com/NiuBi66666688">GITHUB</a><span>/</span><a href="mailto:227110038@qq.com">EMAIL</a><span class="lang-btn" onclick="toggleLang()" id="lang-btn">EN</span></div>
   </div>
 </section>
 
-<!-- ══════════════ SHOWREEL ══════════════ -->
-<section class="section" id="showreel">
-  <div class="space-150"></div>
-  <h2 class="h1-home"><span class="line">我构建会思考</span><span class="line">的 AI 系统。</span></h2>
-  <div class="space-65"></div>
-  <div class="video-showreel-w">
-    <video autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/13037/13037-720.mp4"></video>
-  </div>
-  <div class="video-showreel-flip">
-    <div>The approach</div>
-    <div>AI Agent 工程是关于构建能推理、使用工具并交付真正价值的智能系统——从 prompt 到生产环境。</div>
-  </div>
+<!-- Showreel -->
+<section class="section"><div class="space-150"></div>
+  <h2 class="h1-home"><span class="line">我构建会思考</span><span class="line">的 AI 系统。</span></h2><div class="space-65"></div>
+  <div class="video-showreel-w"><video autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/13037/13037-720.mp4"></video></div>
+  <div class="video-showreel-flip"><div>The approach</div><div>AI Agent 工程是关于构建能推理、使用工具并交付真正价值的智能系统——从 prompt 到生产环境。</div></div>
 </section>
 
-<!-- ══════════════ WORKS ══════════════ -->
+<!-- Blog -->
 <section class="section" id="blog">
-  <div class="works-word-w">
-    <span>博</span><span>客</span>
-  </div>
-  <div class="space-87"></div>
-  <h2 class="h3-style"><span class="line">好的代码解决问题。</span><span class="line">好的文章启发思考。</span></h2>
-  <div class="space-87"></div>
+  <div class="works-word-w"><span>博</span><span>客</span></div><div class="space-87"></div>
+  <h2 class="h3-style"><span class="line">好的代码解决问题。</span><span class="line">好的文章启发思考。</span></h2><div class="space-87"></div>
   <div class="work_list">
-    <div class="work_item"><h2 class="title-work">AI Shopping Agent</h2><p class="short-p-work">Multi-agent procurement system with intent understanding</p><div class="img-work-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%2311182a' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23335577' font-size='48'%3E🤖%3C/text%3E%3C/svg%3E" alt=""></div><div class="cursor-work"><span>explore</span><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M8.6.35L13.12 4.87 8.6 9.39" stroke="#121212"/><line y1="5" x2="13.12" y2="5" stroke="#121212"/></svg></div></div>
-    <div class="work_item"><h2 class="title-work">Campus Marketplace</h2><p class="short-p-work">High-performance trading with real-time search & Redis caching</p><div class="img-work-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%230a1f1a' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23224433' font-size='48'%3E🏪%3C/text%3E%3C/svg%3E" alt=""></div><div class="cursor-work"><span>explore</span><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M8.6.35L13.12 4.87 8.6 9.39" stroke="#121212"/><line y1="5" x2="13.12" y2="5" stroke="#121212"/></svg></div></div>
-    <div class="work_item"><h2 class="title-work">AI Report Generator</h2><p class="short-p-work">Weekly reports from Git history via LLM prompt chains</p><div class="img-work-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%232a1510' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23443322' font-size='48'%3E✍️%3C/text%3E%3C/svg%3E" alt=""></div><div class="cursor-work"><span>explore</span><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M8.6.35L13.12 4.87 8.6 9.39" stroke="#121212"/><line y1="5" x2="13.12" y2="5" stroke="#121212"/></svg></div></div>
-    <div class="work_item"><h2 class="title-work">AI Chat Platform</h2><p class="short-p-work">Multi-model chat with streaming & conversation history</p><div class="img-work-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%23111' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23333' font-size='48'%3E💬%3C/text%3E%3C/svg%3E" alt=""></div><div class="cursor-work"><span>explore</span><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M8.6.35L13.12 4.87 8.6 9.39" stroke="#121212"/><line y1="5" x2="13.12" y2="5" stroke="#121212"/></svg></div></div>
-    <div class="work_item"><h2 class="title-work">Web Scraping Toolkit</h2><p class="short-p-work">Production crawlers with anti-bot strategies</p><div class="img-work-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%231a1a0a' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23443322' font-size='48'%3E🕷️%3C/text%3E%3C/svg%3E" alt=""></div><div class="cursor-work"><span>explore</span><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M8.6.35L13.12 4.87 8.6 9.39" stroke="#121212"/><line y1="5" x2="13.12" y2="5" stroke="#121212"/></svg></div></div>
+    <div class="work_item"><h2 class="title-work">AI Shopping Agent</h2><p class="short-p-work">Multi-agent procurement system with intent understanding</p><div class="img-work-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%2311182a' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23335577' font-size='48'%3E🤖%3C/text%3E%3C/svg%3E" alt=""></div><div class="cursor-work"><span>explore</span><svg width="14" height="10" viewBox="0 0 14 10"><path d="M8.6.35L13.12 4.87 8.6 9.39" stroke="#121212"/><line y1="5" x2="13.12" y2="5" stroke="#121212"/></svg></div></div>
+    <div class="work_item"><h2 class="title-work">Campus Marketplace</h2><p class="short-p-work">High-performance trading with real-time search</p><div class="img-work-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%230a1f1a' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23224433' font-size='48'%3E🏪%3C/text%3E%3C/svg%3E" alt=""></div><div class="cursor-work"><span>explore</span><svg width="14" height="10" viewBox="0 0 14 10"><path d="M8.6.35L13.12 4.87 8.6 9.39" stroke="#121212"/><line y1="5" x2="13.12" y2="5" stroke="#121212"/></svg></div></div>
+    <div class="work_item"><h2 class="title-work">AI Report Generator</h2><p class="short-p-work">Weekly reports from Git history via LLM chains</p><div class="img-work-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%232a1510' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23443322' font-size='48'%3E✍️%3C/text%3E%3C/svg%3E" alt=""></div><div class="cursor-work"><span>explore</span><svg width="14" height="10" viewBox="0 0 14 10"><path d="M8.6.35L13.12 4.87 8.6 9.39" stroke="#121212"/><line y1="5" x2="13.12" y2="5" stroke="#121212"/></svg></div></div>
+    <div class="work_item"><h2 class="title-work">AI Chat Platform</h2><p class="short-p-work">Multi-model chat with streaming & history</p><div class="img-work-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%23111' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23333' font-size='48'%3E💬%3C/text%3E%3C/svg%3E" alt=""></div><div class="cursor-work"><span>explore</span><svg width="14" height="10" viewBox="0 0 14 10"><path d="M8.6.35L13.12 4.87 8.6 9.39" stroke="#121212"/><line y1="5" x2="13.12" y2="5" stroke="#121212"/></svg></div></div>
+    <div class="work_item"><h2 class="title-work">Web Scraping Toolkit</h2><p class="short-p-work">Production crawlers with anti-bot strategies</p><div class="img-work-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%231a1a0a' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23443322' font-size='48'%3E🕷️%3C/text%3E%3C/svg%3E" alt=""></div><div class="cursor-work"><span>explore</span><svg width="14" height="10" viewBox="0 0 14 10"><path d="M8.6.35L13.12 4.87 8.6 9.39" stroke="#121212"/><line y1="5" x2="13.12" y2="5" stroke="#121212"/></svg></div></div>
   </div>
   <div class="space-150"></div>
-  <div class="view-all-w">
-    <a href="#" class="view-all-btn">View all<svg width="24" height="12" viewBox="-8 -1 26 14" fill="none"><polyline points="0.5,0 0.5,7.5 15.5,7.5" stroke="currentColor" stroke-width="1.5" fill="none"/><polyline points="12,4 15.5,7.5 12,11" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a>
-    <div class="nbr-works-w"><span>(</span><span>05</span><span>)</span></div>
-  </div>
+  <div class="view-all-w"><a href="#" class="view-all-btn">View all<svg width="24" height="12" viewBox="-8 -1 26 14"><polyline points="0.5,0 0.5,7.5 15.5,7.5" stroke="currentColor" stroke-width="1.5" fill="none"/><polyline points="12,4 15.5,7.5 12,11" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></a><div class="nbr-works-w"><span>(</span><span>05</span><span>)</span></div></div>
 </section>
 
-<!-- ══════════════ STUDIO VIDEO ══════════════ -->
+<!-- Studio -->
 <section class="section" id="studio">
   <div class="video-studio-w">
     <video autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/28780/28780-720.mp4"></video>
@@ -250,121 +206,197 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:fl
   </div>
 </section>
 
-<!-- ══════════════ INFO ══════════════ -->
-<section class="section">
-  <div class="info-w">
-    <div class="label">( The Studio )</div>
-    <div style="font-size:16px;color:#777;line-height:1.7;max-width:500px">W7W 代表着从零开始的不断迭代——构建、交付、永不停歇。AI Agent 工程、全栈开发，以及永不满足的创造欲。</div>
-  </div>
-  <div class="space-87"></div>
-  <h2 class="h1-home">代码之外，<br>我在运动里找到节奏。</h2>
-  <div class="space-87"></div>
-  <div class="img-block-grid">
-    <div class="img-block-left"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23e8e5df' width='600' height='400'/%3E%3Ctext x='300' y='220' text-anchor='middle' fill='%23ccc' font-size='60'%3E🏸%3C/text%3E%3C/svg%3E" alt=""><div style="position:absolute;bottom:16px;left:16px;font-size:14px;color:#777">or something<br>unexpected.</div></div>
-    <div class="img-block-right-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23d8d8f0' width='600' height='400'/%3E%3Ctext x='300' y='220' text-anchor='middle' fill='%23aac' font-size='60'%3E🏊%3C/text%3E%3C/svg%3E" alt=""></div>
-  </div>
-  <div class="space-87"></div>
-  <h2 class="h1-home">个人爱好</h2>
-  <div class="space-87"></div>
-  <div class="formes-w">
-    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23e8e5df' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23ccc' font-size='40'%3E🏸%3C/text%3E%3C/svg%3E" alt="">
-    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23e0dcd5' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23bbb' font-size='40'%3E🏓%3C/text%3E%3C/svg%3E" alt="">
-    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23e5e0d8' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23ccc' font-size='40'%3E🏀%3C/text%3E%3C/svg%3E" alt="">
-    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23e8e0d5' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23ccb' font-size='40'%3E🏎️%3C/text%3E%3C/svg%3E" alt="">
-    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23ebe5db' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23cba' font-size='40'%3E🍜%3C/text%3E%3C/svg%3E" alt="">
-    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23f0e8f0' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23cac' font-size='40'%3E💐%3C/text%3E%3C/svg%3E" alt="">
-  </div>
-</section>
+<!-- Info -->
+<section class="section"><div class="info-w">
+  <div class="label">( The Studio )</div>
+  <div style="font-size:16px;color:#777;line-height:1.7;max-width:500px">W7W 代表着从零开始的不断迭代——构建、交付、永不停歇。AI Agent 工程、全栈开发，以及永不满足的创造欲。</div>
+</div><div class="space-87"></div>
+<h2 class="h1-home">代码之外，<br>我在运动里找到节奏。</h2><div class="space-87"></div>
+<div class="img-block-grid">
+  <div class="img-block-left"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23e8e5df' width='600' height='400'/%3E%3Ctext x='300' y='220' text-anchor='middle' fill='%23ccc' font-size='60'%3E🏸%3C/text%3E%3C/svg%3E" alt=""><div style="position:absolute;bottom:16px;left:16px;font-size:14px;color:#777">or something<br>unexpected.</div></div>
+  <div class="img-block-right-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23d8d8f0' width='600' height='400'/%3E%3Ctext x='300' y='220' text-anchor='middle' fill='%23aac' font-size='60'%3E🏊%3C/text%3E%3C/svg%3E" alt=""></div>
+</div><div class="space-87"></div>
+<h2 class="h1-home">个人爱好</h2><div class="space-87"></div>
+<div class="formes-w">
+  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23e8e5df' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23ccc' font-size='40'%3E🏸%3C/text%3E%3C/svg%3E" alt="">
+  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23e0dcd5' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23bbb' font-size='40'%3E🏓%3C/text%3E%3C/svg%3E" alt="">
+  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23e5e0d8' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23ccc' font-size='40'%3E🏀%3C/text%3E%3C/svg%3E" alt="">
+  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23e8e0d5' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23ccb' font-size='40'%3E🏎️%3C/text%3E%3C/svg%3E" alt="">
+  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23ebe5db' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23cba' font-size='40'%3E🍜%3C/text%3E%3C/svg%3E" alt="">
+  <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23f0e8f0' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23cac' font-size='40'%3E💐%3C/text%3E%3C/svg%3E" alt="">
+</div></section>
 
-<!-- ══════════════ GLITCH ══════════════ -->
+<!-- Glitch -->
 <section class="glitch-section">
   <div class="glitch-text-w">
-    <div class="glitch-layer _1">W7W7W'<br>W7W7W'<br>W7W7W'</div>
-    <div class="glitch-layer _2">W7W7W'<br>W7W7W'<br>W7W7W'</div>
-    <div class="glitch-layer _3">W7W7W'<br>W7W7W'<br>W7W7W'</div>
-    <div class="glitch-layer _4">W7W7W'<br>W7W7W'<br>W7W7W'</div>
+    <div class="glitch-layer _1">W7W7W'<br>W7W7W'<br>W7W7W'</div><div class="glitch-layer _2">W7W7W'<br>W7W7W'<br>W7W7W'</div>
+    <div class="glitch-layer _3">W7W7W'<br>W7W7W'<br>W7W7W'</div><div class="glitch-layer _4">W7W7W'<br>W7W7W'<br>W7W7W'</div>
     <div class="final-text">从零构建<br>AI 系统，<br>直到生产环境。</div>
   </div>
   <img class="glitch-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Crect fill='%23ddd' width='400' height='600'/%3E%3Ctext x='200' y='320' text-anchor='middle' fill='%23aaa' font-size='80'%3E🏎️%3C/text%3E%3C/svg%3E" alt="">
 </section>
 
-<!-- ══════════════ FOOTER ══════════════ -->
+<!-- Footer -->
 <footer class="footer-section" id="footer">
-  <div class="footer-cta"><h2>从零开始<br>一起构建。</h2></div>
-  <div class="space-24"></div>
+  <div class="footer-cta"><h2>从零开始<br>一起构建。</h2></div><div class="space-24"></div>
   <div class="footer-btns">
     <a href="mailto:227110038@qq.com" class="btn">预约通话<svg width="16" height="8" viewBox="0 0 16 8"><line x1="0" y1="4" x2="14" y2="4" stroke="currentColor" stroke-width="1"/><polyline points="11,1 14,4 11,7" stroke="currentColor" stroke-width="1" fill="none"/></svg></a>
     <a href="mailto:227110038@qq.com" class="btn">发送邮件 <span style="font-size:16px">@</span></a>
-  </div>
-  <div class="space-150"></div>
-  <div class="footer-links">
-    <a href="https://github.com/NiuBi66666688">GitHub</a>
-    <a href="mailto:227110038@qq.com">邮箱</a>
-    <a href="#blog">博客</a>
-  </div>
-  <div class="footer-bottom">
-    <span>©2026 W7W</span>
-    <span>Built from scratch</span>
-  </div>
+  </div><div class="space-150"></div>
+  <div class="footer-links"><a href="https://github.com/NiuBi66666688">GitHub</a><a href="mailto:227110038@qq.com">邮箱</a><a href="#blog">博客</a></div>
+  <div class="footer-bottom"><span>©2026 W7W</span><span>Built from scratch</span></div>
 </footer>
 
-<script>
+<!-- THREE.JS CDN -->
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js"}}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+
 // ═══════════════════════════════════════════
-// LOADER — Countdown then reveal (noth.in style)
+// FLUID MASK REVEAL — Three.js particle system
 // ═══════════════════════════════════════════
-(function(){
-  const loader=document.getElementById('loader');
-  const count=document.getElementById('loader-count');
-  
-  // Check if already played this session
-  try{if(sessionStorage.getItem('w7w:loader-played')==='1'){loader.classList.add('hidden');return}}catch(e){}
-  
-  const TOTAL=4200; // 4.2s
-  const start=performance.now();
-  
-  function tick(now){
-    const elapsed=now-start;
-    const progress=Math.min(elapsed/TOTAL,1);
-    const eased=1-Math.pow(1-progress,3);
-    const num=Math.floor(100*(1-eased));
-    count.textContent=String(num).padStart(3,'0');
+const canvas=document.getElementById('fluid-canvas');
+const heroText=document.getElementById('hero-text');
+const heroContent=document.querySelector('.hero-content');
+
+// Three.js setup
+const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(60,1,.1,1000);
+camera.position.z=5;
+
+// Particles
+const COUNT=600;
+const geom=new THREE.BufferGeometry();
+const positions=new Float32Array(COUNT*3);
+const colors=new Float32Array(COUNT*3);
+const sizes=new Float32Array(COUNT);
+const velocities=[];
+
+for(let i=0;i<COUNT;i++){
+  positions[i*3]=(Math.random()-.5)*8;
+  positions[i*3+1]=(Math.random()-.5)*6;
+  positions[i*3+2]=(Math.random()-.5)*3;
+  colors[i*3]=.44;colors[i*3+1]=.44;colors[i*3+2]=.55;
+  sizes[i]=Math.random()*.05+.01;
+  velocities.push({x:(Math.random()-.5)*.003,y:(Math.random()-.5)*.003,z:(Math.random()-.5)*.001});
+}
+
+geom.setAttribute('position',new THREE.BufferAttribute(positions,3));
+geom.setAttribute('color',new THREE.BufferAttribute(colors,3));
+geom.setAttribute('size',new THREE.BufferAttribute(sizes,1));
+
+const mat=new THREE.PointsMaterial({
+  size:.04,vertexColors:true,blending:THREE.NormalBlending,
+  depthWrite:false,transparent:true,opacity:.7,
+  sizeAttenuation:true
+});
+const points=new THREE.Points(geom,mat);
+scene.add(points);
+
+// Mouse interaction for fluid-like movement
+let mouseX=0,mouseY=0;
+document.addEventListener('mousemove',e=>{mouseX=(e.clientX/window.innerWidth)*2-1;mouseY=-(e.clientY/window.innerHeight)*2+1});
+
+function resize(){renderer.setSize(window.innerWidth,window.innerHeight);camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix()}
+window.addEventListener('resize',resize);resize();
+
+// Countdown state
+let startTime=null,phase='countdown',countdownNum=100;
+const COUNTDOWN_DURATION=3500,TOTAL_DURATION=5200;
+
+function animate(timestamp){
+  requestAnimationFrame(animate);
+  if(!startTime)startTime=timestamp;
+  const elapsed=timestamp-startTime;
+
+  // Update particles
+  const posArr=geom.attributes.position.array;
+  const colArr=geom.attributes.color.array;
+  for(let i=0;i<COUNT;i++){
+    const v=velocities[i],idx=i*3;
     
-    if(progress<1){
-      requestAnimationFrame(tick);
+    if(phase==='countdown'){
+      // Attract to center + mouse influence
+      const cx=-posArr[idx]*.02+mouseX*.002;
+      const cy=-posArr[idx+1]*.02+mouseY*.002;
+      v.x+=cx;v.y+=cy;v.z+=(-posArr[idx+2])*.01;
+      v.x*=.97;v.y*=.97;v.z*=.97;
     }else{
-      count.textContent='000';
-      setTimeout(()=>{loader.classList.add('hidden');try{sessionStorage.setItem('w7w:loader-played','1')}catch(e){}},400);
+      // Dissolve — push outward
+      const dx=posArr[idx],dy=posArr[idx+1];
+      const dist=Math.sqrt(dx*dx+dy*dy)||1;
+      v.x+=dx/dist*.008;
+      v.y+=dy/dist*.008;
+      v.z+=.001;
     }
+    
+    posArr[idx]+=v.x;posArr[idx+1]+=v.y;posArr[idx+2]+=v.z;
+    
+    // Color transition
+    const t=phase==='dissolve'?Math.min((elapsed-COUNTDOWN_DURATION)/(TOTAL_DURATION-COUNTDOWN_DURATION),1):0;
+    colArr[idx]=.44+t*.56;
+    colArr[idx+1]=.44+t*.56;
+    colArr[idx+2]=.55+t*.45;
   }
-  requestAnimationFrame(tick);
+  geom.attributes.position.needsUpdate=true;
+  geom.attributes.color.needsUpdate=true;
+
+  // Phase transitions
+  if(elapsed<COUNTDOWN_DURATION){
+    phase='countdown';
+    mat.opacity=.75;
+  }else if(elapsed<TOTAL_DURATION){
+    phase='dissolve';
+    const dp=(elapsed-COUNTDOWN_DURATION)/(TOTAL_DURATION-COUNTDOWN_DURATION);
+    mat.opacity=.75*(1-dp);
+    points.material.opacity=mat.opacity;
+  }else{
+    canvas.style.display='none';
+    heroContent.style.display='none';
+    heroText.classList.add('show');
+    return;
+  }
+  
+  renderer.render(scene,camera);
+}
+
+// Loader countdown (sync with Three.js)
+(function loaderTick(){
+  try{if(sessionStorage.getItem('w7w:loader-played')==='1'){document.getElementById('loader').classList.add('hidden');return}}catch(e){}
+  const ls=performance.now();
+  const ld=4200;
+  function lt(now){const p=Math.min((now-ls)/ld,1);const n=Math.floor(100*(1-Math.pow(1-p,3)));document.getElementById('loader-count').textContent=String(n).padStart(3,'0');if(p<1)requestAnimationFrame(lt);else{document.getElementById('loader-count').textContent='000';setTimeout(()=>{document.getElementById('loader').classList.add('hidden');try{sessionStorage.setItem('w7w:loader-played','1')}catch(e){}},400)}}
+  requestAnimationFrame(lt);
 })();
 
-// ═══════════════════════════════════════════
-// SCROLL REVEAL
-// ═══════════════════════════════════════════
-const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.08,rootMargin:'0px 0px -60px 0px'});
-document.querySelectorAll('.section').forEach(el=>obs.observe(el));
-setTimeout(()=>document.querySelectorAll('.section').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight)el.classList.add('visible')}),800);
+// Start Three.js animation
+requestAnimationFrame(animate);
+</script>
 
-// ═══════════════════════════════════════════
-// LANGUAGE TOGGLE
-// ═══════════════════════════════════════════
+<script>
+// ── Scroll Reveal ──
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.08,rootMargin:'0px 0px -60px 0px'});
+document.querySelectorAll('.section,.glitch-section').forEach(el=>obs.observe(el));
+setTimeout(()=>document.querySelectorAll('.section,.glitch-section').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight)el.classList.add('visible')}),800);
+
+// ── Language Toggle ──
 let lang='zh';
 function toggleLang(){
   lang=lang==='zh'?'en':'zh';
   document.getElementById('lang-btn').textContent=lang==='zh'?'EN':'中';
   if(lang==='en'){
-    document.querySelector('.h1-home').innerHTML='I build AI systems<br>that think & act.';
-    document.querySelector('.h3-style').innerHTML='Good code solves problems.<br>Great code inspires.';
+    document.querySelector('#hero-text h1 span:first-child').textContent='I build AI systems';
+    document.querySelector('#hero-text h1 span:last-child').textContent='that think & act';
     document.querySelector('.hero-bottom>span').textContent='AI Agent Engineer · Full Stack Developer';
-    document.querySelector('.works-word-w').innerHTML='<span>w</span><span>o</span><span>r</span><span>k</span><span>s</span>';
-    document.querySelector('.footer-cta h2').innerHTML="Let's start<br>from scratch.";
   }else{
-    document.querySelector('.h1-home').innerHTML='我构建会思考<br>的 AI 系统。';
-    document.querySelector('.h3-style').innerHTML='好的代码解决问题。<br>好的文章启发思考。';
+    document.querySelector('#hero-text h1 span:first-child').textContent='我从零构建';
+    document.querySelector('#hero-text h1 span:last-child').textContent='会思考的 AI 系统';
     document.querySelector('.hero-bottom>span').textContent='AI Agent 工程师 · 全栈开发者';
-    document.querySelector('.works-word-w').innerHTML='<span>博</span><span>客</span>';
-    document.querySelector('.footer-cta h2').innerHTML='从零开始<br>一起构建。';
   }
 }
 </script>
