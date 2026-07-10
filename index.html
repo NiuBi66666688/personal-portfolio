@@ -4,130 +4,166 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>W7W</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+<meta name="description" content="AI Agent Engineer & Full Stack Developer">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
+:root{--bg:#faf9f7;--text:#0a0a0a;--muted:rgba(10,10,10,.5);--border:rgba(10,10,10,.08)}
 *,*::after,*::before{margin:0;padding:0;box-sizing:border-box}
 html{scrollbar-width:none;font-size:calc(0rem + 1vw)}
 body::-webkit-scrollbar{display:none}
-body{font-family:'Inter',sans-serif;background:#fff;color:#000;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;width:100%;height:auto}
+::selection{background:var(--text);color:var(--bg)}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
 
 /* ═══ LOADER — Premium 3D ═══ */
-#loader{position:fixed;inset:0;z-index:999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .8s cubic-bezier(.16,1,.3,1)}
-#loader.hidden{opacity:0;pointer-events:none}
-.loader-inner{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
-#loader-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1}
-.loader-counter{position:absolute;bottom:48px;left:50%;transform:translateX(-50%);z-index:2;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:6px;color:rgba(255,255,255,.5)}
-.loader-brand{position:absolute;top:50%;transform:translateY(-50%);z-index:2;font-size:clamp(60px,10vw,120px);font-weight:900;line-height:.85;color:#fff;letter-spacing:-.02em;pointer-events:none;opacity:0;animation:brandIn .8s .3s cubic-bezier(.16,1,.3,1) forwards}
-.loader-brand-left{left:6%}
-.loader-brand-right{right:6%;font-weight:300;font-size:clamp(50px,8vw,100px);animation:brandIn .8s .5s cubic-bezier(.16,1,.3,1) forwards}
-@keyframes brandIn{from{opacity:0;transform:translateY(-50%) scale(.95)}to{opacity:1;transform:translateY(-50%) scale(1)}}
+.loader{position:fixed;inset:0;z-index:999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity 1s cubic-bezier(.16,1,.3,1)}
+.loader.hidden{opacity:0;pointer-events:none}
+.loader-inner{position:relative;width:100%;height:100%}
+#loader-canvas{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(50vw,500px);height:min(50vw,500px);z-index:1;pointer-events:none}
+.loader-counter{position:absolute;bottom:48px;left:50%;transform:translateX(-50%);z-index:3;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:6px;color:rgba(255,255,255,.5)}
+.loader-brand{position:absolute;top:50%;transform:translateY(-50%);z-index:2;font-size:clamp(60px,10vw,120px);font-weight:900;line-height:.85;color:#fff;letter-spacing:-.02em;pointer-events:none}
+.loader-brand-left{left:8%;opacity:0;animation:blr .8s .2s cubic-bezier(.16,1,.3,1) forwards}
+.loader-brand-right{right:8%;font-weight:300;font-size:clamp(50px,8vw,100px);opacity:0;animation:blr .8s .4s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes blr{from{opacity:0;transform:translateY(-50%) translateX(-30px)}to{opacity:1;transform:translateY(-50%) translateX(0)}}
 @media(max-width:768px){.loader-brand-left{left:4%}.loader-brand-right{right:4%}.loader-counter{bottom:24px}}
 
-/* ═══ Nav ═══ */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:flex;justify-content:flex-end;align-items:center}
-.menu-btn{display:flex;align-items:center;gap:8px;cursor:pointer;background:none;border:none}
-.menu-btn-text{font-size:17px;font-weight:400;color:#000;letter-spacing:1px}
-.menu-svg{width:10px;color:#000}
-.menu-links-w{display:flex;gap:24px;margin-right:32px}
-.menu-links-w a{font-size:17px;color:rgba(0,0,0,.6);letter-spacing:1px;text-decoration:none;transition:color .3s}
-.menu-links-w a:hover{color:#000}
-.menu-overlay{position:fixed;inset:0;z-index:200;background:#fff;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
-.menu-overlay.open{opacity:1;pointer-events:all}
-.menu-overlay .cls{position:absolute;top:24px;right:32px;background:none;border:none;font-size:14px;cursor:pointer;color:#000}
-.menu-overlay nav{display:flex;flex-direction:column;align-items:center;gap:32px}
-.menu-overlay nav a{font-size:clamp(32px,5vw,52px);font-weight:500;color:#000;text-decoration:none;transition:opacity .3s}
-.menu-overlay nav a:hover{opacity:.5}
-@media(max-width:991px){.menu-links-w{display:none}nav{padding:18px 20px}}
+/* ═══ Nav — Right-aligned, mix-blend on hero ═══ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 36px;display:flex;justify-content:flex-end;align-items:center}
+.nav-links{display:flex;gap:28px;margin-right:36px}
+.nav-links a{font-size:17px;color:var(--text);letter-spacing:.5px;text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:var(--muted)}
+.nav-btn{display:flex;align-items:center;gap:8px;cursor:pointer;background:none;border:none}
+.nav-btn-text{font-size:17px;font-weight:500;color:var(--text);letter-spacing:.5px}
+.nav-btn-icon{display:grid;grid-template-columns:1fr 1fr;gap:3px;width:14px;height:14px}
+.nav-btn-icon span{display:block;width:100%;height:100%;background:var(--text);border-radius:1px}
+.nav-overlay{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
+.nav-overlay.open{opacity:1;pointer-events:all}
+.nav-overlay-close{position:absolute;top:24px;right:36px;background:none;border:none;font-size:14px;cursor:pointer;color:var(--text)}
+.nav-overlay nav{display:flex;flex-direction:column;align-items:center;gap:36px}
+.nav-overlay nav a{font-size:clamp(32px,5vw,56px);font-weight:600;color:var(--text);text-decoration:none;transition:opacity .3s}
+.nav-overlay nav a:hover{opacity:.5}
+@media(max-width:991px){.nav-links{display:none}.nav{padding:18px 20px}}
 
 /* ═══ Hero ═══ */
-.hero-wrap{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;background:#fff;overflow:hidden}
-.hero-center{text-align:center;max-width:90vw}
-.hero-title{font-size:clamp(60px,16vw,220px);font-weight:900;line-height:.85;letter-spacing:-.04em;color:#000;opacity:0;transform:translateY(40px);animation:heroIn 1s .2s cubic-bezier(.16,1,.3,1) forwards}
-@keyframes heroIn{to{opacity:1;transform:translateY(0)}}
-.hero-subtitle{margin-top:28px;font-size:clamp(12px,1.5vw,16px);font-weight:400;color:rgba(0,0,0,.45);letter-spacing:.12em;text-transform:uppercase;opacity:0;animation:heroIn 1s .5s cubic-bezier(.16,1,.3,1) forwards}
-.hero-bottom{position:absolute;bottom:32px;left:32px;right:32px;display:flex;justify-content:space-between;align-items:flex-end;font-size:12px;color:rgba(0,0,0,.5);letter-spacing:1px}
-.hero-bottom a{color:rgba(0,0,0,.5);text-decoration:none;font-size:11px;letter-spacing:2px;font-family:'IBM Plex Mono',monospace;transition:color .3s}
-.hero-bottom a:hover{color:#000}
-.lang-btn{cursor:pointer;font-size:11px;letter-spacing:2px;font-family:'IBM Plex Mono',monospace;color:rgba(0,0,0,.5)}
+.hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);overflow:hidden}
+.hero-video-wrap{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-video-wrap video{width:100%;height:100%;object-fit:cover}
+.hero-video-overlay{position:absolute;inset:0;background:rgba(0,0,0,.2);z-index:1}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:92vw}
+.hero-title{font-size:clamp(60px,16vw,220px);font-weight:900;line-height:.85;letter-spacing:-.04em;color:var(--text);opacity:0;transform:translateY(40px);animation:hIn 1s .2s cubic-bezier(.16,1,.3,1) forwards}
+.hero-subtitle{margin-top:28px;font-size:clamp(11px,1.3vw,15px);font-weight:500;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;opacity:0;animation:hIn 1s .5s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes hIn{to{opacity:1;transform:translateY(0)}}
+.hero-bottom{position:absolute;bottom:32px;left:32px;right:32px;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;font-size:11px;color:var(--muted);letter-spacing:2px;font-family:'IBM Plex Mono',monospace}
+.hero-bottom a{color:var(--muted);text-decoration:none;transition:color .3s}
+.hero-bottom a:hover{color:var(--text)}
+.lang-btn{cursor:pointer}
 @media(max-width:768px){.hero-bottom{flex-direction:column;gap:16px;align-items:flex-start}}
 
-/* ═══ Sections ═══ */
-.section{padding:140px 60px;max-width:1400px;margin:0 auto}
-.section-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(0,0,0,.35);margin-bottom:24px}
-.section-title{font-size:clamp(28px,5vw,52px);font-weight:700;line-height:1.05;letter-spacing:-.03em}
-.section-title .line{display:block;opacity:0;transform:translateY(30px);animation:lineIn .8s cubic-bezier(.16,1,.3,1) forwards}
-.section-title .line:first-child{animation-delay:.1s}.section-title .line:last-child{animation-delay:.3s}
-@keyframes lineIn{to{opacity:1;transform:translateY(0)}}
-.text{margin-top:40px;font-size:16px;color:rgba(0,0,0,.6);max-width:480px;line-height:1.7}
+/* ═══ Reveal sections ═══ */
+.section{padding:140px 60px;max-width:1400px;margin:0 auto;opacity:0;transform:translateY(60px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
+.section.visible{opacity:1;transform:translateY(0)}
+.label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:28px}
+.title{font-size:clamp(28px,5vw,52px);font-weight:700;line-height:1.05;letter-spacing:-.03em}
+.title .line{display:block;opacity:0;transform:translateY(30px);animation:lIn .8s cubic-bezier(.16,1,.3,1) forwards}
+.title .line:first-child{animation-delay:.1s}.title .line:last-child{animation-delay:.3s}
+@keyframes lIn{to{opacity:1;transform:translateY(0)}}
+.text{margin-top:40px;font-size:16px;color:var(--muted);max-width:480px;line-height:1.7}
 @media(max-width:768px){.section{padding:80px 24px}}
 
-/* ═══ Blog ═══ */
+/* ═══ Showreel ═══ */
+.showreel-video{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:16/9;background:#000}
+.showreel-video video{width:100%;height:100%;object-fit:cover}
+.showreel-cap{display:flex;justify-content:space-between;gap:40px;margin-top:28px;font-size:14px;color:var(--muted);line-height:1.6}
+.showreel-cap div:first-child{flex-shrink:0;font-weight:500}
+@media(max-width:768px){.showreel-cap{flex-direction:column}}
+
+/* ═══ Blog list ═══ */
 .blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:50px}
-.blog-card{opacity:0;transform:translateY(30px);animation:cardIn .6s cubic-bezier(.16,1,.3,1) forwards}
+.blog-card{opacity:0;transform:translateY(30px);animation:cIn .6s cubic-bezier(.16,1,.3,1) forwards}
 .blog-card:nth-child(1){animation-delay:.1s}.blog-card:nth-child(2){animation-delay:.2s}.blog-card:nth-child(3){animation-delay:.3s}
-@keyframes cardIn{to{opacity:1;transform:translateY(0)}}
-.blog-card-img{aspect-ratio:4/3;background:#f0f0f0;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:48px}
+@keyframes cIn{to{opacity:1;transform:translateY(0)}}
+.blog-card-img{aspect-ratio:4/3;background:#e8e5df;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:48px}
 .blog-card h3{font-size:18px;font-weight:600;margin-top:16px;letter-spacing:-.01em}
-.blog-card p{font-size:13px;color:rgba(0,0,0,.5);margin-top:6px}
-.view-all{margin-top:50px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:2px;color:#000;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.blog-card p{font-size:13px;color:var(--muted);margin-top:6px}
+.view-all{display:inline-flex;align-items:center;gap:8px;margin-top:50px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:2px;color:var(--text);text-decoration:none}
 @media(max-width:768px){.blog-grid{grid-template-columns:1fr}}
+
+/* ═══ Studio / Video reflection ═══ */
+.studio-video{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:16/9;background:#000}
+.studio-video video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.studio-video .reflet{opacity:.25;filter:blur(24px);transform:scaleY(-1)}
+
+/* ═══ Info grid ═══ */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:50px}
+.info-card{border-radius:12px;overflow:hidden;position:relative;aspect-ratio:4/3}
+.info-card img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.info-card:hover img{transform:scale(1.03)}
+.info-card-cap{position:absolute;bottom:20px;left:20px;font-size:14px;color:rgba(0,0,0,.5)}
+@media(max-width:768px){.info-grid{grid-template-columns:1fr}}
 
 /* ═══ Hobbies ═══ */
 .hobbies-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:50px}
-.hobby-card{aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:36px;transition:transform .4s}
+.hobby-card{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:36px;transition:transform .4s}
 .hobby-card:hover{transform:scale(1.05)}
 @media(max-width:900px){.hobbies-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* ═══ Marquee ═══ */
-.marquee-wrap{overflow:hidden;padding:80px 0;border-top:1px solid rgba(0,0,0,.08);border-bottom:1px solid rgba(0,0,0,.08)}
+.marquee-wrap{overflow:hidden;padding:80px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .marquee{display:flex;gap:40px;white-space:nowrap}
-.marquee-row{font-size:clamp(48px,8vw,100px);font-weight:700;line-height:.9;letter-spacing:-.03em;display:flex;gap:60px;animation:marquee 30s linear infinite}
+.marquee-row{font-size:clamp(48px,8vw,100px);font-weight:700;line-height:.9;letter-spacing:-.03em;display:flex;gap:60px;animation:mq 30s linear infinite}
 .marquee-row var{font-style:normal;opacity:.13}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ═══ Footer ═══ */
-footer{padding:100px 60px 60px}
+.footer{padding:100px 60px 60px}
 .footer-cta h2{font-size:clamp(28px,5vw,48px);font-weight:700;letter-spacing:-.02em;margin-bottom:20px}
 .footer-btns{display:flex;gap:12px;margin-bottom:60px}
-.btn{border:1px solid #000;padding:14px 28px;font-size:12px;letter-spacing:2px;font-family:'IBM Plex Mono',monospace;display:inline-flex;align-items:center;gap:6px;transition:all .3s;color:#000;text-decoration:none}
-.btn:hover{background:#000;color:#fff}
-.footer-links{display:flex;gap:20px;font-size:12px;color:rgba(0,0,0,.5);font-family:'IBM Plex Mono',monospace}
-.footer-links a{color:rgba(0,0,0,.5);text-decoration:none}
-.footer-links a:hover{color:#000}
-.footer-bottom{padding-top:40px;margin-top:40px;border-top:1px solid rgba(0,0,0,.08);display:flex;justify-content:space-between;font-size:11px;color:rgba(0,0,0,.4);font-family:'IBM Plex Mono',monospace}
-@media(max-width:768px){footer{padding:60px 24px}.footer-bottom{flex-direction:column;gap:8px}}
+.btn{border:1px solid var(--text);padding:14px 28px;font-size:12px;letter-spacing:2px;font-family:'IBM Plex Mono',monospace;display:inline-flex;align-items:center;gap:6px;transition:all .3s;color:var(--text);text-decoration:none}
+.btn:hover{background:var(--text);color:var(--bg)}
+.footer-links{display:flex;gap:20px;font-size:12px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
+.footer-links a{color:var(--muted);text-decoration:none}
+.footer-links a:hover{color:var(--text)}
+.footer-bottom{padding-top:40px;margin-top:40px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:11px;color:rgba(10,10,10,.35);font-family:'IBM Plex Mono',monospace}
+@media(max-width:768px){.footer{padding:60px 24px}.footer-bottom{flex-direction:column;gap:8px}}
 </style>
 </head>
 <body>
 
-<!-- Loader -->
-<div id="loader"><div class="loader-inner">
-  <canvas id="loader-canvas"></canvas>
-  <span class="loader-brand loader-brand-left">W</span>
-  <span class="loader-brand loader-brand-right">'</span>
-  <div class="loader-counter" id="loader-counter">100</div>
-</div></div>
+<!-- ═══ LOADER ═══ -->
+<div class="loader" id="loader">
+  <div class="loader-inner">
+    <canvas id="loader-canvas"></canvas>
+    <span class="loader-brand loader-brand-left">W</span>
+    <span class="loader-brand loader-brand-right">'</span>
+    <div class="loader-counter" id="loader-counter">100</div>
+  </div>
+</div>
 
-<!-- Nav -->
-<nav>
-  <div class="menu-links-w"><a href="#blog">博客</a><a href="#hobbies">爱好</a><a href="#footer">联系</a></div>
-  <button class="menu-btn" onclick="document.querySelector('.menu-overlay').classList.add('open')">
-    <span class="menu-btn-text">menu</span>
-    <svg class="menu-svg" viewBox="0 0 6 6" fill="currentColor"><rect y="4" width="2" height="2"/><rect x="4" y="4" width="2" height="2"/><rect width="2" height="2"/><rect x="4" width="2" height="2"/></svg>
+<!-- ═══ NAV ═══ -->
+<nav class="nav">
+  <div class="nav-links"><a href="#blog">博客</a><a href="#about">关于</a><a href="#contact">联系</a></div>
+  <button class="nav-btn" onclick="document.querySelector('.nav-overlay').classList.add('open')">
+    <span class="nav-btn-text">menu</span>
+    <div class="nav-btn-icon"><span></span><span></span><span></span><span></span></div>
   </button>
 </nav>
-<div class="menu-overlay">
-  <button class="cls" onclick="document.querySelector('.menu-overlay').classList.remove('open')">CLOSE</button>
+<div class="nav-overlay">
+  <button class="nav-overlay-close" onclick="document.querySelector('.nav-overlay').classList.remove('open')">CLOSE</button>
   <nav>
-    <a href="#blog" onclick="document.querySelector('.menu-overlay').classList.remove('open')">博客</a>
-    <a href="#hobbies" onclick="document.querySelector('.menu-overlay').classList.remove('open')">爱好</a>
-    <a href="#footer" onclick="document.querySelector('.menu-overlay').classList.remove('open')">联系</a>
+    <a href="#blog" onclick="document.querySelector('.nav-overlay').classList.remove('open')">博客</a>
+    <a href="#about" onclick="document.querySelector('.nav-overlay').classList.remove('open')">关于</a>
+    <a href="#contact" onclick="document.querySelector('.nav-overlay').classList.remove('open')">联系</a>
   </nav>
 </div>
 
-<!-- Hero -->
-<section class="hero-wrap" id="hero">
-  <div class="hero-center">
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="hero">
+  <div class="hero-video-wrap">
+    <video autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/13038/13038-720.mp4"></video>
+    <div class="hero-video-overlay"></div>
+  </div>
+  <div class="hero-content">
     <h1 class="hero-title">W7W</h1>
     <p class="hero-subtitle">AI AGENT ENGINEER · FULL STACK DEVELOPER</p>
   </div>
@@ -140,10 +176,18 @@ footer{padding:100px 60px 60px}
   </div>
 </section>
 
-<!-- Blog -->
+<!-- ═══ SHOWREEL ═══ -->
+<section class="section"><div style="height:80px"></div>
+  <h2 class="title"><span class="line">我构建会思考</span><span class="line">的 AI 系统。</span></h2>
+  <div style="height:50px"></div>
+  <div class="showreel-video"><video autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/13037/13037-720.mp4"></video></div>
+  <div class="showreel-cap"><div>The approach</div><div>AI Agent 工程是关于构建能推理、使用工具并交付真正价值的智能系统——从 prompt 到生产环境。</div></div>
+</section>
+
+<!-- ═══ BLOG ═══ -->
 <section class="section" id="blog">
-  <div class="section-label">博客</div>
-  <h2 class="section-title"><span class="line">好的代码解决问题。</span><span class="line">好的文章启发思考。</span></h2>
+  <div class="label">博客</div>
+  <h2 class="title"><span class="line">好的代码解决问题。</span><span class="line">好的文章启发思考。</span></h2>
   <p class="text">技术实战教程、工具深度测评、AI 领域前沿观察。</p>
   <div class="blog-grid">
     <div class="blog-card"><div class="blog-card-img">🤖</div><h3>2026 年 10 个 AI 开源工具</h3><p>从小白到进阶 · 12 min</p></div>
@@ -153,10 +197,21 @@ footer{padding:100px 60px 60px}
   <a href="#" class="view-all">查看全部 →</a>
 </section>
 
-<!-- Hobbies -->
-<section class="section" id="hobbies">
-  <div class="section-label">个人爱好</div>
-  <h2 class="section-title"><span class="line">代码之外，</span><span class="line">我在运动里找到节奏。</span></h2>
+<!-- ═══ STUDIO VIDEO ═══ -->
+<section class="section" id="about">
+  <div class="label">关于</div>
+  <p class="text">W7W 代表着从零开始的不断迭代——构建、交付、永不停歇。AI Agent 工程、全栈开发，以及永不满足的创造欲。</p>
+  <div style="height:50px"></div>
+  <div class="studio-video">
+    <video autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/28780/28780-720.mp4"></video>
+    <video class="reflet" autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/28780/28780-720.mp4"></video>
+  </div>
+</section>
+
+<!-- ═══ INFO / HOBBIES ═══ -->
+<section class="section">
+  <div class="label">个人爱好</div>
+  <h2 class="title"><span class="line">代码之外，</span><span class="line">我在运动里找到节奏。</span></h2>
   <p class="text">🏸 羽毛球 · 🏓 乒乓 · 🏀 篮球 · 🏊 游泳 · 🏎️ F1 · 🍜 美食 · 💐 插花 · 📈 投资</p>
   <div class="hobbies-grid">
     <div class="hobby-card" style="background:linear-gradient(135deg,#e8e5df,#d8d5cf)">🏸</div>
@@ -168,27 +223,34 @@ footer{padding:100px 60px 60px}
     <div class="hobby-card" style="background:linear-gradient(135deg,#e0e8d8,#d0e0c8)">📈</div>
     <div class="hobby-card" style="background:linear-gradient(135deg,#e8d8d5,#e0d0c8)">🏎️</div>
   </div>
+  <div style="height:60px"></div>
+  <div class="info-grid">
+    <div class="info-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='450'%3E%3Crect fill='%23e8e5df' width='600' height='450'/%3E%3Ctext x='300' y='240' text-anchor='middle' fill='%23bbb' font-size='50'%3E🏸%3C/text%3E%3C/svg%3E" alt=""><div class="info-card-cap">or something unexpected.</div></div>
+    <div class="info-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='450'%3E%3Crect fill='%23d8d8f0' width='600' height='450'/%3E%3Ctext x='300' y='240' text-anchor='middle' fill='%23aac' font-size='50'%3E🏎️%3C/text%3E%3C/svg%3E" alt=""><div class="info-card-cap">always shipping.</div></div>
+  </div>
 </section>
 
-<!-- Marquee -->
+<!-- ═══ MARQUEE ═══ -->
 <div class="marquee-wrap">
   <div class="marquee">
     <div class="marquee-row"><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var></div>
-    <div class="marquee-row" aria-hidden="true"><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var></div>
+    <div class="marquee-row"><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var></div>
   </div>
 </div>
 
-<!-- Footer -->
-<footer id="footer">
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer" id="contact">
   <div class="footer-cta"><h2>从零开始<br>一起构建。</h2></div>
   <div class="footer-btns">
     <a href="mailto:227110038@qq.com" class="btn">预约通话 →</a>
     <a href="mailto:227110038@qq.com" class="btn">发送邮件 @</a>
   </div>
+  <div style="height:80px"></div>
   <div class="footer-links"><a href="https://github.com/NiuBi66666688">GitHub</a><a href="mailto:227110038@qq.com">邮箱</a><a href="#blog">博客</a></div>
   <div class="footer-bottom"><span>©2026 W7W</span><span>BUILT FROM SCRATCH</span></div>
 </footer>
 
+<!-- THREE.JS CDN -->
 <script type="importmap">
 {"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js"}}
 </script>
@@ -197,7 +259,7 @@ footer{padding:100px 60px 60px}
 import * as THREE from 'three';
 
 // ════════════════════════════════════════════
-// PREMIUM LOADER — Fluid 3D Objects
+// LOADER — Premium 3D Objects Cycling
 // ════════════════════════════════════════════
 const canvas=document.getElementById('loader-canvas');
 const counterEl=document.getElementById('loader-counter');
@@ -206,25 +268,21 @@ const loaderEl=document.getElementById('loader');
 const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
 renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
 renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.5;
+renderer.toneMappingExposure=1.4;
 
-const size=Math.min(window.innerWidth*.5,480);
+const size=Math.min(window.innerWidth*.48,500);
 renderer.setSize(size,size);
 
 const scene=new THREE.Scene();
-const camera=new THREE.PerspectiveCamera(40,1,.1,100);
-camera.position.z=3.8;
+const camera=new THREE.PerspectiveCamera(45,1,.1,100);
+camera.position.z=3.6;
 
-// ── Environment Map for Reflections ──
+// Environment for reflections
 const pmrem=new THREE.PMREMGenerator(renderer);
 const envScene=new THREE.Scene();
-// Studio backdrop
-const bgGeo=new THREE.SphereGeometry(10,32,32);
-const bgMat=new THREE.MeshBasicMaterial({color:0x1a1a2e,side:THREE.BackSide});
-envScene.add(new THREE.Mesh(bgGeo,bgMat));
-// Bright reflection spots
+envScene.add(new THREE.Mesh(new THREE.SphereGeometry(10,32,32),new THREE.MeshBasicMaterial({color:0x1a1a2e,side:THREE.BackSide})));
 for(let i=0;i<8;i++){
-  const m=new THREE.Mesh(new THREE.CircleGeometry(.4,16),new THREE.MeshBasicMaterial({color:0xffffff}));
+  const m=new THREE.Mesh(new THREE.CircleGeometry(.5,16),new THREE.MeshBasicMaterial({color:0xffffff}));
   const a=(i/8)*Math.PI*2;
   m.position.set(Math.cos(a)*5,Math.sin(a)*3-1,Math.sin(a)*5-2);
   m.lookAt(0,0,0);
@@ -232,23 +290,23 @@ for(let i=0;i<8;i++){
 }
 const envMap=pmrem.fromScene(envScene).texture;
 
-// ── Lights ──
-const amb=new THREE.AmbientLight(0x404060,.5);
+// Lights
+const amb=new THREE.AmbientLight(0x404060,.4);
 scene.add(amb);
-const key=new THREE.SpotLight(0xffffff,3,20,Math.PI/6,.5);
-key.position.set(3,5,5);
-scene.add(key);
-const fill=new THREE.PointLight(0x4466cc,1.5,15);
+const key=new THREE.SpotLight(0xffffff,2.5,20,Math.PI/5,.6);
+key.position.set(2,4,3);
+scene.add(key);scene.add(key.target);key.target.position.set(0,0,0);
+const fill=new THREE.PointLight(0x4466cc,1.2,15);
 fill.position.set(-4,2,-3);
 scene.add(fill);
-const rim=new THREE.PointLight(0xff8844,1,12);
+const rim=new THREE.PointLight(0xff8844,.8,12);
 rim.position.set(0,-3,-4);
 scene.add(rim);
-const top=new THREE.DirectionalLight(0xffffff,.8);
+const top=new THREE.DirectionalLight(0xffffff,.6);
 top.position.set(0,5,0);
 scene.add(top);
 
-// ── Object 1: Crumpled Metal Blue Ball ──
+// ── 1. Crumpled Metal Blue Ball ──
 function makeBall(){
   const g=new THREE.IcosahedronGeometry(1,48);
   const pos=g.attributes.position;
@@ -257,23 +315,14 @@ function makeBall(){
     v.fromBufferAttribute(pos,i);
     const x=v.x,y=v.y,z=v.z;
     let n=0;
-    n+=Math.sin(x*3.7+y*2.3)*.15;
-    n+=Math.sin(y*5.1+z*4.2)*.12;
-    n+=Math.sin(z*6.8+x*3.1)*.09;
-    n+=Math.sin(x*9+y*8+z*7)*.05;
-    n+=Math.sin(x*15+y*13)*.03;
-    v.multiplyScalar(1+n);
-    pos.setXYZ(i,v.x,v.y,v.z);
+    n+=Math.sin(x*3.7+y*2.3)*.15;n+=Math.sin(y*5.1+z*4.2)*.12;n+=Math.sin(z*6.8+x*3.1)*.09;n+=Math.sin(x*9+y*8+z*7)*.05;n+=Math.sin(x*15+y*13)*.03;
+    v.multiplyScalar(1+n);pos.setXYZ(i,v.x,v.y,v.z);
   }
   g.computeVertexNormals();
-  const m=new THREE.MeshPhysicalMaterial({
-    color:0x1a44aa,metalness:.95,roughness:.12,
-    envMap,envMapIntensity:2,clearcoat:.4,clearcoatRoughness:.1
-  });
-  return new THREE.Mesh(g,m);
+  return new THREE.Mesh(g,new THREE.MeshPhysicalMaterial({color:0x1a44aa,metalness:.95,roughness:.12,envMap,envMapIntensity:2,clearcoat:.4,clearcoatRoughness:.1}));
 }
 
-// ── Object 2: Crumpled Plastic Bag ──
+// ── 2. Crumpled Plastic Bag ──
 function makeBag(){
   const g=new THREE.SphereGeometry(1.15,64,64);
   const pos=g.attributes.position;
@@ -282,112 +331,83 @@ function makeBag(){
     v.fromBufferAttribute(pos,i);
     const x=v.x,y=v.y,z=v.z;
     let n=0;
-    n+=Math.sin(x*6+y*3+z*4)*.12;
-    n+=Math.cos(y*8+z*5)*.1;
-    n+=Math.sin(z*11+x*7)*.07;
-    n+=Math.sin(x*14+y*12+z*16)*.04;
-    v.multiplyScalar(1+n);
-    pos.setXYZ(i,v.x,v.y,v.z);
+    n+=Math.sin(x*6+y*3+z*4)*.12;n+=Math.cos(y*8+z*5)*.1;n+=Math.sin(z*11+x*7)*.07;n+=Math.sin(x*14+y*12+z*16)*.04;
+    v.multiplyScalar(1+n);pos.setXYZ(i,v.x,v.y,v.z);
   }
   g.computeVertexNormals();
-  const m=new THREE.MeshPhysicalMaterial({
-    color:0xaaaaaa,metalness:.02,roughness:.65,
-    envMap,envMapIntensity:.6,transparent:true,opacity:.95,
-    transmission:.05,thickness:.3,side:THREE.DoubleSide
-  });
-  return new THREE.Mesh(g,m);
+  return new THREE.Mesh(g,new THREE.MeshPhysicalMaterial({color:0xaaaaaa,metalness:.02,roughness:.65,envMap,envMapIntensity:.6,transparent:true,opacity:.95,transmission:.05,thickness:.3,side:THREE.DoubleSide}));
 }
 
-// ── Object 3: Balloon Dog ──
+// ── 3. Balloon Dog (Torus Knot) ──
 function makeDog(){
   const g=new THREE.TorusKnotGeometry(.7,.25,160,32,2,3);
-  const m=new THREE.MeshPhysicalMaterial({
-    color:0x8844dd,metalness:.15,roughness:.2,
-    envMap,envMapIntensity:1.5,clearcoat:.6,clearcoatRoughness:.05,
-    sheen:.8,sheenColor:0xbb88ff,sheenRoughness:.2
-  });
-  return new THREE.Mesh(g,m);
+  return new THREE.Mesh(g,new THREE.MeshPhysicalMaterial({color:0x8844dd,metalness:.15,roughness:.2,envMap,envMapIntensity:1.5,clearcoat:.6,clearcoatRoughness:.05,sheen:.8,sheenColor:0xbb88ff,sheenRoughness:.2}));
 }
 
-// ── Object 4: Metal Star ──
+// ── 4. Metal Star ──
 function makeStar(){
   const g=new THREE.OctahedronGeometry(1.1,0);
   const pos=g.attributes.position;
   const v=new THREE.Vector3();
   for(let i=0;i<pos.count;i++){
     v.fromBufferAttribute(pos,i);
-    const len=v.length();
-    if(len>.25){
-      v.multiplyScale ? v.multiplyScale(1.6) : v.multiplyScalar(1.6);
-    }
-    v.x+=Math.sin(v.y*20)*.02;
-    v.y+=Math.sin(v.z*20)*.02;
+    if(v.length()>.25)v.multiplyScalar(1.6);
+    v.x+=Math.sin(v.y*20)*.02;v.y+=Math.sin(v.z*20)*.02;
     pos.setXYZ(i,v.x,v.y,v.z);
   }
   g.computeVertexNormals();
-  const m=new THREE.MeshPhysicalMaterial({
-    color:0xdddddd,metalness:1,roughness:.05,
-    envMap,envMapIntensity:2.5
-  });
-  return new THREE.Mesh(g,m);
+  return new THREE.Mesh(g,new THREE.MeshPhysicalMaterial({color:0xdddddd,metalness:1,roughness:.05,envMap,envMapIntensity:2.5}));
 }
 
 const objects=[makeBall(),makeBag(),makeDog(),makeStar()];
 let currentObj=objects[0];
+let prevObj=null;
 scene.add(currentObj);
 
-let startTime=null;
-let objIndex=0;
-const OBJ_DURATION=1200;
-const TOTAL_DURATION=5500;
+let startTime=null,objIndex=0;
+const OBJ_DURATION=1300,TOTAL_DURATION=5800;
 
 function animate(ts){
   requestAnimationFrame(animate);
   if(!startTime)startTime=ts;
   const elapsed=ts-startTime;
-  
   const objIdx=Math.min(Math.floor(elapsed/OBJ_DURATION),objects.length-1);
   const t=(elapsed%OBJ_DURATION)/OBJ_DURATION;
   
-  if(objIdx!==objIndex){
-    scene.remove(currentObj);
+  if(objIdx!==objIndex&&prevObj===null){
+    prevObj=currentObj;
     currentObj=objects[objIdx];
-    currentObj.scale.set(.3,.3,.3);
+    currentObj.scale.set(.5,.5,.5);
     scene.add(currentObj);
     objIndex=objIdx;
   }
   
-  // Smooth scale with bounce
+  // Cross-fade
+  if(prevObj){
+    const fade=1-t;
+    prevObj.scale.set(fade,fade,fade);
+    prevObj.rotation.y+=.02;
+    if(t>.5){scene.remove(prevObj);prevObj=null}
+  }
+  
   const target=1-Math.pow(Math.abs(t-.5)*2,2)*.25;
-  const prev=currentObj.scale.x;
-  const smooth=prev+(target-prev)*.15;
-  currentObj.scale.set(smooth,smooth,smooth);
+  const s=currentObj.scale.x+(target-currentObj.scale.x)*.15;
+  currentObj.scale.set(s,s,s);
+  currentObj.rotation.y+=.01;currentObj.rotation.x=Math.sin(elapsed*.0008)*.3;
   
-  // Rotation
-  currentObj.rotation.y+=.012;
-  currentObj.rotation.x=Math.sin(elapsed*.0008)*.3;
-  currentObj.rotation.z=Math.cos(elapsed*.0005)*.15;
-  
-  // Fade out
   if(elapsed>TOTAL_DURATION-1000){
     const fade=Math.max(0,1-(elapsed-(TOTAL_DURATION-1000))/1000);
     renderer.setClearAlpha(fade);
   }
-  
   renderer.render(scene,camera);
-  
-  if(elapsed>TOTAL_DURATION){
-    loaderEl.classList.add('hidden');
-    return;
-  }
+  if(elapsed>TOTAL_DURATION){loaderEl.classList.add('hidden');return}
 }
 
 // Counter
 (function loaderTick(){
   try{if(sessionStorage.getItem('w7w:loader-played')==='1'){loaderEl.classList.add('hidden');return}}catch(e){}
-  const ls=performance.now();
-  const ld=5500;
-  function lt(now){const elapsed=now-ls;const p=Math.min(elapsed/ld,1);const n=Math.ceil(100*(1-Math.pow(1-p,4)));counterEl.textContent=String(Math.max(n,0)).padStart(3,'0');if(p<1)requestAnimationFrame(lt);else{counterEl.textContent='000';setTimeout(()=>{loaderEl.classList.add('hidden');try{sessionStorage.setItem('w7w:loader-played','1')}catch(e){}},600)}}
+  const ls=performance.now(),ld=5800;
+  function lt(now){const el=now-ls;const p=Math.min(el/ld,1);const n=Math.ceil(100*(1-Math.pow(1-p,4)));counterEl.textContent=String(Math.max(n,0)).padStart(3,'0');if(p<1)requestAnimationFrame(lt);else{counterEl.textContent='000';setTimeout(()=>{loaderEl.classList.add('hidden');try{sessionStorage.setItem('w7w:loader-played','1')}catch(e){}},500)}}
   requestAnimationFrame(lt);
 })();
 
