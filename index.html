@@ -37,10 +37,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:fl
 .nav-logo svg{width:120px;color:#fff}
 .menu-w{display:flex;align-items:center;gap:24px}
 .menu-btn{display:flex;align-items:center;gap:8px;cursor:pointer}
-.menu-btn-text{font-size:13px;font-weight:400;color:#fff;letter-spacing:1px;font-family:'Noto Sans SC','Inter',sans-serif}
-.menu-svg{width:8px;color:#fff}
-.menu-links-w{display:flex;gap:20px}
-.menu-links-w a{font-size:13px;color:rgba(255,255,255,.7);letter-spacing:1px;transition:color .3s}
+.menu-btn-text{font-size:17px;font-weight:400;color:#fff;letter-spacing:1px;font-family:'Noto Sans SC','Inter',sans-serif}
+.menu-svg{width:10px;color:#fff}
+.menu-links-w{display:flex;gap:24px}
+.menu-links-w a{font-size:17px;color:rgba(255,255,255,.7);letter-spacing:1px;transition:color .3s}
 .menu-links-w a:hover{color:#fff}
 .menu-overlay{position:fixed;inset:0;z-index:200;background:#fff;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
 .menu-overlay.open{opacity:1;pointer-events:all}
@@ -56,6 +56,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:fl
 .hero-video-overlay{position:absolute;inset:0;background:rgba(0,0,0,.25);z-index:1}
 .hero-content{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center}
 .hero-svg{width:min(80vw,900px);color:#fff;opacity:.95}
+.hero-w7w{font-size:clamp(80px,18vw,340px);font-weight:700;line-height:.85;letter-spacing:-.03em;color:#fff;font-family:'Noto Sans SC','Inter',sans-serif;text-shadow:0 0 80px rgba(0,0,0,.15)}
 .hero-bottom{position:absolute;bottom:32px;left:32px;right:32px;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;font-size:12px;color:rgba(255,255,255,.7);letter-spacing:1px}
 .hero-links{display:flex;gap:16px;align-items:center}
 .hero-links a{color:rgba(255,255,255,.7);transition:color .3s;font-size:11px;letter-spacing:2px;font-family:'IBM Plex Mono',monospace}
@@ -157,9 +158,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:fl
       <svg class="menu-svg" viewBox="0 0 6 6"><rect y="4" width="2" height="2"/><rect x="4" y="4" width="2" height="2"/><rect width="2" height="2"/><rect x="4" width="2" height="2"/></svg>
     </div>
     <div class="menu-links-w">
-      <a href="#works">works</a>
-      <a href="#studio">studio</a>
-      <a href="#footer">contact</a>
+      <a href="#blog">博客</a>
+      <a href="#studio">关于</a>
+      <a href="#footer">联系</a>
     </div>
   </div>
 </nav>
@@ -168,9 +169,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:fl
 <div class="menu-overlay">
   <button class="close-btn" onclick="document.querySelector('.menu-overlay').classList.remove('open')">CLOSE</button>
   <nav>
-    <a href="#works" onclick="document.querySelector('.menu-overlay').classList.remove('open')">Works</a>
-    <a href="#studio" onclick="document.querySelector('.menu-overlay').classList.remove('open')">Studio</a>
-    <a href="#footer" onclick="document.querySelector('.menu-overlay').classList.remove('open')">Contact</a>
+    <a href="#blog" onclick="document.querySelector('.menu-overlay').classList.remove('open')">博客</a>
+    <a href="#studio" onclick="document.querySelector('.menu-overlay').classList.remove('open')">关于</a>
+    <a href="#footer" onclick="document.querySelector('.menu-overlay').classList.remove('open')">联系</a>
   </nav>
 </div>
 
@@ -179,10 +180,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:fl
   <video class="hero-video" autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/13038/13038-720.mp4"></video>
   <div class="hero-video-overlay"></div>
   <div class="hero-content">
-    <svg class="hero-svg" viewBox="0 0 1408 294" fill="none"><path d="M226.68 7.38751C228.884 7.38751 229.985 8.48916 229.985 10.6925V282.864C229.985 285.068 228.884 286.169 226.68 286.169H170.107C168.811 286.169 167.904 285.716 167.386 284.808L72.9032 152.222C71.8663 150.926 70.5703 150.537 69.015 151.055C67.4597 151.444 66.6821 152.481 66.6821 154.166L68.043 282.67C68.043 285.003 66.9413 286.169 64.738 286.169H3.49935C1.16645 286.169 0 285.068 0 282.864V10.6925C0 8.48916 1.16645 7.38751 3.49935 7.38751H59.2946C60.5906 7.38751 61.5627 7.90594 62.2107 8.94278L157.082 151.639C157.989 152.935 159.221 153.388 160.776 152.999C162.461 152.481 163.303 151.379 163.303 149.694L161.942 10.6925C161.942 8.48916 163.044 7.38751 165.247 7.38751H226.68Z" fill="currentColor"/><path d="M330.643 11.6645C348.269 3.88817 366.803 0 386.244 0C405.685 0 424.218 3.88817 441.845 11.6645L487.531 42.9643C500.362 56.0544 510.536 71.6719 518.053 89.8167C525.7 107.832 529.523 126.754 529.523 146.584C529.523 166.414 525.7 185.401 518.053 203.546L487.531 250.204L441.845 281.503L386.244 293.168L330.643 281.503L284.957 250.204L254.241 203.546C246.723 185.401 242.965 166.414 242.965 146.584C242.965 126.754 246.723 107.832 254.241 89.8167L284.957 42.9643L330.643 11.6645ZM330.837 203.157C346.131 218.839 364.6 226.68 386.244 226.68L441.65 203.157L464.59 146.584L441.65 90.0111L386.244 66.4877L330.837 90.0111L307.897 146.584L330.837 203.157Z" fill="currentColor"/><path d="M704.685 7.19312C706.888 7.19312 707.99 8.29476 707.99 10.4981V68.043C707.99 70.2463 706.888 71.3479 704.685 71.3479H655.11C652.907 71.3479 651.805 72.5144 651.805 74.8473V282.864C651.805 285.068 650.639 286.169 648.306 286.169H584.151C581.818 286.169 580.652 285.068 580.652 282.864V74.8473C580.652 72.5144 579.55 71.3479 577.347 71.3479H527.384C525.181 71.3479 524.079 70.2463 524.079 68.043V10.4981C524.079 8.29476 525.181 7.19312 527.384 7.19312H704.685Z" fill="currentColor"/><path d="M952.793 7.97076L955.126 9.13721L956.292 11.4701V283.253L955.126 285.78L952.793 286.752H888.638L886.111 285.78L885.139 283.253V180.994L883.972 178.661L881.639 177.495H802.126L798.627 180.8V283.253L797.655 285.78L795.128 286.752H731.167L728.64 285.78L727.668 283.253V11.4701L728.64 9.13721L731.167 7.97076H795.128L797.655 9.13721L798.627 11.4701V110.23L802.126 113.535H881.639L883.972 112.562L885.139 110.035V11.4701L886.111 9.13721L888.638 7.97076H952.793Z" fill="currentColor"/><path d="M1043.58 7.58191L1046.11 8.74836L1047.08 11.0813V282.864L1046.11 285.392L1043.58 286.364H979.62L977.093 285.392L976.121 282.864V11.0813L977.093 8.74836L979.62 7.58191H1043.58Z" fill="currentColor"/><path d="M1293.78 7.38751C1295.99 7.38751 1297.09 8.48916 1297.09 10.6925V282.864C1297.09 285.068 1295.99 286.169 1293.78 286.169H1237.21L1234.49 284.808L1140.01 152.222L1136.12 151.055L1133.79 154.166L1135.15 282.67L1131.84 286.169H1070.6L1067.1 282.864V10.6925L1070.6 7.38751H1126.4L1129.32 8.94278L1224.19 151.639L1227.88 152.999L1230.41 149.694L1229.05 10.6925L1232.35 7.38751H1293.78Z" fill="currentColor"/><path d="M1404.6 7L1407.13 8.36086L1407.9 11.277L1361.44 120.923L1358.13 123.256H1316.14L1313.42 122.09L1312.84 119.174L1339.08 9.72172L1342.39 7H1404.6Z" fill="currentColor"/></svg>
+    <div class="hero-w7w">W7W</div>
   </div>
   <div class="hero-bottom">
-    <span>AI Agent Engineer · Full Stack Developer</span>
+    <span>AI Agent 工程师 · 全栈开发者</span>
     <div class="hero-links">
       <a href="https://github.com/NiuBi66666688">GITHUB</a>
       <span>/</span>
@@ -195,24 +196,24 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:fl
 <!-- ══════════════ SHOWREEL ══════════════ -->
 <section class="section" id="showreel">
   <div class="space-150"></div>
-  <h2 class="h1-home">I build AI systems<br>that think & act.</h2>
+  <h2 class="h1-home">我构建会思考<br>的 AI 系统。</h2>
   <div class="space-65"></div>
   <div class="video-showreel-w">
     <video autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/13037/13037-720.mp4"></video>
   </div>
   <div class="video-showreel-flip">
-    <div>( The approach )</div>
-    <div>AI Agent engineering is about making intelligent systems that reason, use tools, and deliver real value — from prompt to production.</div>
+    <div>The approach</div>
+    <div>AI Agent 工程是关于构建能推理、使用工具并交付真正价值的智能系统——从 prompt 到生产环境。</div>
   </div>
 </section>
 
 <!-- ══════════════ WORKS ══════════════ -->
-<section class="section" id="works">
+<section class="section" id="blog">
   <div class="works-word-w">
-    <span>w</span><span>o</span><span>r</span><span>k</span><span>s</span>
+    <span>博</span><span>客</span>
   </div>
   <div class="space-87"></div>
-  <h2 class="h3-style">Good code solves problems.<br>Great code inspires.</h2>
+  <h2 class="h3-style">好的代码解决问题。<br>好的文章启发思考。</h2>
   <div class="space-87"></div>
   <div class="work_list">
     <div class="work_item"><h2 class="title-work">AI Shopping Agent</h2><p class="short-p-work">Multi-agent procurement system with intent understanding</p><div class="img-work-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%2311182a' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23335577' font-size='48'%3E🤖%3C/text%3E%3C/svg%3E" alt=""></div><div class="cursor-work"><span>explore</span><svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M8.6.35L13.12 4.87 8.6 9.39" stroke="#121212"/><line y1="5" x2="13.12" y2="5" stroke="#121212"/></svg></div></div>
@@ -240,17 +241,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:fl
 <section class="section">
   <div class="info-w">
     <div class="label">( The Studio )</div>
-    <div style="font-size:16px;color:#777;line-height:1.7;max-width:500px">I called it W7W because it represents the constant iteration — building from zero, always shipping, never settling. AI Agent engineering, full-stack development, and a relentless drive to create.</div>
+    <div style="font-size:16px;color:#777;line-height:1.7;max-width:500px">W7W 代表着从零开始的不断迭代——构建、交付、永不停歇。AI Agent 工程、全栈开发，以及永不满足的创造欲。</div>
   </div>
   <div class="space-87"></div>
-  <h2 class="h1-home">Code follows<br>curiosity.</h2>
+  <h2 class="h1-home">代码之外，<br>我在运动里找到节奏。</h2>
   <div class="space-87"></div>
   <div class="img-block-grid">
     <div class="img-block-left"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23e8e5df' width='600' height='400'/%3E%3Ctext x='300' y='220' text-anchor='middle' fill='%23ccc' font-size='60'%3E🏸%3C/text%3E%3C/svg%3E" alt=""><div style="position:absolute;bottom:16px;left:16px;font-size:14px;color:#777">or something<br>unexpected.</div></div>
     <div class="img-block-right-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Crect fill='%23d8d8f0' width='600' height='400'/%3E%3Ctext x='300' y='220' text-anchor='middle' fill='%23aac' font-size='60'%3E🏊%3C/text%3E%3C/svg%3E" alt=""></div>
   </div>
   <div class="space-87"></div>
-  <h2 class="h1-home">Forms follow<br>perspective.</h2>
+  <h2 class="h1-home">个人爱好</h2>
   <div class="space-87"></div>
   <div class="formes-w">
     <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23e8e5df' width='200' height='200'/%3E%3Ctext x='100' y='110' text-anchor='middle' fill='%23ccc' font-size='40'%3E🏸%3C/text%3E%3C/svg%3E" alt="">
@@ -269,24 +270,24 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 32px;display:fl
     <div class="glitch-layer _2">W7W7W'<br>W7W7W'<br>W7W7W'</div>
     <div class="glitch-layer _3">W7W7W'<br>W7W7W'<br>W7W7W'</div>
     <div class="glitch-layer _4">W7W7W'<br>W7W7W'<br>W7W7W'</div>
-    <div class="final-text">Building AI systems<br>from zero to<br>production.</div>
+    <div class="final-text">从零构建<br>AI 系统，<br>直到生产环境。</div>
   </div>
   <img class="glitch-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='600'%3E%3Crect fill='%23ddd' width='400' height='600'/%3E%3Ctext x='200' y='320' text-anchor='middle' fill='%23aaa' font-size='80'%3E🏎️%3C/text%3E%3C/svg%3E" alt="">
 </section>
 
 <!-- ══════════════ FOOTER ══════════════ -->
 <footer class="footer-section" id="footer">
-  <div class="footer-cta"><h2>Let's start<br>from scratch.</h2></div>
+  <div class="footer-cta"><h2>从零开始<br>一起构建。</h2></div>
   <div class="space-24"></div>
   <div class="footer-btns">
-    <a href="mailto:227110038@qq.com" class="btn">book a call<svg width="16" height="8" viewBox="0 0 16 8"><line x1="0" y1="4" x2="14" y2="4" stroke="currentColor" stroke-width="1"/><polyline points="11,1 14,4 11,7" stroke="currentColor" stroke-width="1" fill="none"/></svg></a>
-    <a href="mailto:227110038@qq.com" class="btn">drop an email <span style="font-size:16px">@</span></a>
+    <a href="mailto:227110038@qq.com" class="btn">预约通话<svg width="16" height="8" viewBox="0 0 16 8"><line x1="0" y1="4" x2="14" y2="4" stroke="currentColor" stroke-width="1"/><polyline points="11,1 14,4 11,7" stroke="currentColor" stroke-width="1" fill="none"/></svg></a>
+    <a href="mailto:227110038@qq.com" class="btn">发送邮件 <span style="font-size:16px">@</span></a>
   </div>
   <div class="space-150"></div>
   <div class="footer-links">
     <a href="https://github.com/NiuBi66666688">GitHub</a>
-    <a href="mailto:227110038@qq.com">Email</a>
-    <a href="#works">Works</a>
+    <a href="mailto:227110038@qq.com">邮箱</a>
+    <a href="#blog">博客</a>
   </div>
   <div class="footer-bottom">
     <span>©2026 W7W</span>
@@ -335,18 +336,22 @@ setTimeout(()=>document.querySelectorAll('.section').forEach(el=>{if(el.getBound
 // ═══════════════════════════════════════════
 // LANGUAGE TOGGLE
 // ═══════════════════════════════════════════
-let lang='en';
+let lang='zh';
 function toggleLang(){
-  lang=lang==='en'?'zh':'en';
-  document.getElementById('lang-btn').textContent=lang==='en'?'EN':'中';
-  if(lang==='zh'){
-    document.querySelector('.h1-home').innerHTML='我构建会思考<br>的 AI 系统。';
-    document.querySelector('.h3-style').innerHTML='好的代码解决问题。<br>好的作品启发思考。';
-    document.querySelector('.hero-bottom>span').textContent='AI Agent 工程师 · 全栈开发者';
-  }else{
+  lang=lang==='zh'?'en':'zh';
+  document.getElementById('lang-btn').textContent=lang==='zh'?'EN':'中';
+  if(lang==='en'){
     document.querySelector('.h1-home').innerHTML='I build AI systems<br>that think & act.';
     document.querySelector('.h3-style').innerHTML='Good code solves problems.<br>Great code inspires.';
     document.querySelector('.hero-bottom>span').textContent='AI Agent Engineer · Full Stack Developer';
+    document.querySelector('.works-word-w').innerHTML='<span>w</span><span>o</span><span>r</span><span>k</span><span>s</span>';
+    document.querySelector('.footer-cta h2').innerHTML="Let's start<br>from scratch.";
+  }else{
+    document.querySelector('.h1-home').innerHTML='我构建会思考<br>的 AI 系统。';
+    document.querySelector('.h3-style').innerHTML='好的代码解决问题。<br>好的文章启发思考。';
+    document.querySelector('.hero-bottom>span').textContent='AI Agent 工程师 · 全栈开发者';
+    document.querySelector('.works-word-w').innerHTML='<span>博</span><span>客</span>';
+    document.querySelector('.footer-cta h2').innerHTML='从零开始<br>一起构建。';
   }
 }
 </script>
