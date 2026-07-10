@@ -5,394 +5,422 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>W7W</title>
 <meta name="description" content="AI Agent Engineer & Full Stack Developer">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+/* ═══════════════════════════════════════════ */
+/* noth.in REPLICA — W7W Edition              */
+/* ═══════════════════════════════════════════ */
+:root{--bg:#f5f3ef;--text:#1a1a1a;--muted:#777;--accent:#1a1a1a;--border:rgba(0,0,0,.08)}
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{font-family:'Noto Sans SC','Inter',system-ui,sans-serif;background:#000;color:#fff;overflow-x:hidden}
+html{scroll-behavior:auto}
+body{font-family:'Noto Sans SC','Inter','PP Neue Montreal',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(0,0,0,.15)}
+#scroll-container{position:relative}
 
-/* ── Navigation ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:28px 40px;display:flex;justify-content:space-between;align-items:center;mix-blend-mode:difference}
-.nav-logo{font-size:16px;font-weight:600;letter-spacing:2px;color:#fff;text-decoration:none}
-.nav-links{display:flex;gap:32px;list-style:none}
-.nav-links a{color:rgba(255,255,255,.7);text-decoration:none;font-size:13px;font-weight:400;letter-spacing:1px;transition:color .3s}
-.nav-links a:hover{color:#fff}
-.nav-toggle{display:none;background:none;border:none;color:#fff;font-size:20px;cursor:pointer}
-@media(max-width:768px){nav{padding:20px 24px}.nav-links{display:none}.nav-toggle{display:block}}
+/* ── Fixed Left Sidebar ── */
+.sidebar{position:fixed;left:28px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;align-items:center;gap:20px;writing-mode:vertical-rl;font-size:11px;letter-spacing:2px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
+.sidebar a{color:var(--muted);text-decoration:none;transition:color .3s}
+.sidebar a:hover{color:var(--text)}
+.sidebar .divider{width:1px;height:30px;background:var(--border);margin:4px 0}
+.sidebar .lang-toggle{cursor:pointer;transition:color .3s}
+.sidebar .lang-toggle:hover{color:var(--text)}
+@media(max-width:900px){.sidebar{display:none}}
 
-/* ── Custom Cursor ── */
-.cursor{position:fixed;pointer-events:none;z-index:9999;mix-blend-mode:difference}
-.cursor-dot{width:5px;height:5px;background:#fff;border-radius:50%;position:fixed;transform:translate(-50%,-50%);pointer-events:none;z-index:9999}
-.cursor-ring{width:26px;height:26px;border:1px solid rgba(255,255,255,.25);border-radius:50%;position:fixed;transform:translate(-50%,-50%);pointer-events:none;z-index:9998;transition:width .35s cubic-bezier(.25,1,.5,1),height .35s cubic-bezier(.25,1,.5,1),border-color .35s}
-.cursor-ring.on-media{width:50px;height:50px;border-color:rgba(255,255,255,.5)}
-@media(max-width:768px){.cursor-dot,.cursor-ring{display:none}}
+/* ── Top Menu ── */
+.top-menu{position:fixed;top:28px;right:32px;z-index:100;display:flex;align-items:center;gap:12px}
+.top-menu .menu-btn{cursor:pointer;font-size:15px;font-weight:500;letter-spacing:1px;color:var(--muted);background:none;border:none;font-family:'Noto Sans SC','Inter',sans-serif;transition:color .3s}
+.top-menu .menu-btn:hover{color:var(--text)}
+.top-menu .menu-lines{display:flex;flex-direction:column;gap:5px;cursor:pointer}
+.top-menu .menu-lines span{display:block;width:22px;height:1.5px;background:var(--text);transition:all .3s}
+@media(max-width:900px){.top-menu{right:16px;top:16px}.top-menu .menu-btn{font-size:14px}}
 
-/* ── Hero Video Section ── */
-.hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-.hero-overlay{position:absolute;inset:0;background:rgba(0,0,0,.55);z-index:1}
-.hero-content{position:relative;z-index:2;text-align:center;max-width:900px;padding:0 40px}
-.hero h1{font-family:'Noto Serif SC','Georgia',serif;font-size:clamp(36px,7vw,80px);font-weight:600;line-height:1.08;letter-spacing:-.01em;margin-bottom:24px;animation:fadeUp 1s ease-out}
-.hero h1 span{display:block;font-weight:300;font-size:.5em;letter-spacing:.08em;margin-bottom:10px;font-family:'Noto Sans SC','Inter',sans-serif}
-.hero-tagline{font-size:16px;color:rgba(255,255,255,.65);line-height:1.7;max-width:480px;margin:0 auto 32px;animation:fadeUp 1s ease-out .2s both}
-.hero-cta{display:inline-block;padding:14px 36px;border:1px solid rgba(255,255,255,.3);color:#fff;text-decoration:none;font-size:13px;letter-spacing:2px;text-transform:uppercase;transition:all .4s,transform .12s ease-out;animation:fadeUp 1s ease-out .4s both;will-change:transform}
-.hero-cta:hover{background:#fff;color:#000;border-color:#fff}
-.hero-scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;color:rgba(255,255,255,.4);font-size:11px;letter-spacing:3px;text-transform:uppercase;animation:fadeUp 1s ease-out .8s both}
-@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+/* ── Menu Overlay ── */
+.menu-overlay{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
+.menu-overlay.open{opacity:1;pointer-events:all}
+.menu-overlay .close-btn{position:absolute;top:28px;right:32px;background:none;border:none;font-size:15px;cursor:pointer;color:var(--muted);font-family:'Noto Sans SC','Inter',sans-serif}
+.menu-overlay nav{display:flex;flex-direction:column;align-items:center;gap:28px}
+.menu-overlay nav a{font-size:clamp(28px,5vw,48px);font-weight:500;color:var(--text);text-decoration:none;letter-spacing:-.02em;transition:opacity .3s}
+.menu-overlay nav a:hover{opacity:.5}
+
+/* ── Hero ── */
+.hero{position:relative;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hero-video-wrap{position:absolute;inset:0;z-index:0}
+.hero-video-wrap video{width:100%;height:100%;object-fit:cover}
+.hero-video-overlay{position:absolute;inset:0;background:rgba(245,243,239,.35);z-index:1}
+#hero-canvas{position:absolute;inset:0;z-index:2;pointer-events:none}
+.hero-content{position:relative;z-index:3;text-align:center}
+.hero-title{font-family:'Noto Sans SC','Inter',sans-serif;font-size:clamp(28px,5vw,52px);font-weight:500;letter-spacing:-.02em;line-height:1.15;color:var(--text);animation:fadeIn 1s ease-out}
+.hero-title .line{display:block}
+.hero-title .line:last-child{font-weight:300;font-size:.6em;margin-top:10px;letter-spacing:.04em}
+
+/* ── Countdown ── */
+.countdown{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);z-index:3;font-family:'IBM Plex Mono',monospace;font-size:14px;letter-spacing:3px;color:var(--text);display:flex;align-items:center;gap:4px}
+.countdown-num{display:inline-block;min-width:30px;text-align:center;transition:none}
+.countdown-final{font-family:'Noto Sans SC','Inter',sans-serif;font-size:clamp(120px,20vw,280px);font-weight:700;line-height:.85;position:absolute;bottom:10%;left:50%;transform:translate(-50%,0);z-index:3;opacity:0;transition:opacity .6s cubic-bezier(.16,1,.3,1)}
+.countdown-final.show{opacity:1}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
 /* ── Section ── */
-.section{position:relative;padding:120px 60px;max-width:1400px;margin:0 auto}
-.section-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:20px;font-weight:400}
-.section-title{font-family:'Noto Serif SC','Georgia',serif;font-size:clamp(28px,5vw,56px);font-weight:600;line-height:1.1;letter-spacing:-.01em;margin-bottom:20px}
-.section-desc{font-size:16px;color:rgba(255,255,255,.55);max-width:500px;line-height:1.7}
+.section{position:relative;padding:140px 60px;max-width:1400px;margin:0 auto}
+.section-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:24px}
+.section-title{font-size:clamp(28px,5vw,56px);font-weight:500;line-height:1.1;letter-spacing:-.02em;margin-bottom:20px;color:var(--text)}
+.section-desc{font-size:16px;color:var(--muted);max-width:500px;line-height:1.7}
 @media(max-width:768px){.section{padding:80px 24px}}
 
-/* ── Video Grid ── */
-.video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:60px}
-.video-grid-item{position:relative;aspect-ratio:16/10;overflow:hidden;cursor:pointer;transform-style:preserve-3d;perspective:1000px;transition:transform .15s ease-out}
-.video-grid-item video,.video-grid-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.25,.1,.25,1);transform:scale(1.06)}
-.video-grid-item:hover video,.video-grid-item:hover img{transform:scale(1.04)}
-.video-grid-item .caption{position:absolute;bottom:0;left:0;right:0;padding:40px 24px 20px;background:linear-gradient(transparent,rgba(0,0,0,.7));z-index:2}
-.video-grid-item .caption h3{font-size:14px;font-weight:500;letter-spacing:1px}
-.video-grid-item .caption span{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:1px}
-@media(max-width:900px){.video-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.video-grid{grid-template-columns:1fr}}
+/* ── Blog List ── */
+.blog-list{margin-top:50px;display:flex;flex-direction:column;gap:0}
+.blog-item{display:flex;align-items:center;justify-content:space-between;padding:28px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:padding .4s,padding-left .4s}
+.blog-item:hover{padding-left:16px}
+.blog-item h3{font-size:clamp(18px,3vw,32px);font-weight:500;letter-spacing:-.02em;flex:1}
+.blog-item .desc{font-size:14px;color:var(--muted);max-width:300px;text-align:right;line-height:1.5}
+.blog-item .arrow{font-size:20px;color:var(--muted);margin-left:20px;transition:transform .4s}
+.blog-item:hover .arrow{transform:translateX(6px)}
+.view-all{display:inline-flex;align-items:center;gap:8px;margin-top:40px;font-size:13px;color:var(--muted);text-decoration:none;letter-spacing:2px;font-family:'IBM Plex Mono',monospace;transition:gap .3s}
+.view-all:hover{gap:14px}
 
-/* ── Full-width Image Strip ── */
-.image-strip{display:flex;gap:4px;margin-top:60px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.image-strip::-webkit-scrollbar{display:none}
-.image-strip-item{flex:0 0 45vw;min-width:300px;aspect-ratio:4/5;overflow:hidden;position:relative;transform-style:preserve-3d;perspective:1000px;transition:transform .15s ease-out}
-.image-strip-item video,.image-strip-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s;transform:scale(1.05)}
-.image-strip-item:hover video,.image-strip-item:hover img{transform:scale(1.03)}
-.image-strip-item .label{position:absolute;bottom:20px;left:20px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#fff;z-index:2}
+/* ── Gallery ── */
+.gallery{position:relative;height:100vh;margin:0 -60px;overflow:hidden}
+.gallery-inner{display:flex;height:100%;gap:4px}
+.gallery-item{flex:1;overflow:hidden;position:relative;transition:flex .5s cubic-bezier(.25,.1,.25,1)}
+.gallery-item:hover{flex:1.5}
+.gallery-item img,.gallery-item video{width:100%;height:100%;object-fit:cover}
+@media(max-width:768px){.gallery{margin:0;height:60vh}.gallery-inner{flex-direction:column}}
 
-/* ── Blog Section ── */
-.blog-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:60px}
-.blog-item{position:relative;aspect-ratio:3/4;overflow:hidden;cursor:pointer;transform-style:preserve-3d;perspective:1200px;transition:transform .15s ease-out}
-.blog-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s;transform:scale(1.05)}
-.blog-item:hover img{transform:scale(1.04)}
-.blog-item .overlay{position:absolute;inset:0;background:rgba(0,0,0,.3);transition:background .4s;display:flex;flex-direction:column;justify-content:flex-end;padding:30px}
-.blog-item:hover .overlay{background:rgba(0,0,0,.55)}
-.blog-item .overlay h4{font-family:'Noto Serif SC','Georgia',serif;font-size:20px;font-weight:600;margin-bottom:6px}
-.blog-item .overlay span{font-size:11px;color:rgba(255,255,255,.6);letter-spacing:1px}
-@media(max-width:900px){.blog-strip{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.blog-strip{grid-template-columns:1fr}}
+/* ── Image Grid ── */
+.image-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:50px}
+.image-grid-item{aspect-ratio:1;overflow:hidden;position:relative}
+.image-grid-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.image-grid-item:hover img{transform:scale(1.04)}
+@media(max-width:900px){.image-grid{grid-template-columns:repeat(2,1fr)}}
 
-/* ── Text Section ── */
-.text-section{padding:160px 60px;text-align:center;max-width:800px;margin:0 auto}
-.text-section .big-text{font-family:'Noto Serif SC','Georgia',serif;font-size:clamp(24px,4vw,40px);font-weight:400;line-height:1.5;color:rgba(255,255,255,.85)}
-.text-section .author{font-size:13px;letter-spacing:2px;color:rgba(255,255,255,.35);margin-top:30px}
+/* ── Studio ── */
+.studio-row{display:flex;justify-content:space-between;align-items:flex-start;margin-top:50px}
+.studio-col h4{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:16px}
+.studio-col p{font-size:16px;line-height:1.8;color:var(--text)}
+
+/* ── Marquee ── */
+.marquee-wrap{overflow:hidden;padding:80px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.marquee{display:flex;gap:40px;white-space:nowrap;font-family:'Noto Sans SC','Inter',sans-serif}
+.marquee-row{font-size:clamp(48px,8vw,100px);font-weight:700;line-height:.9;letter-spacing:-.03em;display:flex;gap:60px;animation:marquee 30s linear infinite}
+.marquee-row var{font-style:normal;opacity:.15;transition:opacity .3s}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ── Footer ── */
-footer{padding:60px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:rgba(255,255,255,.3);letter-spacing:1px}
-footer a{color:rgba(255,255,255,.4);text-decoration:none;transition:color .3s}
-footer a:hover{color:#fff}
-@media(max-width:768px){footer{flex-direction:column;gap:20px;text-align:center;padding:40px 24px}}
+.footer{padding:100px 60px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:40px}
+.footer-cta h2{font-size:clamp(28px,5vw,48px);font-weight:500;letter-spacing:-.02em;margin-bottom:20px}
+.footer-cta a{display:inline-block;padding:14px 30px;border:1px solid var(--text);color:var(--text);text-decoration:none;font-size:12px;letter-spacing:2px;font-family:'IBM Plex Mono',monospace;transition:all .3s}
+.footer-cta a:hover{background:var(--text);color:var(--bg)}
+.footer-links{display:flex;flex-direction:column;gap:12px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px}
+.footer-links a{color:var(--muted);text-decoration:none;transition:color .3s}
+.footer-links a:hover{color:var(--text)}
+.footer-bottom{padding:30px 60px;display:flex;justify-content:space-between;font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace;letter-spacing:1px;border-top:1px solid var(--border)}
+@media(max-width:768px){.footer,.footer-bottom{padding:60px 24px}}
 
-/* ── Scroll reveal ── */
+/* ── Reveal ── */
 .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.25,.1,.25,1),transform .8s cubic-bezier(.25,.1,.25,1)}
 .reveal.in{opacity:1;transform:translateY(0)}
-.d1{transition-delay:.05s}.d2{transition-delay:.15s}.d3{transition-delay:.25s}.d4{transition-delay:.35s}
-::selection{background:rgba(255,255,255,.2)}
+.r1{transition-delay:.05s}.r2{transition-delay:.15s}.r3{transition-delay:.25s}.r4{transition-delay:.35s}
 </style>
 </head>
 <body>
 
-<!-- Navigation -->
-<nav>
-  <a href="#" class="nav-logo">W7W</a>
-  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">☰</button>
-  <ul class="nav-links" id="nav-menu">
-    <li><a href="#work">Work</a></li>
-    <li><a href="#motion">Motion</a></li>
-    <li><a href="#blog">Journal</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
+<!-- Fixed Left Sidebar -->
+<aside class="sidebar">
+  <a href="#" target="_blank">GITHUB</a>
+  <span class="divider"></span>
+  <a href="mailto:227110038@qq.com">EMAIL</a>
+  <span class="divider"></span>
+  <span class="lang-toggle" onclick="toggleLang()" id="lang-btn">EN</span>
+</aside>
 
-<!-- ██ HERO — Full Screen Video ██ -->
-<section class="hero">
-  <video class="hero-video" autoplay muted loop playsinline>
-    <source src="https://assets.mixkit.co/videos/13038/13038-720.mp4" type="video/mp4">
-  </video>
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <h1>
-      <span>AI AGENT ENGINEER</span>
-      Building systems<br>that think & act
-    </h1>
-    <p class="hero-tagline">Full-stack developer at the frontier of language models and production engineering. I build intelligent agents that reason, use tools, and ship.</p>
-    <a href="#work" class="hero-cta">Explore Work</a>
-  </div>
-  <div class="hero-scroll-hint">Scroll</div>
-</section>
-
-<!-- ██ WORK — Project Grid ██ -->
-<section class="section" id="work">
-  <div class="section-label reveal">Selected Work</div>
-  <h2 class="section-title reveal d1">Projects that<br>demonstrate craft.</h2>
-  <p class="section-desc reveal d2">Production-grade applications — each one designed, engineered, and deployed from concept to completion.</p>
-
-  <div class="video-grid">
-    <div class="video-grid-item reveal d1">
-      <video autoplay muted loop playsinline>
-        <source src="https://assets.mixkit.co/videos/13037/13037-720.mp4" type="video/mp4">
-      </video>
-      <div class="caption"><h3>AI Shopping Agent</h3><span>LangGraph · ChromaDB · FastAPI</span></div>
-    </div>
-    <div class="video-grid-item reveal d2">
-      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500'%3E%3Crect fill='%23111' width='800' height='500'/%3E%3Ctext x='400' y='260' text-anchor='middle' fill='%23333' font-size='60'%3E🏪%3C/text%3E%3C/svg%3E" alt="Campus Marketplace">
-      <div class="caption"><h3>Campus Marketplace</h3><span>Next.js · Redis · PostgreSQL</span></div>
-    </div>
-    <div class="video-grid-item reveal d3">
-      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500'%3E%3Crect fill='%23111' width='800' height='500'/%3E%3Ctext x='400' y='260' text-anchor='middle' fill='%23333' font-size='60'%3E✍️%3C/text%3E%3C/svg%3E" alt="AI Report Generator">
-      <div class="caption"><h3>AI Report Generator</h3><span>Python · Streamlit · Qwen API</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ██ MOTION — Sports & Life Clips ██ -->
-<section class="section" id="motion">
-  <div class="section-label reveal">In Motion</div>
-  <h2 class="section-title reveal d1">Life beyond<br>the terminal.</h2>
-  <p class="section-desc reveal d2">When I'm not building AI systems, I'm in constant motion — on the court, in the water, or chasing the next great meal.</p>
-
-  <div class="image-strip reveal d2">
-    <div class="image-strip-item">
-      <video autoplay muted loop playsinline>
-        <source src="https://assets.mixkit.co/videos/13038/13038-720.mp4" type="video/mp4">
-      </video>
-      <div class="label">🏸 Badminton</div>
-    </div>
-    <div class="image-strip-item">
-      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='750'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%231a1a2e'/%3E%3Cstop offset='1' stop-color='%230d1117'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='600' height='750'/%3E%3Ctext x='300' y='390' text-anchor='middle' fill='%23222' font-size='90'%3E🏓%3C/text%3E%3C/svg%3E" alt="Ping Pong">
-      <div class="label">🏓 Ping Pong</div>
-    </div>
-    <div class="image-strip-item">
-      <video autoplay muted loop playsinline>
-        <source src="https://assets.mixkit.co/videos/13037/13037-720.mp4" type="video/mp4">
-      </video>
-      <div class="label">🏀 Basketball</div>
-    </div>
-    <div class="image-strip-item">
-      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='750'%3E%3Cdefs%3E%3ClinearGradient id='g2' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2306233d'/%3E%3Cstop offset='1' stop-color='%2306101c'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g2)' width='600' height='750'/%3E%3Ctext x='300' y='390' text-anchor='middle' fill='%23222' font-size='90'%3E🏊%3C/text%3E%3C/svg%3E" alt="Swimming">
-      <div class="label">🏊 Swimming</div>
-    </div>
-    <div class="image-strip-item">
-      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='750'%3E%3Cdefs%3E%3ClinearGradient id='g3' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%231a0a0a'/%3E%3Cstop offset='1' stop-color='%230d0505'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g3)' width='600' height='750'/%3E%3Ctext x='300' y='390' text-anchor='middle' fill='%23222' font-size='90'%3E🍜%3C/text%3E%3C/svg%3E" alt="Food">
-      <div class="label">🍜 Food Explorer</div>
-    </div>
-    <div class="image-strip-item">
-      <video autoplay muted loop playsinline>
-        <source src="https://assets.mixkit.co/videos/28780/28780-720.mp4" type="video/mp4">
-      </video>
-      <div class="label">🏎️ F1 Racing</div>
-    </div>
-  </div>
-</section>
-
-<!-- ██ BLOG — Journal ██ -->
-<section class="section" id="blog">
-  <div class="section-label reveal">Journal</div>
-  <h2 class="section-title reveal d1">Notes on AI,<br>engineering & life.</h2>
-  <p class="section-desc reveal d2">Practical tutorials, deep-dives, and lessons from building at the frontier.</p>
-
-  <div class="blog-strip reveal d2">
-    <div class="blog-item" onclick="openBlog('post1')">
-      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='800'%3E%3Cdefs%3E%3ClinearGradient id='b1' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2311182a'/%3E%3Cstop offset='1' stop-color='%23080d18'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23b1)' width='600' height='800'/%3E%3Ctext x='300' y='420' text-anchor='middle' fill='%23223355' font-size='120'%3E🤖%3C/text%3E%3C/svg%3E" alt="AI Tools">
-      <div class="overlay"><h4>2026 最值得关注的 10 个 AI 开源工具</h4><span>从小白到进阶 · 12 min</span></div>
-    </div>
-    <div class="blog-item" onclick="openBlog('post2')">
-      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='800'%3E%3Cdefs%3E%3ClinearGradient id='b2' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230a1f1a'/%3E%3Cstop offset='1' stop-color='%23051010'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23b2)' width='600' height='800'/%3E%3Ctext x='300' y='420' text-anchor='middle' fill='%23224433' font-size='120'%3E⭐%3C/text%3E%3C/svg%3E" alt="GitHub Tools">
-      <div class="overlay"><h4>GitHub 必收藏的 8 个开发者效率工具</h4><span>亲测排名 · 10 min</span></div>
-    </div>
-    <div class="blog-item" onclick="openBlog('post3')">
-      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='800'%3E%3Cdefs%3E%3ClinearGradient id='b3' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%232a1510'/%3E%3Cstop offset='1' stop-color='%23180804'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23b3)' width='600' height='800'/%3E%3Ctext x='300' y='420' text-anchor='middle' fill='%23443322' font-size='120'%3E🕷️%3C/text%3E%3C/svg%3E" alt="Web Scraping">
-      <div class="overlay"><h4>Python 爬虫从入门到实战</h4><span>5 个必学库 · 15 min</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ██ ABOUT — Text Section ██ -->
-<section class="text-section reveal" id="about">
-  <p class="big-text">"I believe the best engineers are those who can see the full picture — from the elegance of a well-designed prompt chain to the precision of a production deployment pipeline."</p>
-  <p class="author">— W7W, AI Agent Engineer & Full Stack Developer</p>
-</section>
-
-<!-- ██ CONTACT ██ -->
-<section class="text-section" id="contact" style="padding-bottom:200px">
-  <div class="section-label reveal" style="margin-bottom:30px">Contact</div>
-  <p class="big-text reveal d1" style="font-size:clamp(20px,3vw,32px)">Have a project in mind?<br>Let's build something together.</p>
-  <p class="reveal d2" style="margin-top:30px">
-    <a href="mailto:227110038@qq.com" style="color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.3);padding-bottom:2px;font-size:15px;letter-spacing:1px">227110038@qq.com</a>
-  </p>
-</section>
-
-<!-- Footer -->
-<footer>
-  <span>© W7W 2026</span>
-  <span><a href="https://github.com/NiuBi66666688">GitHub</a> · <a href="#work">Work</a> · <a href="#contact">Contact</a></span>
-</footer>
-
-<!-- Blog Modals -->
-<div id="post1-modal" style="display:none;position:fixed;inset:0;z-index:200;background:#000;overflow-y:auto;padding:80px 40px">
-  <button onclick="closeBlog('post1')" style="position:fixed;top:30px;right:40px;z-index:201;background:none;border:1px solid rgba(255,255,255,.2);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:16px">✕</button>
-  <div style="max-width:700px;margin:0 auto">
-    <span style="font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.4)">AI TOOLS</span>
-    <h2 style="font-family:'Noto Serif SC',serif;font-size:36px;font-weight:600;margin:16px 0 8px">2026 年最值得关注的 10 个 AI 开源工具</h2>
-    <p style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:32px">2026-07-06 · 12 min read</p>
-    <p style="color:rgba(255,255,255,.7);font-size:15px;line-height:1.8;margin-bottom:24px">2026 年的 AI 工具生态已经和两年前完全不同了。按"从入门到进阶"的顺序，把当前最值得关注的 10 个 AI 开源工具排一遍。</p>
-    <h3 style="font-size:20px;margin:32px 0 12px;color:#fff">🥇 入门必装</h3>
-    <p style="color:rgba(255,255,255,.7);font-size:15px;line-height:1.8"><strong>1. Ollama</strong> — 本地跑大模型：<code>ollama run qwen2.5:7b</code></p>
-    <p style="color:rgba(255,255,255,.7);font-size:15px;line-height:1.8"><strong>2. Open WebUI</strong> — Docker 一键部署 ChatGPT 风格界面</p>
-    <h3 style="font-size:20px;margin:32px 0 12px;color:#fff">🥈 进阶之选</h3>
-    <p style="color:rgba(255,255,255,.7);font-size:15px;line-height:1.8"><strong>3. Dify</strong> · <strong>4. FastGPT</strong> · <strong>5. LangGraph</strong> — 构建真正的AI Agent</p>
-    <h3 style="font-size:20px;margin:32px 0 12px;color:#fff">🥉 专业玩家</h3>
-    <p style="color:rgba(255,255,255,.7);font-size:15px;line-height:1.8">6. vLLM · 7. CrewAI · 8. AnythingLLM · 9. n8n+AI · 10. Mem0</p>
+<!-- Top Menu -->
+<div class="top-menu">
+  <button class="menu-btn" onclick="document.querySelector('.menu-overlay').classList.add('open')">MENU</button>
+  <div class="menu-lines" onclick="document.querySelector('.menu-overlay').classList.add('open')">
+    <span></span><span></span>
   </div>
 </div>
 
-<div id="post2-modal" style="display:none;position:fixed;inset:0;z-index:200;background:#000;overflow-y:auto;padding:80px 40px">
-  <button onclick="closeBlog('post2')" style="position:fixed;top:30px;right:40px;z-index:201;background:none;border:1px solid rgba(255,255,255,.2);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:16px">✕</button>
+<!-- Menu Overlay -->
+<div class="menu-overlay">
+  <button class="close-btn" onclick="document.querySelector('.menu-overlay').classList.remove('open')">CLOSE</button>
+  <nav>
+    <a href="#hero" onclick="closeMenu()">首页 / Home</a>
+    <a href="#blog" onclick="closeMenu()">博客 / Blog</a>
+    <a href="#gallery" onclick="closeMenu()">画廊 / Gallery</a>
+    <a href="#hobbies" onclick="closeMenu()">爱好 / Hobbies</a>
+    <a href="#connect" onclick="closeMenu()">联系 / Contact</a>
+  </nav>
+</div>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero" id="hero">
+  <div class="hero-video-wrap">
+    <video autoplay muted loop playsinline id="hero-video">
+      <source src="https://assets.mixkit.co/videos/13038/13038-720.mp4" type="video/mp4">
+    </video>
+    <div class="hero-video-overlay"></div>
+  </div>
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content">
+    <h1 class="hero-title">
+      <span class="line">我从零构建</span>
+      <span class="line">会思考的 AI 系统</span>
+    </h1>
+  </div>
+  <div class="countdown" id="countdown">
+    <span class="countdown-num" id="cd-num">100</span>
+  </div>
+  <div class="countdown-final" id="cd-final">W</div>
+</section>
+
+<!-- ══════════════ BLOG ══════════════ -->
+<section class="section" id="blog">
+  <div class="section-label reveal">博客</div>
+  <h2 class="section-title reveal r1">好的代码解决问题。<br>好的文章启发思考。</h2>
+  <p class="section-desc reveal r2">技术实战教程、工具深度测评、AI 领域前沿观察 — 写给想真正落地的开发者。</p>
+
+  <div class="blog-list reveal r2">
+    <div class="blog-item" onclick="openBlog('post1')">
+      <h3>2026 最值得关注的 10 个 AI 开源工具</h3>
+      <span class="desc">从小白到进阶 · 12 min</span>
+      <span class="arrow">→</span>
+    </div>
+    <div class="blog-item" onclick="openBlog('post2')">
+      <h3>GitHub 必收藏的 8 个开发者效率工具</h3>
+      <span class="desc">亲测排名 · 10 min</span>
+      <span class="arrow">→</span>
+    </div>
+    <div class="blog-item" onclick="openBlog('post3')">
+      <h3>Python 爬虫从入门到实战</h3>
+      <span class="desc">5 个必学库 · 15 min</span>
+      <span class="arrow">→</span>
+    </div>
+  </div>
+  <a href="#" class="view-all reveal r3">查看全部 →</a>
+</section>
+
+<!-- ══════════════ GALLERY ══════════════ -->
+<div class="gallery reveal" id="gallery">
+  <div class="gallery-inner">
+    <div class="gallery-item">
+      <video autoplay muted loop playsinline><source src="https://assets.mixkit.co/videos/13037/13037-720.mp4" type="video/mp4"></video>
+    </div>
+    <div class="gallery-item">
+      <video autoplay muted loop playsinline><source src="https://assets.mixkit.co/videos/28780/28780-720.mp4" type="video/mp4"></video>
+    </div>
+    <div class="gallery-item">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Crect fill='%23e8e5df' width='600' height='600'/%3E%3Ctext x='300' y='320' text-anchor='middle' fill='%23ccc' font-size='100'%3E🏸%3C/text%3E%3C/svg%3E" alt="Badminton">
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ HOBBIES ══════════════ -->
+<section class="section" id="hobbies">
+  <div class="section-label reveal">个人爱好</div>
+  <h2 class="section-title reveal r1">代码之外，<br>我在运动里找到节奏。</h2>
+  <p class="section-desc reveal r2">🏸 羽毛球 · 🏓 乒乓 · 🏀 篮球 · 🏊 游泳 · 🏎️ F1 · 🍜 美食 · 💐 插花 · 📈 投资</p>
+
+  <div class="image-grid reveal r3">
+    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e8e5df' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23ccc' font-size='80'%3E🏸%3C/text%3E%3C/svg%3E" alt="Badminton"></div>
+    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e0dcd5' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23bbb' font-size='80'%3E🏓%3C/text%3E%3C/svg%3E" alt="Ping Pong"></div>
+    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e5e0d8' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23ccc' font-size='80'%3E🏀%3C/text%3E%3C/svg%3E" alt="Basketball"></div>
+    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23d8d8f0' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23aac' font-size='80'%3E🏊%3C/text%3E%3C/svg%3E" alt="Swimming"></div>
+    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e8e0d5' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23ccb' font-size='80'%3E🏎️%3C/text%3E%3C/svg%3E" alt="F1"></div>
+    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23ebe5db' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23cba' font-size='80'%3E🍜%3C/text%3E%3C/svg%3E" alt="Food"></div>
+    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23f0e8f0' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23cac' font-size='80'%3E💐%3C/text%3E%3C/svg%3E" alt="Flowers"></div>
+    <div class="image-grid-item"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23e0e8d8' width='400' height='400'/%3E%3Ctext x='200' y='220' text-anchor='middle' fill='%23aca' font-size='80'%3E📈%3C/text%3E%3C/svg%3E" alt="Stocks"></div>
+  </div>
+</section>
+
+<!-- ══════════════ STUDIO ══════════════ -->
+<section class="section" id="about">
+  <div class="studio-row reveal">
+    <div class="studio-col">
+      <h4>关于我</h4>
+      <p>AI Agent 工程师 & 全栈开发者<br>专注于 LangGraph · RAG · 多Agent协作</p>
+    </div>
+    <div class="studio-col">
+      <h4>联系</h4>
+      <p>227110038@qq.com<br>GitHub: NiuBi66666688</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ MARQUEE ══════════════ -->
+<div class="marquee-wrap reveal">
+  <div class="marquee">
+    <div class="marquee-row">
+      <span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var>
+    </div>
+    <div class="marquee-row" aria-hidden="true">
+      <span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<section class="footer" id="connect">
+  <div class="footer-cta reveal">
+    <h2>从零开始<br>一起构建。</h2>
+    <a href="mailto:227110038@qq.com">BOOK A CALL</a>
+  </div>
+  <div class="footer-links reveal r2">
+    <a href="https://github.com/NiuBi66666688">GitHub</a>
+    <a href="mailto:227110038@qq.com">Email</a>
+    <a href="#blog">Blog</a>
+    <a href="#hobbies">Hobbies</a>
+  </div>
+</section>
+<div class="footer-bottom">
+  <span>©2026 W7W</span>
+  <span>Built from scratch · All rights reserved</span>
+</div>
+
+<!-- Blog Modals -->
+<div id="post1-modal" style="display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto;padding:80px 40px">
+  <button onclick="closeBlog('post1')" style="position:fixed;top:28px;right:32px;z-index:301;background:none;border:none;font-size:15px;cursor:pointer;color:var(--muted);font-family:'Noto Sans SC',sans-serif">CLOSE</button>
   <div style="max-width:700px;margin:0 auto">
-    <span style="font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.4)">DEV TOOLS</span>
-    <h2 style="font-family:'Noto Serif SC',serif;font-size:36px;font-weight:600;margin:16px 0 8px">GitHub 必收藏的 8 个开发者效率工具</h2>
-    <p style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:32px">2026-07-05 · 10 min read</p>
-    <table style="width:100%;border-collapse:collapse;font-size:14px;color:rgba(255,255,255,.7)">
-      <tr style="border-bottom:1px solid rgba(255,255,255,.1)"><td style="padding:10px 8px">🥇</td><td style="padding:10px 8px"><strong>Raycast</strong></td><td style="padding:10px 8px">20K+ ⭐</td><td style="padding:10px 8px;color:rgba(255,255,255,.5)">macOS 效率启动器</td></tr>
-      <tr style="border-bottom:1px solid rgba(255,255,255,.1)"><td style="padding:10px 8px">🥈</td><td style="padding:10px 8px"><strong>Warp</strong></td><td style="padding:10px 8px">22K+ ⭐</td><td style="padding:10px 8px;color:rgba(255,255,255,.5)">AI 原生终端</td></tr>
-      <tr style="border-bottom:1px solid rgba(255,255,255,.1)"><td style="padding:10px 8px">🥉</td><td style="padding:10px 8px"><strong>Nushell</strong></td><td style="padding:10px 8px">32K+ ⭐</td><td style="padding:10px 8px;color:rgba(255,255,255,.5)">结构化 Shell</td></tr>
-      <tr style="border-bottom:1px solid rgba(255,255,255,.1)"><td style="padding:10px 8px">4</td><td style="padding:10px 8px"><strong>Lazygit</strong></td><td style="padding:10px 8px">50K+ ⭐</td><td style="padding:10px 8px;color:rgba(255,255,255,.5)">Git 终端 UI</td></tr>
-      <tr style="border-bottom:1px solid rgba(255,255,255,.1)"><td style="padding:10px 8px">5</td><td style="padding:10px 8px"><strong>fzf</strong></td><td style="padding:10px 8px">65K+ ⭐</td><td style="padding:10px 8px;color:rgba(255,255,255,.5)">模糊搜索</td></tr>
-      <tr style="border-bottom:1px solid rgba(255,255,255,.1)"><td style="padding:10px 8px">6</td><td style="padding:10px 8px"><strong>Bruno</strong></td><td style="padding:10px 8px">25K+ ⭐</td><td style="padding:10px 8px;color:rgba(255,255,255,.5)">API 客户端</td></tr>
-      <tr style="border-bottom:1px solid rgba(255,255,255,.1)"><td style="padding:10px 8px">7</td><td style="padding:10px 8px"><strong>devcontainers</strong></td><td style="padding:10px 8px">10K+ ⭐</td><td style="padding:10px 8px;color:rgba(255,255,255,.5)">容器化开发</td></tr>
-      <tr><td style="padding:10px 8px">8</td><td style="padding:10px 8px"><strong>Ghostty</strong></td><td style="padding:10px 8px">25K+ ⭐</td><td style="padding:10px 8px;color:rgba(255,255,255,.5)">GPU 终端</td></tr>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted)">AI 工具</span>
+    <h2 style="font-size:36px;font-weight:500;margin:16px 0 8px;letter-spacing:-.02em">2026 年最值得关注的 10 个 AI 开源工具</h2>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:32px">2026-07-06 · 12 min read</p>
+    <p style="font-size:15px;line-height:1.8;margin-bottom:24px">从小白到进阶，当前最值得关注的 10 个 AI 开源工具完整排名。</p>
+    <h3 style="font-size:20px;margin:32px 0 12px">🥇 入门必装</h3>
+    <p style="font-size:15px;line-height:1.8"><strong>1. Ollama</strong> — 本地跑大模型 · <strong>2. Open WebUI</strong> — Docker 一键部署</p>
+    <h3 style="font-size:20px;margin:32px 0 12px">🥈 进阶之选</h3>
+    <p style="font-size:15px;line-height:1.8"><strong>3. Dify</strong> · <strong>4. FastGPT</strong> · <strong>5. LangGraph</strong></p>
+    <h3 style="font-size:20px;margin:32px 0 12px">🥉 专业玩家</h3>
+    <p style="font-size:15px;line-height:1.8">6. vLLM · 7. CrewAI · 8. AnythingLLM · 9. n8n+AI · 10. Mem0</p>
+  </div>
+</div>
+<div id="post2-modal" style="display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto;padding:80px 40px">
+  <button onclick="closeBlog('post2')" style="position:fixed;top:28px;right:32px;z-index:301;background:none;border:none;font-size:15px;cursor:pointer;color:var(--muted);font-family:'Noto Sans SC',sans-serif">CLOSE</button>
+  <div style="max-width:700px;margin:0 auto">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted)">DEV 工具</span>
+    <h2 style="font-size:36px;font-weight:500;margin:16px 0 8px;letter-spacing:-.02em">GitHub 必收藏的 8 个开发者效率工具</h2>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:32px">2026-07-05 · 10 min read</p>
+    <table style="width:100%;border-collapse:collapse;font-size:14px">
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">🥇</td><td style="padding:10px 8px"><strong>Raycast</strong></td><td style="padding:10px 8px">20K+ ⭐</td><td style="padding:10px 8px;color:var(--muted)">macOS 效率启动器</td></tr>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">🥈</td><td style="padding:10px 8px"><strong>Warp</strong></td><td style="padding:10px 8px">22K+ ⭐</td><td style="padding:10px 8px;color:var(--muted)">AI 原生终端</td></tr>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">🥉</td><td style="padding:10px 8px"><strong>Nushell</strong></td><td style="padding:10px 8px">32K+ ⭐</td><td style="padding:10px 8px;color:var(--muted)">结构化 Shell</td></tr>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">4</td><td style="padding:10px 8px"><strong>Lazygit</strong></td><td style="padding:10px 8px">50K+ ⭐</td><td style="padding:10px 8px;color:var(--muted)">Git 终端 UI</td></tr>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">5</td><td style="padding:10px 8px"><strong>fzf</strong></td><td style="padding:10px 8px">65K+ ⭐</td><td style="padding:10px 8px;color:var(--muted)">模糊搜索</td></tr>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">6</td><td style="padding:10px 8px"><strong>Bruno</strong></td><td style="padding:10px 8px">25K+ ⭐</td><td style="padding:10px 8px;color:var(--muted)">API 客户端</td></tr>
+      <tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 8px">7</td><td style="padding:10px 8px"><strong>devcontainers</strong></td><td style="padding:10px 8px">10K+ ⭐</td><td style="padding:10px 8px;color:var(--muted)">容器化开发</td></tr>
+      <tr><td style="padding:10px 8px">8</td><td style="padding:10px 8px"><strong>Ghostty</strong></td><td style="padding:10px 8px">25K+ ⭐</td><td style="padding:10px 8px;color:var(--muted)">GPU 终端</td></tr>
     </table>
   </div>
 </div>
-
-<div id="post3-modal" style="display:none;position:fixed;inset:0;z-index:200;background:#000;overflow-y:auto;padding:80px 40px">
-  <button onclick="closeBlog('post3')" style="position:fixed;top:30px;right:40px;z-index:201;background:none;border:1px solid rgba(255,255,255,.2);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:16px">✕</button>
+<div id="post3-modal" style="display:none;position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto;padding:80px 40px">
+  <button onclick="closeBlog('post3')" style="position:fixed;top:28px;right:32px;z-index:301;background:none;border:none;font-size:15px;cursor:pointer;color:var(--muted);font-family:'Noto Sans SC',sans-serif">CLOSE</button>
   <div style="max-width:700px;margin:0 auto">
-    <span style="font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.4)">WEB SCRAPING</span>
-    <h2 style="font-family:'Noto Serif SC',serif;font-size:36px;font-weight:600;margin:16px 0 8px">Python 爬虫从入门到实战</h2>
-    <p style="color:rgba(255,255,255,.4);font-size:13px;margin-bottom:32px">2026-07-04 · 15 min read</p>
-    <p style="color:rgba(255,255,255,.7);font-size:15px;line-height:1.8">从最基础的 requests 讲到生产级 Playwright，附带 3 个可复用的实战案例。</p>
-    <h3 style="font-size:20px;margin:32px 0 12px;color:#fff">📦 5 个必学库</h3>
-    <p style="color:rgba(255,255,255,.7);font-size:15px;line-height:1.8"><strong>requests</strong> (52K⭐) → <strong>BeautifulSoup</strong> → <strong>Scrapy</strong> (53K⭐) → <strong>Playwright</strong> (68K⭐) → <strong>httpx</strong> (13K⭐)</p>
-    <h3 style="font-size:20px;margin:32px 0 12px;color:#fff">🛡️ 反爬策略</h3>
-    <p style="color:rgba(255,255,255,.7);font-size:15px;line-height:1.8">UA轮换 · 请求间隔随机化 · IP代理池 · Cookie管理 · 验证码识别</p>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted)">爬虫</span>
+    <h2 style="font-size:36px;font-weight:500;margin:16px 0 8px;letter-spacing:-.02em">Python 爬虫从入门到实战</h2>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:32px">2026-07-04 · 15 min read</p>
+    <h3 style="font-size:20px;margin:32px 0 12px">📦 5 个必学库</h3>
+    <p style="font-size:15px;line-height:1.8"><strong>requests</strong> (52K⭐) → <strong>BeautifulSoup</strong> → <strong>Scrapy</strong> (53K⭐) → <strong>Playwright</strong> (68K⭐) → <strong>httpx</strong> (13K⭐)</p>
+    <h3 style="font-size:20px;margin:32px 0 12px">🛡️ 反爬策略</h3>
+    <p style="font-size:15px;line-height:1.8">UA轮换 · 间隔随机化 · IP代理池 · Cookie管理 · 验证码识别</p>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════
-// 🔮 ADVANCED MOUSE-FOLLOWING EFFECTS
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// WEBGL CANVAS PARTICLES
+// ═══════════════════════════════════════════
+(function(){
+  const canvas=document.getElementById('hero-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,particles=[];
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
+  class Particle{
+    constructor(){this.reset()}
+    reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.3;this.vy=(Math.random()-.5)*.3;this.size=Math.random()*1.5+.3;this.opacity=Math.random()*.3+.05}
+    update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset()}
+    draw(){ctx.fillStyle=`rgba(0,0,0,${this.opacity})`;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill()}
+  }
+  for(let i=0;i<80;i++)particles.push(new Particle());
+  function animate(){ctx.clearRect(0,0,W,H);particles.forEach(p=>{p.update();p.draw()});requestAnimationFrame(animate)}
+  resize();animate();window.addEventListener('resize',resize);
+})();
 
-// ── Custom Cursor ──
-const dot=document.createElement('div');dot.className='cursor-dot';document.body.appendChild(dot);
-const ring=document.createElement('div');ring.className='cursor-ring';document.body.appendChild(ring);
-let mx=0,my=0,rx=0,ry=0;
+// ═══════════════════════════════════════════
+// COUNTDOWN 100→W (original NOTHIN effect)
+// ═══════════════════════════════════════════
+(function(){
+  const numEl=document.getElementById('cd-num');
+  const finalEl=document.getElementById('cd-final');
+  const totalDuration=5000; // 5 seconds
+  const startNum=100;
+  const startTime=performance.now();
+  
+  function tick(now){
+    const elapsed=now-startTime;
+    const progress=Math.min(elapsed/totalDuration,1);
+    // Ease out — slow down at the end
+    const eased=1-Math.pow(1-progress,3);
+    const current=Math.floor(startNum*(1-eased));
+    numEl.textContent=current;
+    
+    if(progress<1){
+      requestAnimationFrame(tick);
+    }else{
+      numEl.textContent='';
+      numEl.style.display='none';
+      finalEl.classList.add('show');
+    }
+  }
+  setTimeout(()=>requestAnimationFrame(tick),500);
+})();
 
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
-(function animRing(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing)})();
-
-// Ring expands on media elements
-document.querySelectorAll('video,img,.video-grid-item,.image-strip-item,.blog-item').forEach(el=>{
-  el.addEventListener('mouseenter',()=>ring.classList.add('on-media'));
-  el.addEventListener('mouseleave',()=>ring.classList.remove('on-media'));
-});
-
-// ── Hero Video Parallax ──
-const hero=document.querySelector('.hero');
-const heroVideo=document.querySelector('.hero-video');
-const heroContent=document.querySelector('.hero-content');
-if(hero){
-  hero.addEventListener('mousemove',e=>{
-    const w=hero.offsetWidth,h=hero.offsetHeight;
-    const x=(e.clientX/w-.5)*12; // -6 to +6 deg
-    const y=(e.clientY/h-.5)*8;
-    heroVideo.style.transform=`scale(1.08) translate(${-x*3}px,${-y*3}px)`;
-    heroContent.style.transform=`translate(${x*2}px,${y*2}px)`;
-  });
-  hero.addEventListener('mouseleave',()=>{
-    heroVideo.style.transform='scale(1.08) translate(0,0)';
-    heroContent.style.transform='translate(0,0)';
-    heroVideo.style.transition='transform 1.2s cubic-bezier(.25,.1,.25,1)';
-    heroContent.style.transition='transform 1.2s cubic-bezier(.25,.1,.25,1)';
-    setTimeout(()=>{heroVideo.style.transition='';heroContent.style.transition=''},1200);
-  });
-}
-
-// ── 3D Tilt on Grid Items ──
-function applyTilt(els, maxTilt=8, scale=1.03){
-  els.forEach(el=>{
-    el.addEventListener('mousemove',e=>{
-      const rect=el.getBoundingClientRect();
-      const x=(e.clientX-rect.left)/rect.width-.5;
-      const y=(e.clientY-rect.top)/rect.height-.5;
-      el.style.transform=`perspective(1000px) rotateY(${x*maxTilt}deg) rotateX(${-y*maxTilt}deg) scale3d(${scale},${scale},1)`;
-    });
-    el.addEventListener('mouseleave',()=>{
-      el.style.transition='transform .6s cubic-bezier(.25,.1,.25,1)';
-      el.style.transform='perspective(1000px) rotateY(0) rotateX(0) scale3d(1,1,1)';
-      setTimeout(()=>el.style.transition='transform .15s ease-out',600);
-    });
-  });
-}
-applyTilt(document.querySelectorAll('.video-grid-item'));
-applyTilt(document.querySelectorAll('.image-strip-item'));
-applyTilt(document.querySelectorAll('.blog-item'),6,1.02);
-
-// ── Magnetic Button ──
-const cta=document.querySelector('.hero-cta');
-if(cta){
-  cta.addEventListener('mousemove',e=>{
-    const rect=cta.getBoundingClientRect();
-    const x=(e.clientX-rect.left-rect.width/2)*.15;
-    const y=(e.clientY-rect.top-rect.height/2)*.15;
-    cta.style.transform=`translate(${x}px,${y}px)`;
-  });
-  cta.addEventListener('mouseleave',()=>{
-    cta.style.transition='transform .5s cubic-bezier(.25,1,.5,1)';
-    cta.style.transform='translate(0,0)';
-    setTimeout(()=>cta.style.transition='transform .12s ease-out',500);
-  });
-}
-
-// ── Section Spotlight ──
-document.querySelectorAll('.section,.text-section').forEach(sec=>{
-  sec.addEventListener('mousemove',e=>{
-    const rect=sec.getBoundingClientRect();
-    const x=((e.clientX-rect.left)/rect.width*100).toFixed(1);
-    const y=((e.clientY-rect.top)/rect.height*100).toFixed(1);
-    sec.style.background=`radial-gradient(800px circle at ${x}% ${y}%, rgba(255,255,255,.025) 0%, transparent 60%)`;
-  });
-  sec.addEventListener('mouseleave',()=>{
-    sec.style.transition='background .8s ease';
-    sec.style.background='';
-    setTimeout(()=>sec.style.transition='',800);
-  });
-});
-
-// ═══════════════════════════════════════════════
-// EXISTING SCRIPTS
-// ═══════════════════════════════════════════════
-
-// ── Scroll reveal ──
-const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.1});
+// ═══════════════════════════════════════════
+// SCROLL REVEAL
+// ═══════════════════════════════════════════
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight)el.classList.add('in')}),300);
 
-// ── Blog modals ──
+// ═══════════════════════════════════════════
+// BLOG MODALS
+// ═══════════════════════════════════════════
 function openBlog(id){document.getElementById(id+'-modal').style.display='block';document.body.style.overflow='hidden'}
 function closeBlog(id){document.getElementById(id+'-modal').style.display='none';document.body.style.overflow=''}
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('[id$="-modal"]').forEach(el=>el.style.display='none');document.body.style.overflow=''}});
+function closeMenu(){document.querySelector('.menu-overlay').classList.remove('open')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('[id$="-modal"]').forEach(el=>el.style.display='none');document.querySelector('.menu-overlay').classList.remove('open');document.body.style.overflow=''}});
 
-// ── Mobile nav ──
-document.querySelector('.nav-toggle').addEventListener('click',()=>{document.getElementById('nav-menu').classList.toggle('show')});
+// ═══════════════════════════════════════════
+// LANGUAGE TOGGLE (中/EN)
+// ═══════════════════════════════════════════
+let lang='zh';
+const t={zh:{hero1:'我从零构建',hero2:'会思考的 AI 系统',blog:'博客',blogTitle1:'好的代码解决问题。',blogTitle2:'好的文章启发思考。',blogDesc:'技术实战教程、工具深度测评、AI 领域前沿观察 — 写给想真正落地的开发者。',viewAll:'查看全部 →',hobbies:'个人爱好',hobbiesTitle1:'代码之外，',hobbiesTitle2:'我在运动里找到节奏。',hobbiesDesc:'🏸 羽毛球 · 🏓 乒乓 · 🏀 篮球 · 🏊 游泳 · 🏎️ F1 · 🍜 美食 · 💐 插花 · 📈 投资',aboutMe:'关于我',aboutDesc:'AI Agent 工程师 & 全栈开发者<br>专注于 LangGraph · RAG · 多Agent协作',contact:'联系',footerTitle1:'从零开始',footerTitle2:'一起构建。',bookCall:'BOOK A CALL',menuHome:'首页 / Home',menuBlog:'博客 / Blog',menuGallery:'画廊 / Gallery',menuHobbies:'爱好 / Hobbies',menuContact:'联系 / Contact',close:'CLOSE'},
+  en:{hero1:'I build AI systems',hero2:'that think & act',blog:'Blog',blogTitle1:'Good code solves problems.',blogTitle2:'Great articles inspire thinking.',blogDesc:'Practical tutorials, deep tool reviews, and AI frontier insights — for developers who ship.',viewAll:'View all →',hobbies:'Hobbies',hobbiesTitle1:'Beyond the terminal,',hobbiesTitle2:'I find rhythm in motion.',hobbiesDesc:'🏸 Badminton · 🏓 Ping Pong · 🏀 Basketball · 🏊 Swimming · 🏎️ F1 · 🍜 Food · 💐 Flowers · 📈 Stocks',aboutMe:'About',aboutDesc:'AI Agent Engineer & Full Stack Dev<br>Focused on LangGraph · RAG · Multi-Agent',contact:'Contact',footerTitle1:"Let's start",footerTitle2:'from scratch.',bookCall:'BOOK A CALL',menuHome:'首页 / Home',menuBlog:'博客 / Blog',menuGallery:'画廊 / Gallery',menuHobbies:'爱好 / Hobbies',menuContact:'联系 / Contact',close:'CLOSE'}
+};
+function toggleLang(){
+  lang=lang==='zh'?'en':'zh';
+  const d=t[lang];
+  document.getElementById('lang-btn').textContent=lang==='zh'?'EN':'中';
+  document.querySelector('.hero-title .line:first-child').textContent=d.hero1;
+  document.querySelector('.hero-title .line:last-child').textContent=d.hero2;
+  document.querySelector('#blog .section-label').textContent=d.blog;
+  document.querySelector('#blog .section-title').innerHTML=d.blogTitle1+'<br>'+d.blogTitle2;
+  document.querySelector('#blog .section-desc').textContent=d.blogDesc;
+  document.querySelector('#blog .view-all').textContent=d.viewAll;
+  document.querySelector('#hobbies .section-label').textContent=d.hobbies;
+  document.querySelector('#hobbies .section-title').innerHTML=d.hobbiesTitle1+'<br>'+d.hobbiesTitle2;
+  document.querySelector('#hobbies .section-desc').textContent=d.hobbiesDesc;
+  document.querySelector('#about .studio-col:first-child h4').textContent=d.aboutMe;
+  document.querySelector('#about .studio-col:first-child p').innerHTML=d.aboutDesc;
+  document.querySelector('#about .studio-col:last-child h4').textContent=d.contact;
+  document.querySelector('.footer-cta h2').innerHTML=d.footerTitle1+'<br>'+d.footerTitle2;
+  document.querySelector('.footer-cta a').textContent=d.bookCall;
+  document.querySelectorAll('.menu-overlay nav a')[0].textContent=d.menuHome;
+  document.querySelectorAll('.menu-overlay nav a')[1].textContent=d.menuBlog;
+  document.querySelectorAll('.menu-overlay nav a')[2].textContent=d.menuGallery;
+  document.querySelectorAll('.menu-overlay nav a')[3].textContent=d.menuHobbies;
+  document.querySelectorAll('.menu-overlay nav a')[4].textContent=d.menuContact;
+  document.querySelector('.menu-overlay .close-btn').textContent=d.close;
+}
 </script>
 </body>
 </html>
