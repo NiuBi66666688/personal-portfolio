@@ -4,109 +4,116 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>W7W</title>
-<meta name="description" content="AI Agent Engineer & Full Stack Developer">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#faf9f7;--text:#0a0a0a;--muted:rgba(10,10,10,.5);--border:rgba(10,10,10,.08)}
+:root{--bg:#f5f3ef;--text:#0a0a0a;--muted:rgba(10,10,10,.5);--border:rgba(10,10,10,.08)}
 *,*::after,*::before{margin:0;padding:0;box-sizing:border-box}
 html{scrollbar-width:none;font-size:calc(0rem + 1vw)}
 body::-webkit-scrollbar{display:none}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;width:100%;height:auto}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;width:100%}
 ::selection{background:var(--text);color:var(--bg)}
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 
-/* ═══ LOADER — Premium 3D ═══ */
-.loader{position:fixed;inset:0;z-index:999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity 1s cubic-bezier(.16,1,.3,1)}
-.loader.hidden{opacity:0;pointer-events:none}
+/* ═══ LOADER ═══ */
+#loader{position:fixed;inset:0;z-index:999;background:#000;display:flex;align-items:center;justify-content:center}
+#loader.hidden{opacity:0;pointer-events:none;transition:opacity 1s}
 .loader-inner{position:relative;width:100%;height:100%}
-#loader-canvas{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(50vw,500px);height:min(50vw,500px);z-index:1;pointer-events:none}
-.loader-counter{position:absolute;bottom:48px;left:50%;transform:translateX(-50%);z-index:3;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:6px;color:rgba(255,255,255,.5)}
-.loader-brand{position:absolute;top:50%;transform:translateY(-50%);z-index:2;font-size:clamp(60px,10vw,120px);font-weight:900;line-height:.85;color:#fff;letter-spacing:-.02em;pointer-events:none}
-.loader-brand-left{left:8%;opacity:0;animation:blr .8s .2s cubic-bezier(.16,1,.3,1) forwards}
-.loader-brand-right{right:8%;font-weight:300;font-size:clamp(50px,8vw,100px);opacity:0;animation:blr .8s .4s cubic-bezier(.16,1,.3,1) forwards}
-@keyframes blr{from{opacity:0;transform:translateY(-50%) translateX(-30px)}to{opacity:1;transform:translateY(-50%) translateX(0)}}
-@media(max-width:768px){.loader-brand-left{left:4%}.loader-brand-right{right:4%}.loader-counter{bottom:24px}}
+#loader-canvas{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(50vw,480px);height:min(50vw,480px);pointer-events:none}
+.loader-counter{position:absolute;bottom:48px;left:50%;transform:translateX(-50%);font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:6px;color:rgba(255,255,255,.5)}
+.loader-n,.loader-apos{position:absolute;top:50%;transform:translateY(-50%);font-size:clamp(60px,10vw,120px);font-weight:900;color:#fff;opacity:0}
+.loader-n{left:8%;animation:ln .8s .2s forwards}
+.loader-apos{right:8%;font-weight:300;font-size:clamp(50px,8vw,100px);animation:la .8s .4s forwards}
+@keyframes ln{from{opacity:0;transform:translateY(-50%) translateX(-30px)}to{opacity:1;transform:translateY(-50%) translateX(0)}}
+@keyframes la{from{opacity:0;transform:translateY(-50%) translateX(30px)}to{opacity:1;transform:translateY(-50%) translateX(0)}}
+@media(max-width:768px){.loader-n{left:4%}.loader-apos{right:4%}.loader-counter{bottom:24px}}
 
-/* ═══ Nav — Right-aligned, mix-blend on hero ═══ */
+/* ═══ Nav ═══ */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 36px;display:flex;justify-content:flex-end;align-items:center}
 .nav-links{display:flex;gap:28px;margin-right:36px}
-.nav-links a{font-size:17px;color:var(--text);letter-spacing:.5px;text-decoration:none;transition:color .3s}
-.nav-links a:hover{color:var(--muted)}
+.nav-links a{font-size:17px;color:rgba(0,0,0,.6);text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:#000}
 .nav-btn{display:flex;align-items:center;gap:8px;cursor:pointer;background:none;border:none}
-.nav-btn-text{font-size:17px;font-weight:500;color:var(--text);letter-spacing:.5px}
+.nav-btn-text{font-size:17px;color:#000}
 .nav-btn-icon{display:grid;grid-template-columns:1fr 1fr;gap:3px;width:14px;height:14px}
-.nav-btn-icon span{display:block;width:100%;height:100%;background:var(--text);border-radius:1px}
+.nav-btn-icon span{display:block;width:100%;height:100%;background:#000;border-radius:1px}
 .nav-overlay{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
 .nav-overlay.open{opacity:1;pointer-events:all}
-.nav-overlay-close{position:absolute;top:24px;right:36px;background:none;border:none;font-size:14px;cursor:pointer;color:var(--text)}
+.nav-overlay-close{position:absolute;top:24px;right:36px;background:none;border:none;font-size:14px;cursor:pointer}
 .nav-overlay nav{display:flex;flex-direction:column;align-items:center;gap:36px}
-.nav-overlay nav a{font-size:clamp(32px,5vw,56px);font-weight:600;color:var(--text);text-decoration:none;transition:opacity .3s}
+.nav-overlay nav a{font-size:clamp(32px,5vw,56px);font-weight:600;color:#000;text-decoration:none}
 .nav-overlay nav a:hover{opacity:.5}
-@media(max-width:991px){.nav-links{display:none}.nav{padding:18px 20px}}
+@media(max-width:991px){.nav-links{display:none}}
 
 /* ═══ Hero ═══ */
-.hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);overflow:hidden}
-.hero-video-wrap{position:absolute;inset:0;z-index:0;overflow:hidden}
-.hero-video-wrap video{width:100%;height:100%;object-fit:cover}
-.hero-video-overlay{position:absolute;inset:0;background:rgba(0,0,0,.2);z-index:1}
-.hero-content{position:relative;z-index:2;text-align:center;max-width:92vw}
-.hero-title{font-size:clamp(60px,16vw,220px);font-weight:900;line-height:.85;letter-spacing:-.04em;color:var(--text);opacity:0;transform:translateY(40px);animation:hIn 1s .2s cubic-bezier(.16,1,.3,1) forwards}
-.hero-subtitle{margin-top:28px;font-size:clamp(11px,1.3vw,15px);font-weight:500;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;opacity:0;animation:hIn 1s .5s cubic-bezier(.16,1,.3,1) forwards}
+.hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg)}
+.hero-center{text-align:center}
+.hero-title{font-size:clamp(60px,18vw,240px);font-weight:900;line-height:.85;letter-spacing:-.04em;color:#000;opacity:0;transform:translateY(40px);animation:hIn 1s .3s forwards}
 @keyframes hIn{to{opacity:1;transform:translateY(0)}}
-.hero-bottom{position:absolute;bottom:32px;left:32px;right:32px;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;font-size:11px;color:var(--muted);letter-spacing:2px;font-family:'IBM Plex Mono',monospace}
-.hero-bottom a{color:var(--muted);text-decoration:none;transition:color .3s}
-.hero-bottom a:hover{color:var(--text)}
+.hero-subtitle{margin-top:28px;font-size:clamp(11px,1.3vw,15px);color:var(--muted);letter-spacing:.15em;text-transform:uppercase;opacity:0;animation:hIn 1s .6s forwards}
+.hero-bottom{position:absolute;bottom:32px;left:32px;right:32px;display:flex;justify-content:space-between;align-items:flex-end;font-size:11px;color:var(--muted);letter-spacing:2px;font-family:'IBM Plex Mono',monospace}
+.hero-bottom a{color:var(--muted);text-decoration:none}
+.hero-bottom a:hover{color:#000}
 .lang-btn{cursor:pointer}
 @media(max-width:768px){.hero-bottom{flex-direction:column;gap:16px;align-items:flex-start}}
 
-/* ═══ Reveal sections ═══ */
-.section{padding:140px 60px;max-width:1400px;margin:0 auto;opacity:0;transform:translateY(60px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
-.section.visible{opacity:1;transform:translateY(0)}
+/* ═══ Sections ═══ */
+.section{padding:140px 60px;max-width:1400px;margin:0 auto}
+.reveal{opacity:0;transform:translateY(50px);transition:opacity 1s,transform 1s}
+.reveal.visible{opacity:1;transform:translateY(0)}
 .label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:28px}
 .title{font-size:clamp(28px,5vw,52px);font-weight:700;line-height:1.05;letter-spacing:-.03em}
-.title .line{display:block;opacity:0;transform:translateY(30px);animation:lIn .8s cubic-bezier(.16,1,.3,1) forwards}
+.title .line{display:block;opacity:0;transform:translateY(25px);animation:lIn .8s forwards}
 .title .line:first-child{animation-delay:.1s}.title .line:last-child{animation-delay:.3s}
 @keyframes lIn{to{opacity:1;transform:translateY(0)}}
 .text{margin-top:40px;font-size:16px;color:var(--muted);max-width:480px;line-height:1.7}
 @media(max-width:768px){.section{padding:80px 24px}}
 
-/* ═══ Showreel ═══ */
+/* ═══ Video ═══ */
 .showreel-video{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:16/9;background:#000}
 .showreel-video video{width:100%;height:100%;object-fit:cover}
 .showreel-cap{display:flex;justify-content:space-between;gap:40px;margin-top:28px;font-size:14px;color:var(--muted);line-height:1.6}
-.showreel-cap div:first-child{flex-shrink:0;font-weight:500}
+.showreel-cap div:first-child{flex-shrink:0}
 @media(max-width:768px){.showreel-cap{flex-direction:column}}
 
-/* ═══ Blog list ═══ */
-.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:50px}
-.blog-card{opacity:0;transform:translateY(30px);animation:cIn .6s cubic-bezier(.16,1,.3,1) forwards}
-.blog-card:nth-child(1){animation-delay:.1s}.blog-card:nth-child(2){animation-delay:.2s}.blog-card:nth-child(3){animation-delay:.3s}
-@keyframes cIn{to{opacity:1;transform:translateY(0)}}
-.blog-card-img{aspect-ratio:4/3;background:#e8e5df;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:48px}
-.blog-card h3{font-size:18px;font-weight:600;margin-top:16px;letter-spacing:-.01em}
-.blog-card p{font-size:13px;color:var(--muted);margin-top:6px}
-.view-all{display:inline-flex;align-items:center;gap:8px;margin-top:50px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:2px;color:var(--text);text-decoration:none}
-@media(max-width:768px){.blog-grid{grid-template-columns:1fr}}
+/* ═══ Blog list with hover images ═══ */
+.blog-list{margin-top:50px}
+.blog-item{display:flex;align-items:center;justify-content:space-between;padding:32px 0;border-bottom:1px solid var(--border);cursor:pointer;position:relative;transition:padding .3s;opacity:0;transform:translateY(30px);animation:cardIn .6s forwards}
+.blog-item:nth-child(1){animation-delay:.1s}
+.blog-item:nth-child(2){animation-delay:.2s}
+.blog-item:nth-child(3){animation-delay:.3s}
+.blog-item:nth-child(4){animation-delay:.4s}
+.blog-item:nth-child(5){animation-delay:.5s}
+@keyframes cardIn{to{opacity:1;transform:translateY(0)}}
+.blog-item:hover{padding-left:16px}
+.blog-title{font-size:clamp(22px,3.5vw,36px);font-weight:600;letter-spacing:-.02em}
+.blog-desc{font-size:14px;color:var(--muted)}
+.blog-img-w{position:absolute;width:200px;height:140px;right:80px;top:50%;transform:translateY(-50%) translateX(20px);opacity:0;pointer-events:none;transition:all .4s;overflow:hidden;border-radius:8px}
+.blog-item:hover .blog-img-w{opacity:1;transform:translateY(-50%) translateX(0)}
+.blog-img-w img{width:100%;height:100%;object-fit:cover}
+.blog-arrow{position:absolute;right:20px;top:50%;transform:translateY(-50%);opacity:0;transition:opacity .3s}
+.blog-item:hover .blog-arrow{opacity:1}
+.view-all{display:inline-flex;align-items:center;gap:8px;margin-top:50px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:2px;color:#000;text-decoration:none}
+@media(max-width:768px){.blog-item{flex-direction:column;align-items:flex-start;gap:8px}.blog-img-w{display:none}.blog-arrow{display:none}}
 
-/* ═══ Studio / Video reflection ═══ */
+/* ═══ Studio Video with reflection ═══ */
 .studio-video{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:16/9;background:#000}
 .studio-video video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.studio-video .reflet{opacity:.25;filter:blur(24px);transform:scaleY(-1)}
+.studio-video .reflet{opacity:.25;filter:blur(20px);transform:scaleY(-1)}
+
+/* ═══ Hobbies ═══ */
+.hobbies-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:50px}
+.hobby-card{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:40px;transition:transform .4s}
+.hobby-card:hover{transform:scale(1.08)}
+@media(max-width:900px){.hobbies-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* ═══ Info grid ═══ */
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:50px}
 .info-card{border-radius:12px;overflow:hidden;position:relative;aspect-ratio:4/3}
 .info-card img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
-.info-card:hover img{transform:scale(1.03)}
+.info-card:hover img{transform:scale(1.04)}
 .info-card-cap{position:absolute;bottom:20px;left:20px;font-size:14px;color:rgba(0,0,0,.5)}
 @media(max-width:768px){.info-grid{grid-template-columns:1fr}}
-
-/* ═══ Hobbies ═══ */
-.hobbies-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:50px}
-.hobby-card{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:36px;transition:transform .4s}
-.hobby-card:hover{transform:scale(1.05)}
-@media(max-width:900px){.hobbies-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* ═══ Marquee ═══ */
 .marquee-wrap{overflow:hidden;padding:80px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
@@ -116,31 +123,31 @@ img{display:block;max-width:100%}
 @keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ═══ Footer ═══ */
-.footer{padding:100px 60px 60px}
+footer{padding:100px 60px 60px}
 .footer-cta h2{font-size:clamp(28px,5vw,48px);font-weight:700;letter-spacing:-.02em;margin-bottom:20px}
 .footer-btns{display:flex;gap:12px;margin-bottom:60px}
-.btn{border:1px solid var(--text);padding:14px 28px;font-size:12px;letter-spacing:2px;font-family:'IBM Plex Mono',monospace;display:inline-flex;align-items:center;gap:6px;transition:all .3s;color:var(--text);text-decoration:none}
-.btn:hover{background:var(--text);color:var(--bg)}
+.btn{border:1px solid #000;padding:14px 28px;font-size:12px;letter-spacing:2px;font-family:'IBM Plex Mono',monospace;display:inline-flex;align-items:center;gap:6px;transition:all .3s;color:#000;text-decoration:none}
+.btn:hover{background:#000;color:#fff}
 .footer-links{display:flex;gap:20px;font-size:12px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
 .footer-links a{color:var(--muted);text-decoration:none}
-.footer-links a:hover{color:var(--text)}
+.footer-links a:hover{color:#000}
 .footer-bottom{padding-top:40px;margin-top:40px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:11px;color:rgba(10,10,10,.35);font-family:'IBM Plex Mono',monospace}
-@media(max-width:768px){.footer{padding:60px 24px}.footer-bottom{flex-direction:column;gap:8px}}
+@media(max-width:768px){footer{padding:60px 24px}.footer-bottom{flex-direction:column;gap:8px}}
 </style>
 </head>
 <body>
 
-<!-- ═══ LOADER ═══ -->
-<div class="loader" id="loader">
+<!-- Loader -->
+<div id="loader">
   <div class="loader-inner">
     <canvas id="loader-canvas"></canvas>
-    <span class="loader-brand loader-brand-left">W</span>
-    <span class="loader-brand loader-brand-right">'</span>
+    <span class="loader-n">W</span>
+    <span class="loader-apos">'</span>
     <div class="loader-counter" id="loader-counter">100</div>
   </div>
 </div>
 
-<!-- ═══ NAV ═══ -->
+<!-- Nav -->
 <nav class="nav">
   <div class="nav-links"><a href="#blog">博客</a><a href="#about">关于</a><a href="#contact">联系</a></div>
   <button class="nav-btn" onclick="document.querySelector('.nav-overlay').classList.add('open')">
@@ -149,7 +156,7 @@ img{display:block;max-width:100%}
   </button>
 </nav>
 <div class="nav-overlay">
-  <button class="nav-overlay-close" onclick="document.querySelector('.nav-overlay').classList.remove('open')">CLOSE</button>
+  <button class="nav-overlay-close" onclick="this.parentElement.classList.remove('open')">CLOSE</button>
   <nav>
     <a href="#blog" onclick="document.querySelector('.nav-overlay').classList.remove('open')">博客</a>
     <a href="#about" onclick="document.querySelector('.nav-overlay').classList.remove('open')">关于</a>
@@ -157,59 +164,78 @@ img{display:block;max-width:100%}
   </nav>
 </div>
 
-<!-- ═══ HERO ═══ -->
+<!-- Hero -->
 <section class="hero" id="hero">
-  <div class="hero-video-wrap">
-    <video autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/13038/13038-720.mp4"></video>
-    <div class="hero-video-overlay"></div>
-  </div>
-  <div class="hero-content">
+  <div class="hero-center">
     <h1 class="hero-title">W7W</h1>
     <p class="hero-subtitle">AI AGENT ENGINEER · FULL STACK DEVELOPER</p>
   </div>
   <div class="hero-bottom">
     <span>BUILDING FROM ZERO</span>
     <div style="display:flex;gap:16px;align-items:center">
-      <a href="https://github.com/NiuBi66666688">GITHUB</a><a href="mailto:227110038@qq.com">EMAIL</a>
-      <span class="lang-btn" onclick="toggleLang()" id="lang-btn">EN</span>
+      <a href="https://github.com/NiuBi66666688">GITHUB</a>
+      <a href="mailto:227110038@qq.com">EMAIL</a>
+      <span class="lang-btn" id="lang-btn" onclick="toggleLang()">EN</span>
     </div>
   </div>
 </section>
 
-<!-- ═══ SHOWREEL ═══ -->
-<section class="section"><div style="height:80px"></div>
+<!-- Showreel -->
+<section class="section reveal" id="showreel">
   <h2 class="title"><span class="line">我构建会思考</span><span class="line">的 AI 系统。</span></h2>
   <div style="height:50px"></div>
-  <div class="showreel-video"><video autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/13037/13037-720.mp4"></video></div>
-  <div class="showreel-cap"><div>The approach</div><div>AI Agent 工程是关于构建能推理、使用工具并交付真正价值的智能系统——从 prompt 到生产环境。</div></div>
+  <div class="showreel-video"><video autoplay muted loop playsinline src="https://assets.mixkit.co/videos/13037/13037-720.mp4"></video></div>
+  <div class="showreel-cap"><div>The approach</div><div>AI Agent 工程是关于构建能推理、使用工具并交付真正价值的智能系统。</div></div>
 </section>
 
-<!-- ═══ BLOG ═══ -->
-<section class="section" id="blog">
+<!-- Blog -->
+<section class="section reveal" id="blog">
   <div class="label">博客</div>
   <h2 class="title"><span class="line">好的代码解决问题。</span><span class="line">好的文章启发思考。</span></h2>
   <p class="text">技术实战教程、工具深度测评、AI 领域前沿观察。</p>
-  <div class="blog-grid">
-    <div class="blog-card"><div class="blog-card-img">🤖</div><h3>2026 年 10 个 AI 开源工具</h3><p>从小白到进阶 · 12 min</p></div>
-    <div class="blog-card"><div class="blog-card-img">⭐</div><h3>GitHub 必藏 8 个效率工具</h3><p>亲测排名 · 10 min</p></div>
-    <div class="blog-card"><div class="blog-card-img">🕷️</div><h3>Python 爬虫从入门到实战</h3><p>5 个必学库 · 15 min</p></div>
+  <div class="blog-list">
+    <div class="blog-item">
+      <h2 class="blog-title">AI Shopping Agent</h2><p class="blog-desc">Multi-agent procurement</p>
+      <div class="blog-img-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%2311182a' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23335577' font-size='40'%3E🤖%3C/text%3E%3C/svg%3E"></div>
+      <span class="blog-arrow">→</span>
+    </div>
+    <div class="blog-item">
+      <h2 class="blog-title">Campus Marketplace</h2><p class="blog-desc">High-performance trading</p>
+      <div class="blog-img-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%230a1f1a' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23224433' font-size='40'%3E🏪%3C/text%3E%3C/svg%3E"></div>
+      <span class="blog-arrow">→</span>
+    </div>
+    <div class="blog-item">
+      <h2 class="blog-title">AI Report Generator</h2><p class="blog-desc">Weekly reports via LLM chains</p>
+      <div class="blog-img-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%232a1510' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23443322' font-size='40'%3E✍️%3C/text%3E%3C/svg%3E"></div>
+      <span class="blog-arrow">→</span>
+    </div>
+    <div class="blog-item">
+      <h2 class="blog-title">AI Chat Platform</h2><p class="blog-desc">Multi-model with streaming</p>
+      <div class="blog-img-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%23222' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23444' font-size='40'%3E💬%3C/text%3E%3C/svg%3E"></div>
+      <span class="blog-arrow">→</span>
+    </div>
+    <div class="blog-item">
+      <h2 class="blog-title">Web Scraping Toolkit</h2><p class="blog-desc">Production crawlers</p>
+      <div class="blog-img-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%231a1a0a' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23443322' font-size='40'%3E🕷️%3C/text%3E%3C/svg%3E"></div>
+      <span class="blog-arrow">→</span>
+    </div>
   </div>
   <a href="#" class="view-all">查看全部 →</a>
 </section>
 
-<!-- ═══ STUDIO VIDEO ═══ -->
-<section class="section" id="about">
+<!-- Studio + Video -->
+<section class="section reveal" id="about">
   <div class="label">关于</div>
-  <p class="text">W7W 代表着从零开始的不断迭代——构建、交付、永不停歇。AI Agent 工程、全栈开发，以及永不满足的创造欲。</p>
+  <p class="text">W7W 代表着从零开始的不断迭代——构建、交付、永不停歇。</p>
   <div style="height:50px"></div>
   <div class="studio-video">
-    <video autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/28780/28780-720.mp4"></video>
-    <video class="reflet" autoplay muted loop playsinline crossorigin="anonymous" src="https://assets.mixkit.co/videos/28780/28780-720.mp4"></video>
+    <video autoplay muted loop playsinline src="https://assets.mixkit.co/videos/28780/28780-720.mp4"></video>
+    <video class="reflet" autoplay muted loop playsinline src="https://assets.mixkit.co/videos/28780/28780-720.mp4"></video>
   </div>
 </section>
 
-<!-- ═══ INFO / HOBBIES ═══ -->
-<section class="section">
+<!-- Hobbies -->
+<section class="section reveal">
   <div class="label">个人爱好</div>
   <h2 class="title"><span class="line">代码之外，</span><span class="line">我在运动里找到节奏。</span></h2>
   <p class="text">🏸 羽毛球 · 🏓 乒乓 · 🏀 篮球 · 🏊 游泳 · 🏎️ F1 · 🍜 美食 · 💐 插花 · 📈 投资</p>
@@ -225,21 +251,21 @@ img{display:block;max-width:100%}
   </div>
   <div style="height:60px"></div>
   <div class="info-grid">
-    <div class="info-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='450'%3E%3Crect fill='%23e8e5df' width='600' height='450'/%3E%3Ctext x='300' y='240' text-anchor='middle' fill='%23bbb' font-size='50'%3E🏸%3C/text%3E%3C/svg%3E" alt=""><div class="info-card-cap">or something unexpected.</div></div>
-    <div class="info-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='450'%3E%3Crect fill='%23d8d8f0' width='600' height='450'/%3E%3Ctext x='300' y='240' text-anchor='middle' fill='%23aac' font-size='50'%3E🏎️%3C/text%3E%3C/svg%3E" alt=""><div class="info-card-cap">always shipping.</div></div>
+    <div class="info-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='450'%3E%3Crect fill='%23e8e5df' width='600' height='450'/%3E%3Ctext x='300' y='240' text-anchor='middle' fill='%23bbb' font-size='50'%3E🏸%3C/text%3E%3C/svg%3E"><div class="info-card-cap">or something unexpected.</div></div>
+    <div class="info-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='450'%3E%3Crect fill='%23d8d8f0' width='600' height='450'/%3E%3Ctext x='300' y='240' text-anchor='middle' fill='%23aac' font-size='50'%3E🏎️%3C/text%3E%3C/svg%3E"><div class="info-card-cap">always shipping.</div></div>
   </div>
 </section>
 
-<!-- ═══ MARQUEE ═══ -->
-<div class="marquee-wrap">
+<!-- Marquee -->
+<div class="marquee-wrap reveal">
   <div class="marquee">
-    <div class="marquee-row"><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var></div>
-    <div class="marquee-row"><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var></div>
+    <div class="marquee-row"><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</div>
+    <div class="marquee-row"><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</div>
   </div>
 </div>
 
-<!-- ═══ FOOTER ═══ -->
-<footer class="footer" id="contact">
+<!-- Footer -->
+<footer class="reveal" id="contact">
   <div class="footer-cta"><h2>从零开始<br>一起构建。</h2></div>
   <div class="footer-btns">
     <a href="mailto:227110038@qq.com" class="btn">预约通话 →</a>
@@ -250,7 +276,7 @@ img{display:block;max-width:100%}
   <div class="footer-bottom"><span>©2026 W7W</span><span>BUILT FROM SCRATCH</span></div>
 </footer>
 
-<!-- THREE.JS CDN -->
+<!-- THREE.JS — Loader -->
 <script type="importmap">
 {"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js"}}
 </script>
@@ -258,169 +284,219 @@ img{display:block;max-width:100%}
 <script type="module">
 import * as THREE from 'three';
 
-// ════════════════════════════════════════════
-// LOADER — Premium 3D Objects Cycling
-// ════════════════════════════════════════════
-const canvas=document.getElementById('loader-canvas');
-const counterEl=document.getElementById('loader-counter');
-const loaderEl=document.getElementById('loader');
-
-const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
-renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
-renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.4;
-
-const size=Math.min(window.innerWidth*.48,500);
-renderer.setSize(size,size);
-
-const scene=new THREE.Scene();
-const camera=new THREE.PerspectiveCamera(45,1,.1,100);
-camera.position.z=3.6;
-
-// Environment for reflections
-const pmrem=new THREE.PMREMGenerator(renderer);
-const envScene=new THREE.Scene();
-envScene.add(new THREE.Mesh(new THREE.SphereGeometry(10,32,32),new THREE.MeshBasicMaterial({color:0x1a1a2e,side:THREE.BackSide})));
-for(let i=0;i<8;i++){
-  const m=new THREE.Mesh(new THREE.CircleGeometry(.5,16),new THREE.MeshBasicMaterial({color:0xffffff}));
-  const a=(i/8)*Math.PI*2;
-  m.position.set(Math.cos(a)*5,Math.sin(a)*3-1,Math.sin(a)*5-2);
-  m.lookAt(0,0,0);
-  envScene.add(m);
-}
-const envMap=pmrem.fromScene(envScene).texture;
-
-// Lights
-const amb=new THREE.AmbientLight(0x404060,.4);
-scene.add(amb);
-const key=new THREE.SpotLight(0xffffff,2.5,20,Math.PI/5,.6);
-key.position.set(2,4,3);
-scene.add(key);scene.add(key.target);key.target.position.set(0,0,0);
-const fill=new THREE.PointLight(0x4466cc,1.2,15);
-fill.position.set(-4,2,-3);
-scene.add(fill);
-const rim=new THREE.PointLight(0xff8844,.8,12);
-rim.position.set(0,-3,-4);
-scene.add(rim);
-const top=new THREE.DirectionalLight(0xffffff,.6);
-top.position.set(0,5,0);
-scene.add(top);
-
-// ── 1. Crumpled Metal Blue Ball ──
-function makeBall(){
-  const g=new THREE.IcosahedronGeometry(1,48);
-  const pos=g.attributes.position;
-  const v=new THREE.Vector3();
-  for(let i=0;i<pos.count;i++){
-    v.fromBufferAttribute(pos,i);
-    const x=v.x,y=v.y,z=v.z;
-    let n=0;
-    n+=Math.sin(x*3.7+y*2.3)*.15;n+=Math.sin(y*5.1+z*4.2)*.12;n+=Math.sin(z*6.8+x*3.1)*.09;n+=Math.sin(x*9+y*8+z*7)*.05;n+=Math.sin(x*15+y*13)*.03;
-    v.multiplyScalar(1+n);pos.setXYZ(i,v.x,v.y,v.z);
-  }
-  g.computeVertexNormals();
-  return new THREE.Mesh(g,new THREE.MeshPhysicalMaterial({color:0x1a44aa,metalness:.95,roughness:.12,envMap,envMapIntensity:2,clearcoat:.4,clearcoatRoughness:.1}));
-}
-
-// ── 2. Crumpled Plastic Bag ──
-function makeBag(){
-  const g=new THREE.SphereGeometry(1.15,64,64);
-  const pos=g.attributes.position;
-  const v=new THREE.Vector3();
-  for(let i=0;i<pos.count;i++){
-    v.fromBufferAttribute(pos,i);
-    const x=v.x,y=v.y,z=v.z;
-    let n=0;
-    n+=Math.sin(x*6+y*3+z*4)*.12;n+=Math.cos(y*8+z*5)*.1;n+=Math.sin(z*11+x*7)*.07;n+=Math.sin(x*14+y*12+z*16)*.04;
-    v.multiplyScalar(1+n);pos.setXYZ(i,v.x,v.y,v.z);
-  }
-  g.computeVertexNormals();
-  return new THREE.Mesh(g,new THREE.MeshPhysicalMaterial({color:0xaaaaaa,metalness:.02,roughness:.65,envMap,envMapIntensity:.6,transparent:true,opacity:.95,transmission:.05,thickness:.3,side:THREE.DoubleSide}));
-}
-
-// ── 3. Balloon Dog (Torus Knot) ──
-function makeDog(){
-  const g=new THREE.TorusKnotGeometry(.7,.25,160,32,2,3);
-  return new THREE.Mesh(g,new THREE.MeshPhysicalMaterial({color:0x8844dd,metalness:.15,roughness:.2,envMap,envMapIntensity:1.5,clearcoat:.6,clearcoatRoughness:.05,sheen:.8,sheenColor:0xbb88ff,sheenRoughness:.2}));
-}
-
-// ── 4. Metal Star ──
-function makeStar(){
-  const g=new THREE.OctahedronGeometry(1.1,0);
-  const pos=g.attributes.position;
-  const v=new THREE.Vector3();
-  for(let i=0;i<pos.count;i++){
-    v.fromBufferAttribute(pos,i);
-    if(v.length()>.25)v.multiplyScalar(1.6);
-    v.x+=Math.sin(v.y*20)*.02;v.y+=Math.sin(v.z*20)*.02;
-    pos.setXYZ(i,v.x,v.y,v.z);
-  }
-  g.computeVertexNormals();
-  return new THREE.Mesh(g,new THREE.MeshPhysicalMaterial({color:0xdddddd,metalness:1,roughness:.05,envMap,envMapIntensity:2.5}));
-}
-
-const objects=[makeBall(),makeBag(),makeDog(),makeStar()];
-let currentObj=objects[0];
-let prevObj=null;
-scene.add(currentObj);
-
-let startTime=null,objIndex=0;
-const OBJ_DURATION=1300,TOTAL_DURATION=5800;
-
-function animate(ts){
-  requestAnimationFrame(animate);
-  if(!startTime)startTime=ts;
-  const elapsed=ts-startTime;
-  const objIdx=Math.min(Math.floor(elapsed/OBJ_DURATION),objects.length-1);
-  const t=(elapsed%OBJ_DURATION)/OBJ_DURATION;
+(function(){
+  var canvas=document.getElementById('loader-canvas');
+  var counter=document.getElementById('loader-counter');
+  var loader=document.getElementById('loader');
   
-  if(objIdx!==objIndex&&prevObj===null){
-    prevObj=currentObj;
-    currentObj=objects[objIdx];
-    currentObj.scale.set(.5,.5,.5);
+  try{
+    var renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+    var s=Math.min(window.innerWidth*.48,500);
+    renderer.setSize(s,s);
+    
+    var scene=new THREE.Scene();
+    var camera=new THREE.PerspectiveCamera(45,1,.1,100);
+    camera.position.z=4;
+    
+    // Lights only (no heavy env map)
+    scene.add(new THREE.AmbientLight(0xffffff,.4));
+    var dir1=new THREE.DirectionalLight(0xffffff,.8);
+    dir1.position.set(3,4,5);
+    scene.add(dir1);
+    var dir2=new THREE.DirectionalLight(0x4466aa,.4);
+    dir2.position.set(-3,1,-2);
+    scene.add(dir2);
+    var dir3=new THREE.DirectionalLight(0xff8844,.3);
+    dir3.position.set(0,-3,-2);
+    scene.add(dir3);
+    
+    // ═══ METALLIC 3D OBJECTS ═══
+    
+    // 1. Badminton - metallic blue sphere elongated
+    function makeBirdie(){
+      var g=new THREE.Group();
+      var body=new THREE.Mesh(
+        new THREE.SphereGeometry(.8,32,32),
+        new THREE.MeshStandardMaterial({color:0x2266cc,metalness:.9,roughness:.15})
+      );
+      body.scale.y=1.3;
+      g.add(body);
+      var ring=new THREE.Mesh(
+        new THREE.TorusGeometry(.6,.05,16,32),
+        new THREE.MeshStandardMaterial({color:0xffffff,metalness:.5,roughness:.2})
+      );
+      ring.position.y=.4;
+      g.add(ring);
+      return g;
+    }
+    
+    // 2. Basketball - textured orange metallic
+    function makeBball(){
+      var g=new THREE.Group();
+      var geo=new THREE.SphereGeometry(.9,64,64);
+      var pos=geo.attributes.position;
+      var v=new THREE.Vector3();
+      for(var i=0;i<pos.count;i++){
+        v.fromBufferAttribute(pos,i);
+        var n=Math.sin(v.x*10)*Math.sin(v.y*10)*Math.sin(v.z*10)*.02;
+        v.multiplyScalar(1+n);
+        pos.setXYZ(i,v.x,v.y,v.z);
+      }
+      geo.computeVertexNormals();
+      var ball=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:0xcc4400,metalness:.5,roughness:.25}));
+      g.add(ball);
+      var seamMat=new THREE.MeshStandardMaterial({color:0x222222,metalness:.8,roughness:.1});
+      for(var j=0;j<3;j++){
+        var seam=new THREE.Mesh(new THREE.TorusGeometry(.88,.02,8,64),seamMat);
+        seam.rotation.set(j*Math.PI/3,j*Math.PI/4,0);
+        g.add(seam);
+      }
+      return g;
+    }
+    
+    // 3. F1 Car - metallic red low-poly
+    function makeF1(){
+      var g=new THREE.Group();
+      var mat=new THREE.MeshStandardMaterial({color:0xcc0000,metalness:.8,roughness:.2});
+      var body=new THREE.Mesh(new THREE.BoxGeometry(2.4,.4,.8),mat);
+      g.add(body);
+      var cockpit=new THREE.Mesh(new THREE.BoxGeometry(.8,.35,.6),new THREE.MeshStandardMaterial({color:0x111111,metalness:.9,roughness:.1}));
+      cockpit.position.set(-.2,.3,0);
+      g.add(cockpit);
+      var nose=new THREE.Mesh(new THREE.ConeGeometry(.4,.8,16),mat);
+      nose.rotation.z=-Math.PI/2;
+      nose.position.x=1.5;
+      g.add(nose);
+      var fwing=new THREE.Mesh(new THREE.BoxGeometry(.1,.05,1.4),mat);
+      fwing.position.set(2.1,-.15,0);
+      g.add(fwing);
+      var rwing=new THREE.Mesh(new THREE.BoxGeometry(.08,.5,1),mat);
+      rwing.position.set(-1.5,.35,0);
+      g.add(rwing);
+      var wheelGeo=new THREE.CylinderGeometry(.2,.2,.15,24);
+      var wheelMat=new THREE.MeshStandardMaterial({color:0x111111,metalness:.3,roughness:.5});
+      [[.8,-.25,.55],[.8,-.25,-.55],[-.8,-.25,.55],[-.8,-.25,-.55]].forEach(function(p){
+        var w=new THREE.Mesh(wheelGeo,wheelMat);
+        w.rotation.x=Math.PI/2;
+        w.position.set(p[0],p[1],p[2]);
+        g.add(w);
+      });
+      return g;
+    }
+    
+    // 4. Tennis Racket - gold metallic
+    function makeRacket(){
+      var g=new THREE.Group();
+      var frame=new THREE.Mesh(
+        new THREE.TorusGeometry(.7,.06,16,48),
+        new THREE.MeshStandardMaterial({color:0xddaa00,metalness:.9,roughness:.15})
+      );
+      g.add(frame);
+      var handle=new THREE.Mesh(
+        new THREE.CylinderGeometry(.06,.06,.8,16),
+        new THREE.MeshStandardMaterial({color:0x333333,metalness:.5,roughness:.3})
+      );
+      handle.position.y=-.9;
+      g.add(handle);
+      return g;
+    }
+    
+    var objects=[makeBirdie(),makeBball(),makeF1(),makeRacket()];
+    var currentIdx=0,currentObj=objects[0],prevObj=null;
     scene.add(currentObj);
-    objIndex=objIdx;
+    
+    var mouseX=0,mouseY=0;
+    document.addEventListener('mousemove',function(e){
+      mouseX=(e.clientX/window.innerWidth)*2-1;
+      mouseY=-(e.clientY/window.innerHeight)*2+1;
+    });
+    
+    var startTime=null;
+    var OBJ_D=1400,TOTAL_D=6500;
+    var counterStart=performance.now();
+    
+    function loop(ts){
+      requestAnimationFrame(loop);
+      if(!startTime)startTime=ts;
+      var elapsed=ts-startTime;
+      
+      var idx=Math.min(Math.floor(elapsed/OBJ_D),objects.length-1);
+      var t=(elapsed%OBJ_D)/OBJ_D;
+      
+      if(idx!==currentIdx&&!prevObj){
+        prevObj=currentObj;
+        currentObj=objects[idx];
+        currentObj.scale.set(.3,.3,.3);
+        scene.add(currentObj);
+        currentIdx=idx;
+      }
+      
+      if(prevObj){
+        var f=1-t;
+        prevObj.scale.set(f,f,f);
+        prevObj.rotation.y+=.03;
+        if(t>.5){scene.remove(prevObj);prevObj=null}
+      }
+      
+      var target=1-Math.pow(Math.abs(t-.5)*2,2)*.2;
+      var sc=currentObj.scale.x+(target-currentObj.scale.x)*.15;
+      currentObj.scale.set(sc,sc,sc);
+      currentObj.rotation.y+=.012;
+      currentObj.rotation.x=Math.sin(elapsed*.0008)*.25+mouseY*.15;
+      currentObj.rotation.z=Math.cos(elapsed*.0006)*.1-mouseX*.1;
+      currentObj.position.x=mouseX*.15;
+      currentObj.position.y=-mouseY*.1;
+      
+      if(elapsed>TOTAL_D-1200){
+        var fade=Math.max(0,1-(elapsed-(TOTAL_D-1200))/1200);
+        renderer.setClearAlpha(fade*1.5);
+      }
+      
+      renderer.render(scene,camera);
+      
+      if(elapsed>TOTAL_D){
+        loader.classList.add('hidden');
+        return;
+      }
+      
+      // Counter
+      var p=Math.min(elapsed/TOTAL_D,1);
+      var n=Math.ceil(100*(1-Math.pow(1-p,4)));
+      counter.textContent=String(Math.max(n,0)).padStart(3,'0');
+      if(p>=1){
+        counter.textContent='000';
+        try{sessionStorage.setItem('w7w:loader-played','1')}catch(e){}
+      }
+    }
+    requestAnimationFrame(loop);
+    
+  }catch(err){
+    console.error('Loader error:',err);
+    // Fallback - just hide loader
+    setTimeout(function(){loader.classList.add('hidden')},3000);
   }
-  
-  // Cross-fade
-  if(prevObj){
-    const fade=1-t;
-    prevObj.scale.set(fade,fade,fade);
-    prevObj.rotation.y+=.02;
-    if(t>.5){scene.remove(prevObj);prevObj=null}
-  }
-  
-  const target=1-Math.pow(Math.abs(t-.5)*2,2)*.25;
-  const s=currentObj.scale.x+(target-currentObj.scale.x)*.15;
-  currentObj.scale.set(s,s,s);
-  currentObj.rotation.y+=.01;currentObj.rotation.x=Math.sin(elapsed*.0008)*.3;
-  
-  if(elapsed>TOTAL_DURATION-1000){
-    const fade=Math.max(0,1-(elapsed-(TOTAL_DURATION-1000))/1000);
-    renderer.setClearAlpha(fade);
-  }
-  renderer.render(scene,camera);
-  if(elapsed>TOTAL_DURATION){loaderEl.classList.add('hidden');return}
-}
-
-// Counter
-(function loaderTick(){
-  try{if(sessionStorage.getItem('w7w:loader-played')==='1'){loaderEl.classList.add('hidden');return}}catch(e){}
-  const ls=performance.now(),ld=5800;
-  function lt(now){const el=now-ls;const p=Math.min(el/ld,1);const n=Math.ceil(100*(1-Math.pow(1-p,4)));counterEl.textContent=String(Math.max(n,0)).padStart(3,'0');if(p<1)requestAnimationFrame(lt);else{counterEl.textContent='000';setTimeout(()=>{loaderEl.classList.add('hidden');try{sessionStorage.setItem('w7w:loader-played','1')}catch(e){}},500)}}
-  requestAnimationFrame(lt);
 })();
-
-requestAnimationFrame(animate);
 </script>
 
 <script>
-const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.section').forEach(el=>obs.observe(el));
-setTimeout(()=>document.querySelectorAll('.section').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight)el.classList.add('visible')}),600);
+(function(){
+  var reveals=document.querySelectorAll('.reveal');
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});
+  },{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+  reveals.forEach(function(el){obs.observe(el);});
+  setTimeout(function(){
+    reveals.forEach(function(el){
+      if(el.getBoundingClientRect().top<window.innerHeight)el.classList.add('visible');
+    });
+  },600);
+})();
 
-let lang='zh';
-function toggleLang(){lang=lang==='zh'?'en':'zh';document.getElementById('lang-btn').textContent=lang==='zh'?'EN':'中';}
+function toggleLang(){
+  var btn=document.getElementById('lang-btn');
+  btn.textContent=btn.textContent==='EN'?'中':'EN';
+}
 </script>
 </body>
 </html>
