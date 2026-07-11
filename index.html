@@ -4,499 +4,353 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>W7W</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#f5f3ef;--text:#0a0a0a;--muted:rgba(10,10,10,.5);--border:rgba(10,10,10,.08)}
-*,*::after,*::before{margin:0;padding:0;box-sizing:border-box}
-html{scrollbar-width:none;font-size:calc(0rem + 1vw)}
-body::-webkit-scrollbar{display:none}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;width:100%}
-::selection{background:var(--text);color:var(--bg)}
-a{color:inherit;text-decoration:none}
-img{display:block;max-width:100%}
+<meta name="description" content="W7W — AI Agent Engineer. Building intelligent systems from zero.">
 
-/* ═══ LOADER ═══ */
-#loader{position:fixed;inset:0;z-index:999;background:#000;display:flex;align-items:center;justify-content:center}
-#loader.hidden{opacity:0;pointer-events:none;transition:opacity 1s}
-.loader-inner{position:relative;width:100%;height:100%}
-#loader-canvas{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(50vw,480px);height:min(50vw,480px);pointer-events:none}
-.loader-counter{position:absolute;bottom:48px;left:50%;transform:translateX(-50%);font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:6px;color:rgba(255,255,255,.5)}
-.loader-n,.loader-apos{position:absolute;top:50%;transform:translateY(-50%);font-size:clamp(60px,10vw,120px);font-weight:900;color:#fff;opacity:0}
-.loader-n{left:8%;animation:ln .8s .2s forwards}
-.loader-apos{right:8%;font-weight:300;font-size:clamp(50px,8vw,100px);animation:la .8s .4s forwards}
-@keyframes ln{from{opacity:0;transform:translateY(-50%) translateX(-30px)}to{opacity:1;transform:translateY(-50%) translateX(0)}}
-@keyframes la{from{opacity:0;transform:translateY(-50%) translateX(30px)}to{opacity:1;transform:translateY(-50%) translateX(0)}}
-@media(max-width:768px){.loader-n{left:4%}.loader-apos{right:4%}.loader-counter{bottom:24px}}
-
-/* ═══ Nav ═══ */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 36px;display:flex;justify-content:flex-end;align-items:center}
-.nav-links{display:flex;gap:28px;margin-right:36px}
-.nav-links a{font-size:17px;color:rgba(0,0,0,.6);text-decoration:none;transition:color .3s}
-.nav-links a:hover{color:#000}
-.nav-btn{display:flex;align-items:center;gap:8px;cursor:pointer;background:none;border:none}
-.nav-btn-text{font-size:17px;color:#000}
-.nav-btn-icon{display:grid;grid-template-columns:1fr 1fr;gap:3px;width:14px;height:14px}
-.nav-btn-icon span{display:block;width:100%;height:100%;background:#000;border-radius:1px}
-.nav-overlay{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
-.nav-overlay.open{opacity:1;pointer-events:all}
-.nav-overlay-close{position:absolute;top:24px;right:36px;background:none;border:none;font-size:14px;cursor:pointer}
-.nav-overlay nav{display:flex;flex-direction:column;align-items:center;gap:36px}
-.nav-overlay nav a{font-size:clamp(32px,5vw,56px);font-weight:600;color:#000;text-decoration:none}
-.nav-overlay nav a:hover{opacity:.5}
-@media(max-width:991px){.nav-links{display:none}}
-
-/* ═══ Hero ═══ */
-.hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg)}
-.hero-center{text-align:center}
-.hero-title{font-size:clamp(60px,18vw,240px);font-weight:900;line-height:.85;letter-spacing:-.04em;color:#000;opacity:0;transform:translateY(40px);animation:hIn 1s .3s forwards}
-@keyframes hIn{to{opacity:1;transform:translateY(0)}}
-.hero-subtitle{margin-top:28px;font-size:clamp(11px,1.3vw,15px);color:var(--muted);letter-spacing:.15em;text-transform:uppercase;opacity:0;animation:hIn 1s .6s forwards}
-.hero-bottom{position:absolute;bottom:32px;left:32px;right:32px;display:flex;justify-content:space-between;align-items:flex-end;font-size:11px;color:var(--muted);letter-spacing:2px;font-family:'IBM Plex Mono',monospace}
-.hero-bottom a{color:var(--muted);text-decoration:none}
-.hero-bottom a:hover{color:#000}
-.lang-btn{cursor:pointer}
-@media(max-width:768px){.hero-bottom{flex-direction:column;gap:16px;align-items:flex-start}}
-
-/* ═══ Sections ═══ */
-.section{padding:140px 60px;max-width:1400px;margin:0 auto}
-.reveal{opacity:0;transform:translateY(50px);transition:opacity 1s,transform 1s}
-.reveal.visible{opacity:1;transform:translateY(0)}
-.label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:28px}
-.title{font-size:clamp(28px,5vw,52px);font-weight:700;line-height:1.05;letter-spacing:-.03em}
-.title .line{display:block;opacity:0;transform:translateY(25px);animation:lIn .8s forwards}
-.title .line:first-child{animation-delay:.1s}.title .line:last-child{animation-delay:.3s}
-@keyframes lIn{to{opacity:1;transform:translateY(0)}}
-.text{margin-top:40px;font-size:16px;color:var(--muted);max-width:480px;line-height:1.7}
-@media(max-width:768px){.section{padding:80px 24px}}
-
-/* ═══ Video ═══ */
-.showreel-video{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:16/9;background:#000}
-.showreel-video video{width:100%;height:100%;object-fit:cover}
-.showreel-cap{display:flex;justify-content:space-between;gap:40px;margin-top:28px;font-size:14px;color:var(--muted);line-height:1.6}
-.showreel-cap div:first-child{flex-shrink:0}
-@media(max-width:768px){.showreel-cap{flex-direction:column}}
-
-/* ═══ Blog list with hover images ═══ */
-.blog-list{margin-top:50px}
-.blog-item{display:flex;align-items:center;justify-content:space-between;padding:32px 0;border-bottom:1px solid var(--border);cursor:pointer;position:relative;transition:padding .3s;opacity:0;transform:translateY(30px);animation:cardIn .6s forwards}
-.blog-item:nth-child(1){animation-delay:.1s}
-.blog-item:nth-child(2){animation-delay:.2s}
-.blog-item:nth-child(3){animation-delay:.3s}
-.blog-item:nth-child(4){animation-delay:.4s}
-.blog-item:nth-child(5){animation-delay:.5s}
-@keyframes cardIn{to{opacity:1;transform:translateY(0)}}
-.blog-item:hover{padding-left:16px}
-.blog-title{font-size:clamp(22px,3.5vw,36px);font-weight:600;letter-spacing:-.02em}
-.blog-desc{font-size:14px;color:var(--muted)}
-.blog-img-w{position:absolute;width:200px;height:140px;right:80px;top:50%;transform:translateY(-50%) translateX(20px);opacity:0;pointer-events:none;transition:all .4s;overflow:hidden;border-radius:8px}
-.blog-item:hover .blog-img-w{opacity:1;transform:translateY(-50%) translateX(0)}
-.blog-img-w img{width:100%;height:100%;object-fit:cover}
-.blog-arrow{position:absolute;right:20px;top:50%;transform:translateY(-50%);opacity:0;transition:opacity .3s}
-.blog-item:hover .blog-arrow{opacity:1}
-.view-all{display:inline-flex;align-items:center;gap:8px;margin-top:50px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:2px;color:#000;text-decoration:none}
-@media(max-width:768px){.blog-item{flex-direction:column;align-items:flex-start;gap:8px}.blog-img-w{display:none}.blog-arrow{display:none}}
-
-/* ═══ Studio Video with reflection ═══ */
-.studio-video{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:16/9;background:#000}
-.studio-video video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.studio-video .reflet{opacity:.25;filter:blur(20px);transform:scaleY(-1)}
-
-/* ═══ Hobbies ═══ */
-.hobbies-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:50px}
-.hobby-card{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:40px;transition:transform .4s}
-.hobby-card:hover{transform:scale(1.08)}
-@media(max-width:900px){.hobbies-grid{grid-template-columns:repeat(2,1fr)}}
-
-/* ═══ Info grid ═══ */
-.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:50px}
-.info-card{border-radius:12px;overflow:hidden;position:relative;aspect-ratio:4/3}
-.info-card img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
-.info-card:hover img{transform:scale(1.04)}
-.info-card-cap{position:absolute;bottom:20px;left:20px;font-size:14px;color:rgba(0,0,0,.5)}
-@media(max-width:768px){.info-grid{grid-template-columns:1fr}}
-
-/* ═══ Marquee ═══ */
-.marquee-wrap{overflow:hidden;padding:80px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.marquee{display:flex;gap:40px;white-space:nowrap}
-.marquee-row{font-size:clamp(48px,8vw,100px);font-weight:700;line-height:.9;letter-spacing:-.03em;display:flex;gap:60px;animation:mq 30s linear infinite}
-.marquee-row var{font-style:normal;opacity:.13}
-@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-/* ═══ Footer ═══ */
-footer{padding:100px 60px 60px}
-.footer-cta h2{font-size:clamp(28px,5vw,48px);font-weight:700;letter-spacing:-.02em;margin-bottom:20px}
-.footer-btns{display:flex;gap:12px;margin-bottom:60px}
-.btn{border:1px solid #000;padding:14px 28px;font-size:12px;letter-spacing:2px;font-family:'IBM Plex Mono',monospace;display:inline-flex;align-items:center;gap:6px;transition:all .3s;color:#000;text-decoration:none}
-.btn:hover{background:#000;color:#fff}
-.footer-links{display:flex;gap:20px;font-size:12px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
-.footer-links a{color:var(--muted);text-decoration:none}
-.footer-links a:hover{color:#000}
-.footer-bottom{padding-top:40px;margin-top:40px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:11px;color:rgba(10,10,10,.35);font-family:'IBM Plex Mono',monospace}
-@media(max-width:768px){footer{padding:60px 24px}.footer-bottom{flex-direction:column;gap:8px}}
-</style>
+<!-- Fonts -->
+<link rel="stylesheet" href="assets/css/pp-neue-montreal.css">
+<link rel="stylesheet" href="assets/css/ibm-plex-mono.css">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
-<!-- Loader -->
+<!-- ═══════════════════ LOADER ═══════════════════ -->
 <div id="loader">
-  <div class="loader-inner">
-    <canvas id="loader-canvas"></canvas>
-    <span class="loader-n">W</span>
-    <span class="loader-apos">'</span>
-    <div class="loader-counter" id="loader-counter">100</div>
+  <div class="loader-c">
+    <div class="loader-inner">
+      <div class="loader-letters">
+        <span>W</span><span class="apos">'</span><span>7W</span>
+      </div>
+      <div id="loader-counter">100</div>
+    </div>
   </div>
 </div>
 
-<!-- Nav -->
-<nav class="nav">
-  <div class="nav-links"><a href="#blog">博客</a><a href="#about">关于</a><a href="#contact">联系</a></div>
-  <button class="nav-btn" onclick="document.querySelector('.nav-overlay').classList.add('open')">
-    <span class="nav-btn-text">menu</span>
-    <div class="nav-btn-icon"><span></span><span></span><span></span><span></span></div>
-  </button>
+<!-- ═══════════════════ NAVIGATION ═══════════════════ -->
+<nav class="nav-boiler" id="nav">
+  <div class="nav-logo-wrap">
+    <a href="/" class="link" style="font-size:0.75rem">W7W</a>
+  </div>
+  <div class="menu-w">
+    <button class="menu-btn" id="menu-btn">
+      <span data-zh="MENU" data-en="MENU">MENU</span>
+      <svg class="menu-svg" viewBox="0 0 6 6" fill="currentColor"><circle cx="3" cy="3" r="1.5"/></svg>
+    </button>
+    <div class="menu-links-w" id="menu-links">
+      <a href="#blog" data-zh="博客" data-en="BLOG">博客</a>
+      <a href="#about" data-zh="关于" data-en="ABOUT">关于</a>
+      <a href="#contact" data-zh="联系" data-en="CONTACT">联系</a>
+    </div>
+  </div>
 </nav>
-<div class="nav-overlay">
-  <button class="nav-overlay-close" onclick="this.parentElement.classList.remove('open')">CLOSE</button>
+
+<!-- Menu Overlay -->
+<div class="menu-overlay" id="menu-overlay">
+  <button class="menu-overlay-close" id="menu-close">✕</button>
   <nav>
-    <a href="#blog" onclick="document.querySelector('.nav-overlay').classList.remove('open')">博客</a>
-    <a href="#about" onclick="document.querySelector('.nav-overlay').classList.remove('open')">关于</a>
-    <a href="#contact" onclick="document.querySelector('.nav-overlay').classList.remove('open')">联系</a>
+    <a href="#blog" data-zh="博客" data-en="BLOG">博客</a>
+    <a href="#about" data-zh="关于" data-en="ABOUT">关于</a>
+    <a href="#contact" data-zh="联系" data-en="CONTACT">联系</a>
   </nav>
 </div>
 
-<!-- Hero -->
-<section class="hero" id="hero">
-  <div class="hero-center">
-    <h1 class="hero-title">W7W</h1>
-    <p class="hero-subtitle">AI AGENT ENGINEER · FULL STACK DEVELOPER</p>
-  </div>
-  <div class="hero-bottom">
-    <span>BUILDING FROM ZERO</span>
-    <div style="display:flex;gap:16px;align-items:center">
-      <a href="https://github.com/NiuBi66666688">GITHUB</a>
-      <a href="mailto:227110038@qq.com">EMAIL</a>
-      <span class="lang-btn" id="lang-btn" onclick="toggleLang()">EN</span>
+<!-- ═══════════════════ SECTION-W (Hero Video + Canvas) ═══════════════════ -->
+<section class="section-w" id="section-w">
+  <video class="video-hero-bg motion" autoplay muted loop playsinline poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9'%3E%3Crect fill='%23000'/%3E%3C/svg%3E">
+    <source src="https://assets.mixkit.co/videos/13037/13037-720.mp4" type="video/mp4">
+  </video>
+  <canvas id="canvas-hero"></canvas>
+</section>
+
+<!-- ═══════════════════ FAKE HERO (Overlay Text) ═══════════════════ -->
+<section class="section-fake-hero" id="fake-hero">
+  <h1 class="hero-tagline" data-zh="我构建<br>会思考的 AI 系统。" data-en="I build<br>AI systems that think.">
+    我构建<br>会思考的 AI 系统。
+  </h1>
+  <div class="hero-bottom-links">
+    <div class="link-hero-w">
+      <a href="mailto:227110038@qq.com" class="btn white email">
+        <div class="arrow-w">
+          <div class="line-arrow black"></div>
+          <div class="shape-arrow black"></div>
+        </div>
+        <span data-zh="预约通话" data-en="BOOK A CALL">预约通话</span>
+      </a>
+      <a href="https://github.com/NiuBi66666688" class="link" target="_blank">GITHUB</a>
+      <span class="link">/</span>
+      <a href="mailto:227110038@qq.com" class="link">EMAIL</a>
+    </div>
+    <div class="link-hero-lang-w">
+      <span class="link-lang lang-btn" id="lang-btn-hero" onclick="toggleLang()" style="cursor:pointer">EN</span>
     </div>
   </div>
 </section>
 
-<!-- Showreel -->
-<section class="section reveal" id="showreel">
-  <h2 class="title"><span class="line">我构建会思考</span><span class="line">的 AI 系统。</span></h2>
-  <div style="height:50px"></div>
-  <div class="showreel-video"><video autoplay muted loop playsinline src="https://assets.mixkit.co/videos/13037/13037-720.mp4"></video></div>
-  <div class="showreel-cap"><div>The approach</div><div>AI Agent 工程是关于构建能推理、使用工具并交付真正价值的智能系统。</div></div>
-</section>
-
-<!-- Blog -->
-<section class="section reveal" id="blog">
-  <div class="label">博客</div>
-  <h2 class="title"><span class="line">好的代码解决问题。</span><span class="line">好的文章启发思考。</span></h2>
-  <p class="text">技术实战教程、工具深度测评、AI 领域前沿观察。</p>
-  <div class="blog-list">
-    <div class="blog-item">
-      <h2 class="blog-title">AI Shopping Agent</h2><p class="blog-desc">Multi-agent procurement</p>
-      <div class="blog-img-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%2311182a' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23335577' font-size='40'%3E🤖%3C/text%3E%3C/svg%3E"></div>
-      <span class="blog-arrow">→</span>
+<!-- ═══════════════════ HERO HOME (W7W Letters) ═══════════════════ -->
+<section class="section hero-home" id="hero-home">
+  <div class="container hero-home-inner">
+    <div class="nothin-hero-w">
+      <div class="hero-letter-w">
+        <span class="hero-letter">W</span>
+        <span class="hero-letter">7</span>
+        <span class="hero-letter">W</span>
+      </div>
     </div>
-    <div class="blog-item">
-      <h2 class="blog-title">Campus Marketplace</h2><p class="blog-desc">High-performance trading</p>
-      <div class="blog-img-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%230a1f1a' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23224433' font-size='40'%3E🏪%3C/text%3E%3C/svg%3E"></div>
-      <span class="blog-arrow">→</span>
+    <div class="space-24"></div>
+    <div class="link-hero-bottom-w" style="padding:0 1.25rem">
+      <div class="link-hero-w">
+        <a href="mailto:227110038@qq.com" class="btn white email">
+          <div class="arrow-w">
+            <div class="line-arrow black"></div>
+            <div class="shape-arrow black"></div>
+          </div>
+          <span data-zh="预约通话" data-en="BOOK A CALL">预约通话</span>
+        </a>
+        <a href="https://github.com/NiuBi66666688" class="link" target="_blank">GITHUB</a>
+        <span class="link">/</span>
+        <a href="mailto:227110038@qq.com" class="link">EMAIL</a>
+      </div>
+      <div class="link-hero-lang-w">
+        <span class="link-lang lang-btn" onclick="toggleLang()" style="cursor:pointer">EN</span>
+      </div>
     </div>
-    <div class="blog-item">
-      <h2 class="blog-title">AI Report Generator</h2><p class="blog-desc">Weekly reports via LLM chains</p>
-      <div class="blog-img-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%232a1510' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23443322' font-size='40'%3E✍️%3C/text%3E%3C/svg%3E"></div>
-      <span class="blog-arrow">→</span>
-    </div>
-    <div class="blog-item">
-      <h2 class="blog-title">AI Chat Platform</h2><p class="blog-desc">Multi-model with streaming</p>
-      <div class="blog-img-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%23222' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23444' font-size='40'%3E💬%3C/text%3E%3C/svg%3E"></div>
-      <span class="blog-arrow">→</span>
-    </div>
-    <div class="blog-item">
-      <h2 class="blog-title">Web Scraping Toolkit</h2><p class="blog-desc">Production crawlers</p>
-      <div class="blog-img-w"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='280'%3E%3Crect fill='%231a1a0a' width='400' height='280'/%3E%3Ctext x='200' y='150' text-anchor='middle' fill='%23443322' font-size='40'%3E🕷️%3C/text%3E%3C/svg%3E"></div>
-      <span class="blog-arrow">→</span>
-    </div>
-  </div>
-  <a href="#" class="view-all">查看全部 →</a>
-</section>
-
-<!-- Studio + Video -->
-<section class="section reveal" id="about">
-  <div class="label">关于</div>
-  <p class="text">W7W 代表着从零开始的不断迭代——构建、交付、永不停歇。</p>
-  <div style="height:50px"></div>
-  <div class="studio-video">
-    <video autoplay muted loop playsinline src="https://assets.mixkit.co/videos/28780/28780-720.mp4"></video>
-    <video class="reflet" autoplay muted loop playsinline src="https://assets.mixkit.co/videos/28780/28780-720.mp4"></video>
   </div>
 </section>
 
-<!-- Hobbies -->
-<section class="section reveal">
-  <div class="label">个人爱好</div>
-  <h2 class="title"><span class="line">代码之外，</span><span class="line">我在运动里找到节奏。</span></h2>
-  <p class="text">🏸 羽毛球 · 🏓 乒乓 · 🏀 篮球 · 🏊 游泳 · 🏎️ F1 · 🍜 美食 · 💐 插花 · 📈 投资</p>
-  <div class="hobbies-grid">
-    <div class="hobby-card" style="background:linear-gradient(135deg,#e8e5df,#d8d5cf)">🏸</div>
-    <div class="hobby-card" style="background:linear-gradient(135deg,#e0dcd5,#d5d0c8)">🏓</div>
-    <div class="hobby-card" style="background:linear-gradient(135deg,#e5e0d8,#d8d3c8)">🏀</div>
-    <div class="hobby-card" style="background:linear-gradient(135deg,#d8d8f0,#c8c8e0)">🏊</div>
-    <div class="hobby-card" style="background:linear-gradient(135deg,#e8e0d5,#d8d0c5)">🍜</div>
-    <div class="hobby-card" style="background:linear-gradient(135deg,#f0e8f0,#e0d8e0)">💐</div>
-    <div class="hobby-card" style="background:linear-gradient(135deg,#e0e8d8,#d0e0c8)">📈</div>
-    <div class="hobby-card" style="background:linear-gradient(135deg,#e8d8d5,#e0d0c8)">🏎️</div>
-  </div>
-  <div style="height:60px"></div>
-  <div class="info-grid">
-    <div class="info-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='450'%3E%3Crect fill='%23e8e5df' width='600' height='450'/%3E%3Ctext x='300' y='240' text-anchor='middle' fill='%23bbb' font-size='50'%3E🏸%3C/text%3E%3C/svg%3E"><div class="info-card-cap">or something unexpected.</div></div>
-    <div class="info-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='450'%3E%3Crect fill='%23d8d8f0' width='600' height='450'/%3E%3Ctext x='300' y='240' text-anchor='middle' fill='%23aac' font-size='50'%3E🏎️%3C/text%3E%3C/svg%3E"><div class="info-card-cap">always shipping.</div></div>
+<!-- ═══════════════════ SHOWREEL (About / Approach) ═══════════════════ -->
+<section class="section showreel" id="about">
+  <div class="container">
+    <div class="showreel-light"></div>
+    <div class="reveal" style="margin-bottom:3rem">
+      <h2 style="letter-spacing:-.01em;font-size:clamp(1.5rem,3.75vw,3.75rem);font-weight:500;line-height:1;margin-bottom:1rem" data-zh="好的代码解决问题。<br>好的系统启发思考。" data-en="Good code solves problems.<br>Great systems inspire thinking.">
+        好的代码解决问题。<br>好的系统启发思考。
+      </h2>
+      <p class="p-m" style="color:var(--muted);max-width:480px" data-zh="专注于 AI Agent 工程、全栈开发与智能系统设计。" data-en="Focused on AI Agent engineering, full-stack development, and intelligent system design.">
+        专注于 AI Agent 工程、全栈开发与智能系统设计。
+      </p>
+    </div>
+    <div class="video-showreel-w reveal" style="min-height:auto">
+      <div style="width:100%;border-radius:8px;overflow:hidden;background:#000">
+        <video autoplay muted loop playsinline style="width:100%;display:block" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9'%3E%3Crect fill='%23000'/%3E%3C/svg%3E">
+          <source src="https://assets.mixkit.co/videos/13038/13038-720.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="video-showreel-flip" style="position:relative;padding:1.625rem 0 0">
+        <span class="p-m" data-zh="方法论" data-en="The approach">方法论</span>
+        <span class="p-s" style="color:var(--muted);max-width:21.625rem;display:block" data-zh="工程思维与设计美学的交汇点——构建既优雅又实用的系统。" data-en="Where engineering meets design — building systems that are both elegant and practical.">
+          工程思维与设计美学的交汇点——构建既优雅又实用的系统。
+        </span>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- Marquee -->
-<div class="marquee-wrap reveal">
+<!-- ═══════════════════ WORKS / BLOG ═══════════════════ -->
+<section class="section works" id="blog">
+  <div class="container is--full" style="padding:5.4375rem 1.25rem 1.625rem">
+    <div class="works-word-w" id="works-word-w">
+      <span class="works-word" data-zh="博客" data-en="BLOG">博客</span>
+      <span class="works-word" data-zh="博客" data-en="BLOG">博客</span>
+    </div>
+
+    <div style="max-width:var(--size-container);margin:0 auto">
+
+      <div class="space-65"></div>
+
+      <!-- Blog post grid -->
+      <div class="work_list" id="blog-list">
+        <article class="work-link" style="grid-column:span 4">
+          <div class="img-work-w" style="margin-bottom:1.25rem">
+            <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:4px;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;font-size:3rem">🤖</div>
+          </div>
+          <span class="title-work" data-zh="AI · 2026.07" data-en="AI · Jul 2026">AI · 2026.07</span>
+          <p class="short-p-work" data-zh="从零搭建 AI Agent：MCP 协议实战" data-en="Building an AI Agent with MCP from Scratch">从零搭建 AI Agent：MCP 协议实战</p>
+        </article>
+
+        <article class="work-link" style="grid-column:span 4">
+          <div class="img-work-w" style="margin-bottom:1.25rem">
+            <div style="background:linear-gradient(135deg,#1a2e1a,#1e3e16);border-radius:4px;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;font-size:3rem">🏸</div>
+          </div>
+          <span class="title-work" data-zh="生活 · 2026.07" data-en="Life · Jul 2026">生活 · 2026.07</span>
+          <p class="short-p-work" data-zh="我的 F1 观赛指南：上海站攻略" data-en="F1 Race Guide: Shanghai Grand Prix">我的 F1 观赛指南：上海站攻略</p>
+        </article>
+
+        <article class="work-link" style="grid-column:span 4">
+          <div class="img-work-w" style="margin-bottom:1.25rem">
+            <div style="background:linear-gradient(135deg,#2e1a1a,#3e1616);border-radius:4px;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;font-size:3rem">📈</div>
+          </div>
+          <span class="title-work" data-zh="投资 · 2026.06" data-en="Finance · Jun 2026">投资 · 2026.06</span>
+          <p class="short-p-work" data-zh="量化思维做个人投资：我的工具箱" data-en="Quantitative Investing: My Toolkit">量化思维做个人投资：我的工具箱</p>
+        </article>
+
+        <article class="work-link" style="grid-column:span 4">
+          <div class="img-work-w" style="margin-bottom:1.25rem">
+            <div style="background:linear-gradient(135deg,#1a1a2e,#2e1a3e);border-radius:4px;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;font-size:3rem">🛠️</div>
+          </div>
+          <span class="title-work" data-zh="工具 · 2026.06" data-en="Tools · Jun 2026">工具 · 2026.06</span>
+          <p class="short-p-work" data-zh="2026 年最值得关注的 AI 工具" data-en="Best AI Tools of 2026">2026 年最值得关注的 AI 工具</p>
+        </article>
+
+        <article class="work-link" style="grid-column:span 4">
+          <div class="img-work-w" style="margin-bottom:1.25rem">
+            <div style="background:linear-gradient(135deg,#2e1a0a,#3e2e1e);border-radius:4px;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;font-size:3rem">💐</div>
+          </div>
+          <span class="title-work" data-zh="爱好 · 2026.05" data-en="Hobby · May 2026">爱好 · 2026.05</span>
+          <p class="short-p-work" data-zh="插花入门：我的第一束花" data-en="Flower Arranging: My First Bouquet">插花入门：我的第一束花</p>
+        </article>
+      </div>
+
+      <div class="work-view-all-w">  
+        <div></div>
+        <div class="nbr-works-w" style="color:#8e8e8e">
+          <span class="p-m" style="font-size:1.125rem">(<span data-zh="已发布" data-en="Published">已发布</span> <span id="post-count">05</span>)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ VIDEO SECTION (About / Studio) ═══════════════════ -->
+<section class="section video" id="studio">
+  <div class="container is--full" style="padding:0;overflow:hidden">
+    <div class="musee-w">
+      <div class="video-w">
+        <div class="video-sticky">
+          <video class="musee-bg" autoplay muted loop playsinline poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9'%3E%3Crect fill='%23000'/%3E%3C/svg%3E">
+            <source src="https://assets.mixkit.co/videos/28780/28780-720.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <!-- Video reflection -->
+      <video class="video-reflet" autoplay muted loop playsinline>
+        <source src="https://assets.mixkit.co/videos/28780/28780-720.mp4" type="video/mp4">
+      </video>
+      <div class="cadre-video"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ INFO-IMG (Hobbies / "个人爱好") ═══════════════════ -->
+<section class="section info-img" id="hobbies">
+  <div class="container">
+    <div class="hobbies-label reveal" data-zh="个人爱好" data-en="HOBBIES">个人爱好</div>
+    <h2 class="reveal" style="letter-spacing:-.01em;font-size:clamp(1.5rem,3.75vw,3.75rem);font-weight:500;line-height:1;margin-bottom:1rem" data-zh="代码之外，<br>我在运动里找到节奏。" data-en="Beyond code,<br>I find rhythm in motion.">
+      代码之外，<br>我在运动里找到节奏。
+    </h2>
+    <p class="p-s reveal" style="color:var(--muted);margin-bottom:2rem" data-zh="🏸 羽毛球 · 🏓 乒乓 · 🏀 篮球 · 🏊 游泳 · 🏎️ F1 · 🍜 美食 · 💐 插花 · 📈 投资" data-en="🏸 Badminton · 🏓 Ping Pong · 🏀 Basketball · 🏊 Swimming · 🏎️ F1 · 🍜 Food · 💐 Flowers · 📈 Stocks">
+      🏸 羽毛球 · 🏓 乒乓 · 🏀 篮球 · 🏊 游泳 · 🏎️ F1 · 🍜 美食 · 💐 插花 · 📈 投资
+    </p>
+
+    <div class="hobbies-grid reveal">
+      <div class="hobby-card" style="background:linear-gradient(135deg,#e8e5df,#d8d5cf)">🏸</div>
+      <div class="hobby-card" style="background:linear-gradient(135deg,#e0dcd5,#d5d0c8)">🏓</div>
+      <div class="hobby-card" style="background:linear-gradient(135deg,#e5e0d8,#d8d3c8)">🏀</div>
+      <div class="hobby-card" style="background:linear-gradient(135deg,#d8d8f0,#c8c8e0)">🏊</div>
+      <div class="hobby-card" style="background:linear-gradient(135deg,#e8e0d5,#d8d0c5)">🍜</div>
+      <div class="hobby-card" style="background:linear-gradient(135deg,#f0e8f0,#e0d8e0)">💐</div>
+      <div class="hobby-card" style="background:linear-gradient(135deg,#e0e8d8,#d0e0c8)">📈</div>
+      <div class="hobby-card" style="background:linear-gradient(135deg,#e8d8d5,#e0d0c8)">🏎️</div>
+    </div>
+
+    <div class="space-65"></div>
+
+    <!-- "Forms follow perspective" section within info-img -->
+    <div class="reveal" style="margin-top:2rem">
+      <h2 class="p-l" style="letter-spacing:-.01em;font-size:clamp(1.2rem,2.5vw,2.5rem);font-weight:500;line-height:1;margin-bottom:1rem" data-zh="形态跟随视角。" data-en="Forms follow perspective.">
+        形态跟随视角。
+      </h2>
+      <p class="p-s" style="color:var(--muted);max-width:320px" data-zh="或者，来点意想不到的。" data-en="Or something unexpected.">
+        或者，来点意想不到的。
+      </p>
+    </div>
+
+    <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:2rem">
+      <div style="border-radius:8px;overflow:hidden;aspect-ratio:4/3">
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#f0ece5,#e8e3da);display:flex;align-items:center;justify-content:center;font-size:4rem">🏸</div>
+      </div>
+      <div style="border-radius:8px;overflow:hidden;aspect-ratio:4/3">
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#e8e8f0,#dcdce8);display:flex;align-items:center;justify-content:center;font-size:4rem">🏎️</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ SECTION SEPARATOR BLUR ═══════════════════ -->
+<div class="section-separator-blur"></div>
+
+<!-- ═══════════════════ GLITCH SECTION (W7W7W') ═══════════════════ -->
+<section class="section glitch" id="glitch">
+  <div class="container is--full" style="min-height:1254px;position:relative;padding:0;overflow:hidden">
+    <div class="glitch-text-sticky-w">
+      <!-- Glitch text layers -->
+      <div class="div-block-5" style="grid-column:1/4;grid-row:1/3">
+        <div class="text-block-6 _1" style="opacity:.03;transform:translate(-4px,2px)">I build AI systems that think.</div>
+        <div class="text-block-6 _6" style="opacity:.05;transform:translate(3px,-3px)">I build AI systems that think.</div>
+        <div class="text-block-6 _2" style="opacity:.1">I build AI systems that think.</div>
+        <div class="text-block-6 _3" style="opacity:.04;transform:translate(-2px,-1px)">I build AI systems that think.</div>
+        <div class="text-block-6 _4" style="opacity:.07;transform:translate(4px,1px)">I build AI systems that think.</div>
+        <div class="text-block-6 final" style="font-size:clamp(1.5rem,3vw,2.5rem);font-weight:500;letter-spacing:-.01em">W7W7W'</div>
+      </div>
+    </div>
+    <div class="img-glitch-w">
+      <div class="merguez">
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#2a2a2a,#1a1a1a);display:flex;align-items:center;justify-content:center;font-size:4rem">✦</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ MARQUEE ═══════════════════ -->
+<div class="marquee-w reveal">
   <div class="marquee">
-    <div class="marquee-row"><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</div>
-    <div class="marquee-row"><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</div>
+    <div class="marquee-row"><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var></div>
+    <div class="marquee-row"><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var><span>W7W7W'</span><var>W7W7W'</var></div>
   </div>
 </div>
 
-<!-- Footer -->
-<footer class="reveal" id="contact">
-  <div class="footer-cta"><h2>从零开始<br>一起构建。</h2></div>
-  <div class="footer-btns">
-    <a href="mailto:227110038@qq.com" class="btn">预约通话 →</a>
-    <a href="mailto:227110038@qq.com" class="btn">发送邮件 @</a>
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<section class="section-footer" id="contact">
+  <div class="container" style="width:100%">
+    <div class="reveal">
+      <h2 style="letter-spacing:-.01em;font-size:clamp(1.5rem,4vw,3.75rem);font-weight:500;line-height:1;margin-bottom:2rem" data-zh="从零开始<br>一起构建。" data-en="Let's build<br>from nothing.">
+        从零开始<br>一起构建。
+      </h2>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:80px">
+        <a href="mailto:227110038@qq.com" class="btn">
+          <div class="arrow-w">
+            <div class="line-arrow"></div>
+            <div class="shape-arrow"></div>
+          </div>
+          <span data-zh="预约通话" data-en="BOOK A CALL">预约通话</span>
+        </a>
+        <a href="mailto:227110038@qq.com" class="btn email">
+          <span data-zh="发送邮件" data-en="DROP AN EMAIL @">发送邮件</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px">
+        <a href="https://github.com/NiuBi66666688" class="link footer" target="_blank">GitHub</a>
+        <a href="mailto:227110038@qq.com" class="link footer">Email</a>
+        <a href="#blog" class="link footer" data-zh="博客" data-en="Blog">博客</a>
+      </div>
+    </div>
+
+    <div class="reveal footer-info-w" style="border-top:1px solid rgba(255,255,255,.1);padding-top:40px;margin-top:20px;flex-wrap:wrap;gap:12px">
+      <div class="footer-info" style="display:flex;gap:1rem;flex-wrap:wrap">
+        <span>©2026 W7W</span>
+        <span>—</span>
+        <span data-zh="从零构建" data-en="Built from scratch">从零构建</span>
+      </div>
+      <div class="lang-footer">
+        <span class="link-lang lang-btn" onclick="toggleLang()" style="cursor:pointer;background:var(--white);color:var(--black);padding:.25rem;border-radius:4px;font-size:.75rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase">EN</span>
+      </div>
+    </div>
   </div>
-  <div style="height:80px"></div>
-  <div class="footer-links"><a href="https://github.com/NiuBi66666688">GitHub</a><a href="mailto:227110038@qq.com">邮箱</a><a href="#blog">博客</a></div>
-  <div class="footer-bottom"><span>©2026 W7W</span><span>BUILT FROM SCRATCH</span></div>
-</footer>
+</section>
 
-<!-- THREE.JS — Loader -->
-<script type="importmap">
-{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js"}}
-</script>
+<!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
+<script src="assets/js/main.js"></script>
 
-<script type="module">
-import * as THREE from 'three';
-
-(function(){
-  var canvas=document.getElementById('loader-canvas');
-  var counter=document.getElementById('loader-counter');
-  var loader=document.getElementById('loader');
-  
-  try{
-    var renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
-    var s=Math.min(window.innerWidth*.48,500);
-    renderer.setSize(s,s);
-    
-    var scene=new THREE.Scene();
-    var camera=new THREE.PerspectiveCamera(45,1,.1,100);
-    camera.position.z=4;
-    
-    // Lights only (no heavy env map)
-    scene.add(new THREE.AmbientLight(0xffffff,.4));
-    var dir1=new THREE.DirectionalLight(0xffffff,.8);
-    dir1.position.set(3,4,5);
-    scene.add(dir1);
-    var dir2=new THREE.DirectionalLight(0x4466aa,.4);
-    dir2.position.set(-3,1,-2);
-    scene.add(dir2);
-    var dir3=new THREE.DirectionalLight(0xff8844,.3);
-    dir3.position.set(0,-3,-2);
-    scene.add(dir3);
-    
-    // ═══ METALLIC 3D OBJECTS ═══
-    
-    // 1. Badminton - metallic blue sphere elongated
-    function makeBirdie(){
-      var g=new THREE.Group();
-      var body=new THREE.Mesh(
-        new THREE.SphereGeometry(.8,32,32),
-        new THREE.MeshStandardMaterial({color:0x2266cc,metalness:.9,roughness:.15})
-      );
-      body.scale.y=1.3;
-      g.add(body);
-      var ring=new THREE.Mesh(
-        new THREE.TorusGeometry(.6,.05,16,32),
-        new THREE.MeshStandardMaterial({color:0xffffff,metalness:.5,roughness:.2})
-      );
-      ring.position.y=.4;
-      g.add(ring);
-      return g;
-    }
-    
-    // 2. Basketball - textured orange metallic
-    function makeBball(){
-      var g=new THREE.Group();
-      var geo=new THREE.SphereGeometry(.9,64,64);
-      var pos=geo.attributes.position;
-      var v=new THREE.Vector3();
-      for(var i=0;i<pos.count;i++){
-        v.fromBufferAttribute(pos,i);
-        var n=Math.sin(v.x*10)*Math.sin(v.y*10)*Math.sin(v.z*10)*.02;
-        v.multiplyScalar(1+n);
-        pos.setXYZ(i,v.x,v.y,v.z);
-      }
-      geo.computeVertexNormals();
-      var ball=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:0xcc4400,metalness:.5,roughness:.25}));
-      g.add(ball);
-      var seamMat=new THREE.MeshStandardMaterial({color:0x222222,metalness:.8,roughness:.1});
-      for(var j=0;j<3;j++){
-        var seam=new THREE.Mesh(new THREE.TorusGeometry(.88,.02,8,64),seamMat);
-        seam.rotation.set(j*Math.PI/3,j*Math.PI/4,0);
-        g.add(seam);
-      }
-      return g;
-    }
-    
-    // 3. F1 Car - metallic red low-poly
-    function makeF1(){
-      var g=new THREE.Group();
-      var mat=new THREE.MeshStandardMaterial({color:0xcc0000,metalness:.8,roughness:.2});
-      var body=new THREE.Mesh(new THREE.BoxGeometry(2.4,.4,.8),mat);
-      g.add(body);
-      var cockpit=new THREE.Mesh(new THREE.BoxGeometry(.8,.35,.6),new THREE.MeshStandardMaterial({color:0x111111,metalness:.9,roughness:.1}));
-      cockpit.position.set(-.2,.3,0);
-      g.add(cockpit);
-      var nose=new THREE.Mesh(new THREE.ConeGeometry(.4,.8,16),mat);
-      nose.rotation.z=-Math.PI/2;
-      nose.position.x=1.5;
-      g.add(nose);
-      var fwing=new THREE.Mesh(new THREE.BoxGeometry(.1,.05,1.4),mat);
-      fwing.position.set(2.1,-.15,0);
-      g.add(fwing);
-      var rwing=new THREE.Mesh(new THREE.BoxGeometry(.08,.5,1),mat);
-      rwing.position.set(-1.5,.35,0);
-      g.add(rwing);
-      var wheelGeo=new THREE.CylinderGeometry(.2,.2,.15,24);
-      var wheelMat=new THREE.MeshStandardMaterial({color:0x111111,metalness:.3,roughness:.5});
-      [[.8,-.25,.55],[.8,-.25,-.55],[-.8,-.25,.55],[-.8,-.25,-.55]].forEach(function(p){
-        var w=new THREE.Mesh(wheelGeo,wheelMat);
-        w.rotation.x=Math.PI/2;
-        w.position.set(p[0],p[1],p[2]);
-        g.add(w);
-      });
-      return g;
-    }
-    
-    // 4. Tennis Racket - gold metallic
-    function makeRacket(){
-      var g=new THREE.Group();
-      var frame=new THREE.Mesh(
-        new THREE.TorusGeometry(.7,.06,16,48),
-        new THREE.MeshStandardMaterial({color:0xddaa00,metalness:.9,roughness:.15})
-      );
-      g.add(frame);
-      var handle=new THREE.Mesh(
-        new THREE.CylinderGeometry(.06,.06,.8,16),
-        new THREE.MeshStandardMaterial({color:0x333333,metalness:.5,roughness:.3})
-      );
-      handle.position.y=-.9;
-      g.add(handle);
-      return g;
-    }
-    
-    var objects=[makeBirdie(),makeBball(),makeF1(),makeRacket()];
-    var currentIdx=0,currentObj=objects[0],prevObj=null;
-    scene.add(currentObj);
-    
-    var mouseX=0,mouseY=0;
-    document.addEventListener('mousemove',function(e){
-      mouseX=(e.clientX/window.innerWidth)*2-1;
-      mouseY=-(e.clientY/window.innerHeight)*2+1;
-    });
-    
-    var startTime=null;
-    var OBJ_D=1400,TOTAL_D=6500;
-    var counterStart=performance.now();
-    
-    function loop(ts){
-      requestAnimationFrame(loop);
-      if(!startTime)startTime=ts;
-      var elapsed=ts-startTime;
-      
-      var idx=Math.min(Math.floor(elapsed/OBJ_D),objects.length-1);
-      var t=(elapsed%OBJ_D)/OBJ_D;
-      
-      if(idx!==currentIdx&&!prevObj){
-        prevObj=currentObj;
-        currentObj=objects[idx];
-        currentObj.scale.set(.3,.3,.3);
-        scene.add(currentObj);
-        currentIdx=idx;
-      }
-      
-      if(prevObj){
-        var f=1-t;
-        prevObj.scale.set(f,f,f);
-        prevObj.rotation.y+=.03;
-        if(t>.5){scene.remove(prevObj);prevObj=null}
-      }
-      
-      var target=1-Math.pow(Math.abs(t-.5)*2,2)*.2;
-      var sc=currentObj.scale.x+(target-currentObj.scale.x)*.15;
-      currentObj.scale.set(sc,sc,sc);
-      currentObj.rotation.y+=.012;
-      currentObj.rotation.x=Math.sin(elapsed*.0008)*.25+mouseY*.15;
-      currentObj.rotation.z=Math.cos(elapsed*.0006)*.1-mouseX*.1;
-      currentObj.position.x=mouseX*.15;
-      currentObj.position.y=-mouseY*.1;
-      
-      if(elapsed>TOTAL_D-1200){
-        var fade=Math.max(0,1-(elapsed-(TOTAL_D-1200))/1200);
-        renderer.setClearAlpha(fade*1.5);
-      }
-      
-      renderer.render(scene,camera);
-      
-      if(elapsed>TOTAL_D){
-        loader.classList.add('hidden');
-        return;
-      }
-      
-      // Counter
-      var p=Math.min(elapsed/TOTAL_D,1);
-      var n=Math.ceil(100*(1-Math.pow(1-p,4)));
-      counter.textContent=String(Math.max(n,0)).padStart(3,'0');
-      if(p>=1){
-        counter.textContent='000';
-        try{sessionStorage.setItem('w7w:loader-played','1')}catch(e){}
-      }
-    }
-    requestAnimationFrame(loop);
-    
-  }catch(err){
-    console.error('Loader error:',err);
-    // Fallback - just hide loader
-    setTimeout(function(){loader.classList.add('hidden')},3000);
-  }
-})();
-</script>
-
-<script>
-(function(){
-  var reveals=document.querySelectorAll('.reveal');
-  var obs=new IntersectionObserver(function(entries){
-    entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});
-  },{threshold:.08,rootMargin:'0px 0px -40px 0px'});
-  reveals.forEach(function(el){obs.observe(el);});
-  setTimeout(function(){
-    reveals.forEach(function(el){
-      if(el.getBoundingClientRect().top<window.innerHeight)el.classList.add('visible');
-    });
-  },600);
-})();
-
-function toggleLang(){
-  var btn=document.getElementById('lang-btn');
-  btn.textContent=btn.textContent==='EN'?'中':'EN';
-}
-</script>
 </body>
 </html>
